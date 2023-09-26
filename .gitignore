@@ -23,3 +23,4 @@ pan_gene_slurm.sh
 *.stderr
 
 .literature
+.test
