@@ -1,9 +1,10 @@
 nextflow.enable.dsl=2
 
-include { GUNZIP            } from '../modules/nf-core/gunzip'
-include { FASTA_VALIDATE    } from '../modules/local/fasta_validate'
+include { GUNZIP as GUNZIP_TARGET_ASSEMBLY  } from '../modules/nf-core/gunzip'
+include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
+include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
 
-include { validateParams    } from '../modules/local/validate_params'
+include { validateParams                    } from '../modules/local/validate_params'
 
 validateParams(params)
 
@@ -24,7 +25,7 @@ workflow PAN_GENE {
     }
     | set { ch_target_assemblies }
 
-    GUNZIP(
+    GUNZIP_TARGET_ASSEMBLY(
         ch_target_assemblies.gz
     )
     .gunzip
@@ -33,7 +34,7 @@ workflow PAN_GENE {
     )
     | set { ch_gunzip_target_assemblies }
 
-    ch_versions.mix(GUNZIP.out.versions)
+    ch_versions.mix(GUNZIP_TARGET_ASSEMBLY.out.versions)
     | set { ch_versions }
 
     // FASTA_VALIDATE
@@ -42,5 +43,28 @@ workflow PAN_GENE {
     | set { ch_validated_target_assemblies }
 
     ch_versions.mix(FASTA_VALIDATE.out.versions)
+    | set { ch_versions }
+
+    // GUNZIP: te_libraries
+    Channel.fromList(params.te_libraries)
+    | map { tag, filePath ->
+        [[id:tag], file(filePath, checkIfExists: true)]
+    }
+    | branch { meta, file ->
+        gz: "$file".endsWith(".gz")
+        rest: !"$file".endsWith(".gz")
+    }
+    | set { ch_te_libraries }
+
+    GUNZIP_TE_LIBRARY(
+        ch_te_libraries.gz
+    )
+    .gunzip
+    | mix(
+        ch_te_libraries.rest
+    )
+    | set { ch_gunzip_te_libraries }
+
+    ch_versions.mix(GUNZIP_TE_LIBRARY.out.versions)
     | set { ch_versions }
 }
