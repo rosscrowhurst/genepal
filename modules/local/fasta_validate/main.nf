@@ -12,15 +12,22 @@ process FASTA_VALIDATE {
         tuple val(meta), path(fasta_file)
     
     output:
-        val(meta)
+        tuple val(meta), path("$validFasta"),   emit: valid_fasta
+        path "versions.yml",                    emit: versions
 
     script:
+        validFasta = (fasta_file.toString() - ~/\.\w+$/) + ".validated.fasta"
         """
         fasta_validate -v $fasta_file >/dev/null
 
         # If invalid, the above command will fail and
         # the NXF error startegy will kick in.
         
-        echo -n "VALIDATE_FASTA:${meta.id}:VALID"
+        cat $fasta_file > $validFasta
+
+        cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            fasta_validate: a6a2ec1_ps
+        END_VERSIONS
         """
 }
