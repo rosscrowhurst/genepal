@@ -6,4 +6,8 @@ validateParams(params)
 
 workflow PAN_GENE {
     Channel.fromList(params.target_assemblies)
+    | map { tag, filePath ->
+        [[id:tag], file(filePath, checkIfExists: true)]
+    }
+    | 
 }

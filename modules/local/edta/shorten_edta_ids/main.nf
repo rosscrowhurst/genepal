@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 // https://github.com/Plant-Food-Research-Open/assembly_qc
 // GPL-3.0: https://github.com/Plant-Food-Research-Open/assembly_qc/blob/main/LICENSE
 process SHORTEN_EDTA_IDS {
-    tag "${meta}"
+    tag "$meta.id"
     label "process_single"
 
     container "docker://gallvp/python3npkgs:v0.4"
