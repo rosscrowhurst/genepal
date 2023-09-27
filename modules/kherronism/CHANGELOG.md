@@ -9,6 +9,7 @@
 
 1. Added stub
 2. Added author in meta.yml
+3. Changed input "tuple val(meta), path(lib)" to "path(lib)"
 
 ### braker3
 
