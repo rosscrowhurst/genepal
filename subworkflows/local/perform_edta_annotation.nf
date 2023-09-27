@@ -17,11 +17,11 @@ workflow PERFORM_EDTA_ANNOTATION {
         | EDTA
 
         RESTORE_EDTA_IDS(
-            EDTA.out.te_anno_gff3,
+            EDTA.out.te_lib_fasta,
             EDTA.out.intact_gff3.map { it[1] },
             EDTA.out.pass_list.map { it[1] },
             EDTA.out.out_file.map { it[1] },
-            EDTA.out.te_lib_fasta.map { it[1] },
+            EDTA.out.te_anno_gff3.map { it[1] },
             SHORTEN_EDTA_IDS.out.renamed_ids_tsv.map { it[1] }
         )
 
@@ -38,11 +38,11 @@ workflow PERFORM_EDTA_ANNOTATION {
         | set { ch_versions }
     
     emit:
-        te_anno_gff3    = RESTORE_EDTA_IDS.out.te_anno_gff3
+        te_lib_fasta    = RESTORE_EDTA_IDS.out.te_lib_fasta
         intact_gff3     = RESTORE_EDTA_IDS.out.intact_gff3
         pass_list       = RESTORE_EDTA_IDS.out.pass_list
         out_file        = RESTORE_EDTA_IDS.out.out_file
-        te_lib_fasta    = RESTORE_EDTA_IDS.out.te_lib_fasta
+        te_anno_gff3    = RESTORE_EDTA_IDS.out.te_anno_gff3
         renamed_ids_tsv = RESTORE_EDTA_IDS.out.renamed_ids_tsv
         versions        = ch_versions
 }

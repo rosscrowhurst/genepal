@@ -9,19 +9,19 @@ process RESTORE_EDTA_IDS {
     container "docker://gallvp/python3npkgs:v0.4"
 
     input:
-        tuple val(meta), path(te_anno_gff3)
+        tuple val(meta), path(te_lib_fa)
         path(intact_gff3)
         path(pass_list)
         path(out_file)
-        path(te_lib_fa)
+        path(te_anno_gff3)
         path(renamed_ids_tsv)
     
     output:
-        tuple val(meta), path("${meta.id}.EDTA.TEanno.gff3"),           emit: te_anno_gff3
+        tuple val(meta), path("${meta.id}.EDTA.TElib.fa"),              emit: te_lib_fasta
         tuple val(meta), path("${meta.id}.EDTA.intact.gff3"),           emit: intact_gff3
         tuple val(meta), path("${meta.id}.renamed.ids.EDTA.pass.list"), emit: pass_list
         tuple val(meta), path("${meta.id}.renamed.ids.EDTA.out"),       emit: out_file
-        tuple val(meta), path("${meta.id}.EDTA.TElib.fa"),              emit: te_lib_fasta
+        tuple val(meta), path("${meta.id}.EDTA.TEanno.gff3"),           emit: te_anno_gff3
         tuple val(meta), path("${meta.id}.renamed.ids.tsv"),            emit: renamed_ids_tsv
         path "versions.yml",                                            emit: versions
 
@@ -51,11 +51,11 @@ process RESTORE_EDTA_IDS {
     stub:
         def VERSION = "f1b7bce" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
         """
-        touch "${meta.id}.EDTA.TEanno.gff3"
+        touch "${meta.id}.EDTA.TElib.fa"
         touch "${meta.id}.EDTA.intact.gff3"
         touch "${meta.id}.renamed.ids.EDTA.pass.list"
         touch "${meta.id}.renamed.ids.EDTA.out"
-        touch "${meta.id}.EDTA.TElib.fa"
+        touch "${meta.id}.EDTA.TEanno.gff3"
         touch "${meta.id}.renamed.ids.tsv"
 
         cat <<-END_VERSIONS > versions.yml
