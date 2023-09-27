@@ -40,6 +40,10 @@ flowchart LR
     SKIP_EDTA
     REPEATMASKER
     end
+
+    style Params fill:#00EEFF50
+    style Validate fill:#00EEFF50
+    style Repeatmask fill:#00EEFF50
 ```
 
 ## Plant&Food Users
