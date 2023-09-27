@@ -79,7 +79,7 @@ workflow PAN_GENE {
     | filter { meta, assembly, teLib ->
         teLib == null
     }
-    | map {[it[0], it[1]]}
+    | map {meta, assembly, teLib -> [meta, assembly]}
     | PERFORM_EDTA_ANNOTATION
 
     ch_versions.mix(PERFORM_EDTA_ANNOTATION.out.versions)
@@ -96,6 +96,7 @@ workflow PAN_GENE {
         ch_assemblies_n_te_libs.map {meta, assembly, te_lib -> [meta, assembly]},
         ch_assemblies_n_te_libs.map {meta, assembly, te_lib -> te_lib},
     )
-    .fasta_masked
-    | view
+
+    ch_versions.mix(REPEATMASKER.out.versions)
+    | set { ch_versions }
 }
