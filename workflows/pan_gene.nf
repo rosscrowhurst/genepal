@@ -3,6 +3,7 @@ nextflow.enable.dsl=2
 include { GUNZIP as GUNZIP_TARGET_ASSEMBLY  } from '../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
 include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
+include { REPEATMASKER                      } from '../modules/kherronism/repeatmasker'
 
 include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
 
@@ -83,7 +84,18 @@ workflow PAN_GENE {
 
     ch_versions.mix(PERFORM_EDTA_ANNOTATION.out.versions)
     | set { ch_versions }
+    
+    // REPEATMASKER
+    ch_validated_target_assemblies
+    | join(
+        PERFORM_EDTA_ANNOTATION.out.te_lib_fasta.mix(ch_gunzip_te_libraries)
+    )
+    | set { ch_assemblies_n_te_libs }
 
-    ch_versions
+    REPEATMASKER(
+        ch_assemblies_n_te_libs.map {meta, assembly, te_lib -> [meta, assembly]},
+        ch_assemblies_n_te_libs.map {meta, assembly, te_lib -> te_lib},
+    )
+    .fasta_masked
     | view
 }
