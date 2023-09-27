@@ -11,11 +11,8 @@ workflow PERFORM_EDTA_ANNOTATION {
         genome_fasta    // [meta, /path/to/genome/fasta]
     
     main:
-        genome_fasta
-        | SHORTEN_EDTA_IDS
-
-        SHORTEN_EDTA_IDS
-        .out
+        
+        SHORTEN_EDTA_IDS(genome_fasta)
         .renamed_ids_fasta
         | EDTA
 
@@ -27,6 +24,18 @@ workflow PERFORM_EDTA_ANNOTATION {
             EDTA.out.te_lib_fasta.map { it[1] },
             SHORTEN_EDTA_IDS.out.renamed_ids_tsv.map { it[1] }
         )
+
+        Channel.empty()
+        | mix(
+            SHORTEN_EDTA_IDS.out.versions
+        )
+        | mix(
+            EDTA.out.versions
+        )
+        | mix(
+            RESTORE_EDTA_IDS.out.versions
+        )
+        | set { ch_versions }
     
     emit:
         te_anno_gff3    = RESTORE_EDTA_IDS.out.te_anno_gff3
@@ -34,5 +43,6 @@ workflow PERFORM_EDTA_ANNOTATION {
         pass_list       = RESTORE_EDTA_IDS.out.pass_list
         out_file        = RESTORE_EDTA_IDS.out.out_file
         te_lib_fasta    = RESTORE_EDTA_IDS.out.te_lib_fasta
-        renamed_ids_tsv = RESTORE_EDTA_IDS.out.RESTORE_EDTA_IDS
+        renamed_ids_tsv = RESTORE_EDTA_IDS.out.renamed_ids_tsv
+        versions        = ch_versions
 }

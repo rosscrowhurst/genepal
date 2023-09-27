@@ -6,6 +6,8 @@ process RESTORE_EDTA_IDS {
     tag "$meta.id"
     label "process_single"
 
+    container "docker://gallvp/python3npkgs:v0.4"
+
     input:
         tuple val(meta), path(te_anno_gff3)
         path(intact_gff3)
@@ -15,14 +17,16 @@ process RESTORE_EDTA_IDS {
         path(renamed_ids_tsv)
     
     output:
-        tuple val(meta), path("${meta}.EDTA.TEanno.gff3"),              emit: te_anno_gff3
-        tuple val(meta), path("${meta}.EDTA.intact.gff3"),              emit: intact_gff3
-        tuple val(meta), path("${meta}.renamed.ids.EDTA.pass.list"),    emit: pass_list
-        tuple val(meta), path("${meta}.renamed.ids.EDTA.out"),          emit: out_file
-        tuple val(meta), path("${meta}.EDTA.TElib.fa"),                 emit: te_list_fasta
-        tuple val(meta), path("${meta}.renamed.ids.tsv"),               emit: renamed_ids_tsv
+        tuple val(meta), path("${meta.id}.EDTA.TEanno.gff3"),           emit: te_anno_gff3
+        tuple val(meta), path("${meta.id}.EDTA.intact.gff3"),           emit: intact_gff3
+        tuple val(meta), path("${meta.id}.renamed.ids.EDTA.pass.list"), emit: pass_list
+        tuple val(meta), path("${meta.id}.renamed.ids.EDTA.out"),       emit: out_file
+        tuple val(meta), path("${meta.id}.EDTA.TElib.fa"),              emit: te_lib_fasta
+        tuple val(meta), path("${meta.id}.renamed.ids.tsv"),            emit: renamed_ids_tsv
+        path "versions.yml",                                            emit: versions
 
     script:
+        def VERSION = "f1b7bce" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
         """
         cat $pass_list > "${meta.id}.renamed.ids.EDTA.pass.list"
         cat $out_file > "${meta.id}.renamed.ids.EDTA.out"
@@ -37,5 +41,26 @@ process RESTORE_EDTA_IDS {
         else
             reverse_edta_naming_f1b7bce.py "$renamed_ids_tsv" "$te_anno_gff3" "$intact_gff3" "$meta"
         fi
+
+        cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            reverse_edta_naming: $VERSION
+        END_VERSIONS
+        """
+    
+    stub:
+        def VERSION = "f1b7bce" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
+        """
+        touch "${meta.id}.EDTA.TEanno.gff3"
+        touch "${meta.id}.EDTA.intact.gff3"
+        touch "${meta.id}.renamed.ids.EDTA.pass.list"
+        touch "${meta.id}.renamed.ids.EDTA.out"
+        touch "${meta.id}.EDTA.TElib.fa"
+        touch "${meta.id}.renamed.ids.tsv"
+
+        cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            reverse_edta_naming: $VERSION
+        END_VERSIONS
         """
 }

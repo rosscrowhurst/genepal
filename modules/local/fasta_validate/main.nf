@@ -17,6 +17,7 @@ process FASTA_VALIDATE {
 
     script:
         validFasta = (fasta_file.toString() - ~/\.\w+$/) + ".validated.fasta"
+        def VERSION = "a6a2ec1_ps" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
         """
         fasta_validate -v $fasta_file >/dev/null
 
@@ -27,7 +28,19 @@ process FASTA_VALIDATE {
 
         cat <<-END_VERSIONS > versions.yml
         "${task.process}":
-            fasta_validate: a6a2ec1_ps
+            fasta_validate: $VERSION
+        END_VERSIONS
+        """
+    
+    stub:
+        validFasta = (fasta_file.toString() - ~/\.\w+$/) + ".validated.fasta"
+        def VERSION = "a6a2ec1_ps" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
+        """
+        touch $validFasta
+
+        cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            fasta_validate: $VERSION
         END_VERSIONS
         """
 }

@@ -4,6 +4,8 @@ include { GUNZIP as GUNZIP_TARGET_ASSEMBLY  } from '../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
 include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
 
+include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
+
 include { validateParams                    } from '../modules/local/validate_params'
 
 validateParams(params)
@@ -38,8 +40,8 @@ workflow PAN_GENE {
     | set { ch_versions }
 
     // FASTA_VALIDATE
-    ch_gunzip_target_assemblies
-    | FASTA_VALIDATE
+    FASTA_VALIDATE(ch_gunzip_target_assemblies)
+    .valid_fasta
     | set { ch_validated_target_assemblies }
 
     ch_versions.mix(FASTA_VALIDATE.out.versions)
@@ -67,4 +69,21 @@ workflow PAN_GENE {
 
     ch_versions.mix(GUNZIP_TE_LIBRARY.out.versions)
     | set { ch_versions }
+
+    // PERFORM_EDTA_ANNOTATION
+    ch_validated_target_assemblies
+    | join(
+        ch_gunzip_te_libraries, remainder: true
+    )
+    | filter { meta, assembly, teLib ->
+        teLib == null
+    }
+    | map {[it[0], it[1]]}
+    | PERFORM_EDTA_ANNOTATION
+
+    ch_versions.mix(PERFORM_EDTA_ANNOTATION.out.versions)
+    | set { ch_versions }
+
+    ch_versions
+    | view
 }

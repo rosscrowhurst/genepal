@@ -19,13 +19,14 @@ process EDTA {
         tuple val(meta), path('*.EDTA.pass.list'),      emit: pass_list
         tuple val(meta), path('*.EDTA.out'),            emit: out_file
         tuple val(meta), path('*.EDTA.TElib.fa'),       emit: te_lib_fasta
+        path "versions.yml",                            emit: versions
     
     script:
         def args = task.ext.args ?: ''
         """
         EDTA.pl \\
         --genome $fasta_file \\
-        --threads ${task.cpus} \\
+        --threads $task.cpus \\
         $args
 
         fasta_file_mod="${fasta_file}.mod"
@@ -37,5 +38,26 @@ process EDTA {
         ln -s "./\${fasta_file_mod}.EDTA.raw/LTR/\${fasta_file_mod}.pass.list" "\${fasta_file_mod}.EDTA.pass.list"
         
         ln -s "./\${fasta_file_mod}.EDTA.anno/\${fasta_file_mod}.out" "\${fasta_file_mod}.EDTA.out"
+
+        cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            EDTA: \$(EDTA.pl -h | awk ' /##### Extensive/ {print \$7}')
+        END_VERSIONS
+        """
+    
+    stub:
+        """
+        fasta_file_mod="${fasta_file}.mod"
+
+        touch "\${fasta_file_mod}.EDTA.TEanno.gff3"
+        touch "\${fasta_file_mod}.EDTA.intact.gff3"
+        touch "\${fasta_file_mod}.EDTA.pass.list"
+        touch "\${fasta_file_mod}.EDTA.out"
+        touch "\${fasta_file_mod}.EDTA.TElib.fa"
+
+        cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            EDTA: \$(EDTA.pl -h | awk ' /##### Extensive/ {print \$7}')
+        END_VERSIONS
         """
 }
