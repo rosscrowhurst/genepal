@@ -4,9 +4,9 @@ include { GUNZIP as GUNZIP_TARGET_ASSEMBLY  } from '../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
 include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
 include { REPEATMASKER                      } from '../modules/kherronism/repeatmasker'
-include { SAMPLESHEET_CHECK                 } from '../modules/local/samplesheet_check'
 
 include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
+include { EXTRACT_SAMPLES                   } from '../subworkflows/local/extract_samples'
 
 include { validateParams                    } from '../modules/local/validate_params'
 
@@ -101,14 +101,17 @@ workflow PAN_GENE {
     ch_versions.mix(REPEATMASKER.out.versions)
     | set { ch_versions }
 
-    // SAMPLESHEET_CHECK
-    SAMPLESHEET_CHECK(
+    // EXTRACT_SAMPLES
+    EXTRACT_SAMPLES(
         Channel.fromPath(params.samplesheet),
         Channel.of(params.target_assemblies.collect{tag, fastaPath -> tag.strip()}.join(","))
     )
-    .csv
-    | set { ch_valid_samplesheet }
+    .reads
+    | set { ch_reads_fq }
 
-    ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
+    ch_reads_fq
+    | view
+
+    ch_versions.mix(EXTRACT_SAMPLES.out.versions)
     | set { ch_versions }
 }
