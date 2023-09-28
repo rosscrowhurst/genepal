@@ -4,6 +4,7 @@ include { GUNZIP as GUNZIP_TARGET_ASSEMBLY  } from '../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
 include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
 include { REPEATMASKER                      } from '../modules/kherronism/repeatmasker'
+include { CAT_FASTQ                         } from '../modules/nf-core/cat/fastq'
 
 include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
 include { EXTRACT_SAMPLES                   } from '../subworkflows/local/extract_samples'
@@ -38,7 +39,8 @@ workflow PAN_GENE {
     )
     | set { ch_gunzip_target_assemblies }
 
-    ch_versions.mix(GUNZIP_TARGET_ASSEMBLY.out.versions)
+    ch_versions
+    | mix(GUNZIP_TARGET_ASSEMBLY.out.versions)
     | set { ch_versions }
 
     // FASTA_VALIDATE
@@ -46,7 +48,8 @@ workflow PAN_GENE {
     .valid_fasta
     | set { ch_validated_target_assemblies }
 
-    ch_versions.mix(FASTA_VALIDATE.out.versions)
+    ch_versions
+    | mix(FASTA_VALIDATE.out.versions)
     | set { ch_versions }
 
     // GUNZIP: te_libraries
@@ -69,7 +72,8 @@ workflow PAN_GENE {
     )
     | set { ch_gunzip_te_libraries }
 
-    ch_versions.mix(GUNZIP_TE_LIBRARY.out.versions)
+    ch_versions
+    | mix(GUNZIP_TE_LIBRARY.out.versions)
     | set { ch_versions }
 
     // PERFORM_EDTA_ANNOTATION
@@ -83,7 +87,8 @@ workflow PAN_GENE {
     | map {meta, assembly, teLib -> [meta, assembly]}
     | PERFORM_EDTA_ANNOTATION
 
-    ch_versions.mix(PERFORM_EDTA_ANNOTATION.out.versions)
+    ch_versions
+    | mix(PERFORM_EDTA_ANNOTATION.out.versions)
     | set { ch_versions }
     
     // REPEATMASKER
@@ -98,20 +103,60 @@ workflow PAN_GENE {
         ch_assemblies_n_te_libs.map {meta, assembly, te_lib -> te_lib},
     )
 
-    ch_versions.mix(REPEATMASKER.out.versions)
+    ch_versions
+    | mix(REPEATMASKER.out.versions)
     | set { ch_versions }
 
     // EXTRACT_SAMPLES
+    // https://github.com/nf-core/rnaseq
+    // MIT: https://github.com/nf-core/rnaseq/blob/master/LICENSE
     EXTRACT_SAMPLES(
         Channel.fromPath(params.samplesheet),
         Channel.of(params.target_assemblies.collect{tag, fastaPath -> tag.strip()}.join(","))
     )
     .reads
-    | set { ch_reads_fq }
+    | map { meta, fastq ->
+        new_id = meta.id - ~/_T\d+/
+        [ meta + [id: new_id], fastq ]
+    }
+    | groupTuple()
+    | branch { meta, fastq ->
+        single  : fastq.size() == 1
+            return [ meta, fastq.flatten() ]
+        multiple: fastq.size() > 1
+            return [ meta, fastq.flatten() ]
+    }
+    | set { ch_fastq }
 
-    ch_reads_fq
-    | view
-
-    ch_versions.mix(EXTRACT_SAMPLES.out.versions)
+    ch_versions
+    | mix(EXTRACT_SAMPLES.out.versions)
     | set { ch_versions }
+
+    // CAT_FASTQ
+    // https://github.com/nf-core/rnaseq
+    // MIT: https://github.com/nf-core/rnaseq/blob/master/LICENSE
+    CAT_FASTQ (
+        ch_fastq.multiple
+    )
+    .reads
+    | mix(ch_fastq.single)
+    | set { ch_cat_fastq }
+    
+    ch_versions
+    | mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
+    | set { ch_versions }
+
+    // Branch FastQ channels if 'auto' specified to infer strandedness
+    ch_cat_fastq
+    | branch { meta, fastq ->
+        auto_strand : meta.strandedness == 'auto'
+            return [ meta, fastq ]
+        known_strand: meta.strandedness != 'auto'
+            return [ meta, fastq ]
+    }
+    | set { ch_strand_fastq }
+
+    ch_strand_fastq
+    .auto_strand
+    | view
 }
