@@ -15,7 +15,7 @@ import argparse
 
 
 def parse_args(args=None):
-    Description = "Reformat nf-core/rnaseq samplesheet file and check its contents."
+    Description = "Reformat nf-core/rnaseq style samplesheet file and check its contents."
     Epilog = 'Example usage: python check_samplesheet.py <FILE_IN> "target_assembly_a,target_assembly_b" <FILE_OUT>'
 
     parser = argparse.ArgumentParser(description=Description, epilog=Epilog)

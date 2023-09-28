@@ -44,7 +44,7 @@ def validate_fastq_columns(fastq_1, fastq_2):
             raise ValueError(f"Failed to match fq1 and fq2 files:\n{fq1}\n{fq2}")
 
 
-def validate_sample_sheet(pd_df):
+def validate_samplesheet(pd_df):
     if len(pd.unique(pd_df["sample"])) != len(pd_df["sample"]):
         raise ValueError(f"Failed to create a sample-sheet with unique sample IDs")
 
@@ -164,7 +164,7 @@ def create_sample_ids_from_files_list(list_of_files_R1):
     return sample_ids
 
 
-def save_sample_sheet(exp_name, list_of_files_R1, list_of_files_R2, sample_ids):
+def save_samplesheet(exp_name, list_of_files_R1, list_of_files_R2, sample_ids):
     strandedness = ["auto" for _ in sample_ids]
     file_data = pd.DataFrame(
         {
@@ -175,17 +175,17 @@ def save_sample_sheet(exp_name, list_of_files_R1, list_of_files_R2, sample_ids):
         }
     )
 
-    validate_sample_sheet(file_data)
+    validate_samplesheet(file_data)
     file_data.sort_values(by=["sample"], inplace=True)
 
     file_data_dedup = remove_duplicate_samples(file_data)
 
     file_data_dedup["sample"] = file_data_dedup["sample"].apply(remove_lane_suffix)
 
-    file_data_dedup.to_csv(f"{exp_name}_sample_sheet.csv", index=False)
+    file_data_dedup.to_csv(f"{exp_name}_samplesheet.csv", index=False)
 
 
-def make_sample_sheet_from_metadata_file(file_path, exp_name):
+def make_samplesheet_from_metadata_file(file_path, exp_name):
     file_data = pd.read_excel(file_path, sheet_name="Samplesheet")
 
     sample_id_col = "isolate"
@@ -201,14 +201,14 @@ def make_sample_sheet_from_metadata_file(file_path, exp_name):
 
     file_data = file_data[["sample", "fastq_1", "fastq_2", "strandedness"]]
 
-    validate_sample_sheet(file_data)
+    validate_samplesheet(file_data)
     file_data.sort_values(by=["sample"], inplace=True)
 
     file_data_dedup = remove_duplicate_samples(file_data)
-    file_data_dedup.to_csv(f"{exp_name}_sample_sheet.csv", index=False)
+    file_data_dedup.to_csv(f"{exp_name}_samplesheet.csv", index=False)
 
 
-def make_sample_sheet_from_folder(file_path, exp_name):
+def make_samplesheet_from_folder(file_path, exp_name):
     if os.path.isfile(file_path):
         raise ValueError(
             "The provided path is for a file. Path to an input folder is required"
@@ -226,10 +226,10 @@ def make_sample_sheet_from_folder(file_path, exp_name):
 
     list_of_files_R1, list_of_files_R2 = extract_r1_r2_files(list_of_files)
     sample_ids = create_sample_ids_from_files_list(list_of_files_R1)
-    save_sample_sheet(exp_name, list_of_files_R1, list_of_files_R2, sample_ids)
+    save_samplesheet(exp_name, list_of_files_R1, list_of_files_R2, sample_ids)
 
 
-def make_sample_sheet_from_command(input_path_or_command, exp_name):
+def make_samplesheet_from_command(input_path_or_command, exp_name):
     result = subprocess.run(
         input_path_or_command, shell=True, capture_output=True, text=True
     )
@@ -250,7 +250,7 @@ def make_sample_sheet_from_command(input_path_or_command, exp_name):
 
     list_of_files_R1, list_of_files_R2 = extract_r1_r2_files(list_of_files)
     sample_ids = create_sample_ids_from_files_list(list_of_files_R1)
-    save_sample_sheet(exp_name, list_of_files_R1, list_of_files_R2, sample_ids)
+    save_samplesheet(exp_name, list_of_files_R1, list_of_files_R2, sample_ids)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -275,11 +275,11 @@ def main():
     print("Creating sample sheet...")
 
     if os.path.isfile(input_path_or_command):
-        make_sample_sheet_from_metadata_file(input_path_or_command, exp_name)
+        make_samplesheet_from_metadata_file(input_path_or_command, exp_name)
     elif os.path.isdir(input_path_or_command):
-        make_sample_sheet_from_folder(pathlib.Path(input_path_or_command), exp_name)
+        make_samplesheet_from_folder(pathlib.Path(input_path_or_command), exp_name)
     else:
-        make_sample_sheet_from_command(input_path_or_command, exp_name)
+        make_samplesheet_from_command(input_path_or_command, exp_name)
 
 if __name__ == "__main__":
     main()
