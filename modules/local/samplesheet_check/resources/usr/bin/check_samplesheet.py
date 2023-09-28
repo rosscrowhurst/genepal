@@ -15,7 +15,9 @@ import argparse
 
 
 def parse_args(args=None):
-    Description = "Reformat nf-core/rnaseq style samplesheet file and check its contents."
+    Description = (
+        "Reformat nf-core/rnaseq style samplesheet file and check its contents."
+    )
     Epilog = 'Example usage: python check_samplesheet.py <FILE_IN> "target_assembly_a,target_assembly_b" <FILE_OUT>'
 
     parser = argparse.ArgumentParser(description=Description, epilog=Epilog)
@@ -138,7 +140,7 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
                     print_error(
                         "Invalid combination of columns provided!", "Line", line
                     )
-                
+
                 ## Check if the target assemblies are permissible
                 target_assemblies_list = sorted(
                     [x.strip() for x in target_assemblies.strip().split(";")]
@@ -149,14 +151,15 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
                         continue
 
                     print_error(
-                        f"Target assembly '{assembly}' is not one of {permissible_target_assemblies}",
+                        f"Target assembly '{assembly}' is not one of {permissible_target_assemblies}!",
                         "Line",
                         line,
                     )
 
-                ## Create sample mapping dictionary = {sample: [[ single_end, fastq_1, fastq_2, strandedness, target_assemblies ]]}
+                ## Create sample mapping dictionary = {sample: [[ single_end, fastq_1, fastq_2, strandedness, [target_assemblies] ]]}
+                sample_target_assemblies = ";".join(target_assemblies_list)
                 sample_info = (
-                    sample_info + lspl[len(HEADER) :] + [";".join(target_assemblies_list)]
+                    sample_info + lspl[len(HEADER) :] + [sample_target_assemblies]
                 )
                 if sample not in sample_mapping_dict:
                     sample_mapping_dict[sample] = [sample_info]
@@ -175,7 +178,14 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
         with open(file_out, "w") as fout:
             fout.write(
                 ",".join(
-                    ["sample", "single_end", "fastq_1", "fastq_2", "strandedness", "target_assemblies"]
+                    [
+                        "sample",
+                        "single_end",
+                        "fastq_1",
+                        "fastq_2",
+                        "strandedness",
+                        "target_assemblies",
+                    ]
                     + header[len(HEADER) :]
                 )
                 + "\n"
@@ -199,6 +209,17 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
                 ):
                     print_error(
                         f"Multiple runs of a sample must have the same strandedness!",
+                        "Sample",
+                        sample,
+                    )
+
+                ## Check that multiple runs of the same sample have same target assemblies
+                if not all(
+                    x[4] == sample_mapping_dict[sample][0][4]
+                    for x in sample_mapping_dict[sample]
+                ):
+                    print_error(
+                        f"Multiple runs of a sample must have the same target assemblies!",
                         "Sample",
                         sample,
                     )
