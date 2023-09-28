@@ -41,9 +41,9 @@ flowchart LR
     REPEATMASKER
     end
 
-    style Params fill:#00EEFF50
-    style Validate fill:#00EEFF50
-    style Repeatmask fill:#00EEFF50
+    style Params fill:#00FFFF21,stroke:#00FFFF21
+    style Validate fill:#00FFFF21,stroke:#00FFFF21
+    style Repeatmask fill:#00FFFF21,stroke:#00FFFF21
 ```
 
 ## Plant&Food Users
