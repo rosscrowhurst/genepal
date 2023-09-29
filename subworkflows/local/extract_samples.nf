@@ -6,6 +6,7 @@ nextflow.enable.dsl=2
 // Changes:
 // Added channel permissible_target_assemblies
 // Changed file name from input_check.nf to extract_samples.nf
+// Removed strandedness
 //
 // Check input samplesheet and get read channels
 //
@@ -35,7 +36,6 @@ def create_fastq_channel(LinkedHashMap row) {
     def meta = [:]
     meta.id                 = row.sample
     meta.single_end         = row.single_end.toBoolean()
-    meta.strandedness       = row.strandedness
     meta.target_assemblies  = row.target_assemblies.split(";").sort()
 
     // add path(s) of the fastq file(s) to the meta map

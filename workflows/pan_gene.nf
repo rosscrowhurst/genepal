@@ -147,14 +147,4 @@ workflow PAN_GENE {
     ch_versions
     | mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
     | set { ch_versions }
-
-    // Branch FastQ channels if 'auto' specified to infer strandedness
-    ch_cat_fastq
-    | branch { meta, fastq ->
-        auto_strand : meta.strandedness == 'auto'
-            return [ meta, fastq ]
-        known_strand: meta.strandedness != 'auto'
-            return [ meta, fastq ]
-    }
-    | set { ch_strand_fastq }
 }

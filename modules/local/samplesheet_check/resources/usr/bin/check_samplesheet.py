@@ -12,6 +12,7 @@ import argparse
 #
 # 1. Formatted with black
 # 2. Added checks for the fifth column: target_assemblies
+# 3. Removed strandedness
 
 
 def parse_args(args=None):
@@ -48,17 +49,17 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
     """
     This function checks that the samplesheet follows the following structure:
 
-    sample,fastq_1,fastq_2,strandedness,target_assemblies
-    SAMPLE_PE,SAMPLE_PE_RUN1_1.fastq.gz,SAMPLE_PE_RUN1_2.fastq.gz,forward,red5;red3
-    SAMPLE_PE,SAMPLE_PE_RUN2_1.fastq.gz,SAMPLE_PE_RUN2_2.fastq.gz,forward,red5;red3
-    SAMPLE_SE,SAMPLE_SE_RUN1_1.fastq.gz,,forward,red5
+    sample,fastq_1,fastq_2,target_assemblies
+    SAMPLE_PE,SAMPLE_PE_RUN1_1.fastq.gz,SAMPLE_PE_RUN1_2.fastq.gz,red5;red3
+    SAMPLE_PE,SAMPLE_PE_RUN2_1.fastq.gz,SAMPLE_PE_RUN2_2.fastq.gz,red5;red3
+    SAMPLE_SE,SAMPLE_SE_RUN1_1.fastq.gz,,red5
     """
 
     sample_mapping_dict = {}
     with open(file_in, "r", encoding="utf-8-sig") as fin:
         ## Check header
-        MIN_COLS = 3
-        HEADER = ["sample", "fastq_1", "fastq_2", "strandedness", "target_assemblies"]
+        MIN_COLS = 4
+        HEADER = ["sample", "fastq_1", "fastq_2", "target_assemblies"]
         header = [x.strip('"') for x in fin.readline().strip().split(",")]
         if header[: len(HEADER)] != HEADER:
             print(
@@ -88,7 +89,7 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
                     )
 
                 ## Check sample name entries
-                sample, fastq_1, fastq_2, strandedness, target_assemblies = lspl[
+                sample, fastq_1, fastq_2, target_assemblies = lspl[
                     : len(HEADER)
                 ]
 
@@ -114,28 +115,12 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
                                 line,
                             )
 
-                ## Check strandedness
-                strandednesses = ["unstranded", "forward", "reverse", "auto"]
-                if strandedness:
-                    if strandedness not in strandednesses:
-                        print_error(
-                            f"Strandedness must be one of '{', '.join(strandednesses)}'!",
-                            "Line",
-                            line,
-                        )
-                else:
-                    print_error(
-                        f"Strandedness has not been specified! Must be one of {', '.join(strandednesses)}.",
-                        "Line",
-                        line,
-                    )
-
                 ## Auto-detect paired-end/single-end
-                sample_info = []  ## [single_end, fastq_1, fastq_2, strandedness]
+                sample_info = []  ## [single_end, fastq_1, fastq_2]
                 if sample and fastq_1 and fastq_2:  ## Paired-end short reads
-                    sample_info = ["0", fastq_1, fastq_2, strandedness]
+                    sample_info = ["0", fastq_1, fastq_2]
                 elif sample and fastq_1 and not fastq_2:  ## Single-end short reads
-                    sample_info = ["1", fastq_1, fastq_2, strandedness]
+                    sample_info = ["1", fastq_1, fastq_2]
                 else:
                     print_error(
                         "Invalid combination of columns provided!", "Line", line
@@ -183,7 +168,6 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
                         "single_end",
                         "fastq_1",
                         "fastq_2",
-                        "strandedness",
                         "target_assemblies",
                     ]
                     + header[len(HEADER) :]
@@ -202,20 +186,9 @@ def check_samplesheet(file_in, file_out, permissible_target_assemblies):
                         sample,
                     )
 
-                ## Check that multiple runs of the same sample are of the same strandedness
-                if not all(
-                    x[3] == sample_mapping_dict[sample][0][3]
-                    for x in sample_mapping_dict[sample]
-                ):
-                    print_error(
-                        f"Multiple runs of a sample must have the same strandedness!",
-                        "Sample",
-                        sample,
-                    )
-
                 ## Check that multiple runs of the same sample have same target assemblies
                 if not all(
-                    x[4] == sample_mapping_dict[sample][0][4]
+                    x[3] == sample_mapping_dict[sample][0][3]
                     for x in sample_mapping_dict[sample]
                 ):
                     print_error(
