@@ -7,9 +7,10 @@ A NextFlow pipeline for pan-genome annotation.
 flowchart LR
     TARGET_ASSEMBLIES((target_assemblies))
     TE_LIBRARIES((te_libraries))
+    SAMPLESHEET((samplesheet))
+    GUNZIP_TE[GUNZIP]
     SKIP_EDTA{Skip EDTA}
     pend((dev))
-    GUNZIP_TE[GUNZIP]
     
     TARGET_ASSEMBLIES --> GUNZIP
     GUNZIP --> FASTA_VALIDATE
@@ -17,16 +18,23 @@ flowchart LR
     FASTA_VALIDATE --> SKIP_EDTA
     
     TE_LIBRARIES --> GUNZIP_TE
-    SKIP_EDTA --> REPEATMASKER
     GUNZIP_TE --> SKIP_EDTA
-    
+    SKIP_EDTA --> REPEATMASKER
     FASTA_PERFORM_EDTA --> REPEATMASKER
-
     REPEATMASKER --> pend
+
+    SAMPLESHEET --> SAMPLESHEET_CHECK
+    SAMPLESHEET_CHECK --> |Technical replicates|CAT_FASTQ
+    CAT_FASTQ --> FASTQC
+    SAMPLESHEET_CHECK --> FASTQC
+    FASTQC --> UMITOOLS
+    UMITOOLS --> FASTP
+    FASTP --> pend
 
     subgraph Params
     TARGET_ASSEMBLIES
     TE_LIBRARIES
+    SAMPLESHEET
     end
 
     subgraph Validate
@@ -41,9 +49,18 @@ flowchart LR
     REPEATMASKER
     end
 
+    subgraph SamplePrep
+    SAMPLESHEET_CHECK
+    CAT_FASTQ
+    FASTQC
+    UMITOOLS
+    FASTP
+    end
+
     style Params fill:#00FFFF21,stroke:#00FFFF21
     style Validate fill:#00FFFF21,stroke:#00FFFF21
     style Repeatmask fill:#00FFFF21,stroke:#00FFFF21
+    style SamplePrep fill:#00FFFF21,stroke:#00FFFF21
 ```
 
 ## Plant&Food Users
