@@ -15,3 +15,4 @@
 
 1. Added stub
 2. Added author in meta.yml
+3. Made output hintsfile optional as it is not produced for ab-initio annotation.

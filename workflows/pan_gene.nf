@@ -179,11 +179,11 @@ workflow PAN_GENE {
     | set { ch_versions }
 
     // BRAKER3
-    ch_bam = Channel.empty().ifEmpty([])
-    ch_rnaseq_sets_dirs = Channel.empty().ifEmpty([])
-    ch_rnaseq_sets_ids = Channel.empty().ifEmpty([])
-    ch_proteins = Channel.empty().ifEmpty([])
-    ch_hintsfile = Channel.empty().ifEmpty([])
+    ch_bam = REPEATMASKER.out.fasta_masked.map {return []}
+    ch_rnaseq_sets_dirs = REPEATMASKER.out.fasta_masked.map {return []}
+    ch_rnaseq_sets_ids = REPEATMASKER.out.fasta_masked.map {return []}
+    ch_proteins = REPEATMASKER.out.fasta_masked.map {return []}
+    ch_hintsfile = REPEATMASKER.out.fasta_masked.map {return []}
 
     BRAKER3(
         REPEATMASKER.out.fasta_masked,

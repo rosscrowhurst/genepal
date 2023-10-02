@@ -19,7 +19,7 @@ process BRAKER3 {
     tuple val(meta), path("${prefix}/braker.gtf")      , emit: gtf
     tuple val(meta), path("${prefix}/braker.codingseq"), emit: cds
     tuple val(meta), path("${prefix}/braker.aa")       , emit: aa
-    tuple val(meta), path("${prefix}/hintsfile.gff")   , emit: hintsfile
+    tuple val(meta), path("${prefix}/hintsfile.gff")   , emit: hintsfile, optional: true
     tuple val(meta), path("${prefix}/braker.log")      , emit: log
     tuple val(meta), path("${prefix}/what-to-cite.txt"), emit: citations
     tuple val(meta), path("${prefix}/braker.gff3")     , emit: gff3     , optional: true
