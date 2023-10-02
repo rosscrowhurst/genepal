@@ -8,6 +8,7 @@ include { CAT_FASTQ                         } from '../modules/nf-core/cat/fastq
 
 include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
 include { EXTRACT_SAMPLES                   } from '../subworkflows/local/extract_samples'
+include { FASTQ_FASTQC_UMITOOLS_FASTP       } from '../subworkflows/nf-core/fastq_fastqc_umitools_fastp'
 
 include { validateParams                    } from '../modules/local/validate_params'
 
@@ -147,4 +148,23 @@ workflow PAN_GENE {
     ch_versions
     | mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
     | set { ch_versions }
+
+    // FASTQ_FASTQC_UMITOOLS_FASTP
+    // https://github.com/nf-core/rnaseq
+    // MIT: https://github.com/nf-core/rnaseq/blob/master/LICENSE
+    def with_umi            = false
+    def skip_umi_extract    = true
+    def umi_discard_read    = false
+    FASTQ_FASTQC_UMITOOLS_FASTP (
+        ch_cat_fastq,
+        params.sample_prep.skip_fastqc,
+        with_umi,
+        skip_umi_extract,
+        umi_discard_read,
+        params.sample_prep.skip_fastp,
+        [],
+        params.sample_prep.save_trimmed,
+        params.sample_prep.save_trimmed,
+        params.sample_prep.min_trimmed_reads
+    )
 }
