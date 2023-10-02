@@ -167,4 +167,8 @@ workflow PAN_GENE {
         params.sample_prep.save_trimmed,
         params.sample_prep.min_trimmed_reads
     )
+
+    ch_versions
+    | mix(FASTQ_FASTQC_UMITOOLS_FASTP.out.versions)
+    | set { ch_versions }
 }
