@@ -21,14 +21,13 @@ flowchart LR
     GUNZIP_TE --> SKIP_EDTA
     SKIP_EDTA --> REPEATMASKER
     FASTA_PERFORM_EDTA --> REPEATMASKER
-    REPEATMASKER --> pend
+    REPEATMASKER --> BRAKER3
 
     SAMPLESHEET --> SAMPLESHEET_CHECK
     SAMPLESHEET_CHECK --> |Technical replicates|CAT_FASTQ
     CAT_FASTQ --> FASTQC
     SAMPLESHEET_CHECK --> FASTQC
-    FASTQC --> UMITOOLS
-    UMITOOLS --> FASTP
+    FASTQC --> FASTP
     FASTP --> pend
 
     subgraph Params
@@ -53,7 +52,6 @@ flowchart LR
     SAMPLESHEET_CHECK
     CAT_FASTQ
     FASTQC
-    UMITOOLS
     FASTP
     end
 
