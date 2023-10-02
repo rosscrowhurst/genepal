@@ -5,6 +5,7 @@ include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
 include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
 include { REPEATMASKER                      } from '../modules/kherronism/repeatmasker'
 include { CAT_FASTQ                         } from '../modules/nf-core/cat/fastq'
+include { BRAKER3                           } from '../modules/kherronism/braker3'
 
 include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
 include { EXTRACT_SAMPLES                   } from '../subworkflows/local/extract_samples'
@@ -176,4 +177,20 @@ workflow PAN_GENE {
     ch_versions
     | mix(FASTQ_FASTQC_UMITOOLS_FASTP.out.versions)
     | set { ch_versions }
+
+    // BRAKER3
+    ch_bam = Channel.empty().ifEmpty([])
+    ch_rnaseq_sets_dirs = Channel.empty().ifEmpty([])
+    ch_rnaseq_sets_ids = Channel.empty().ifEmpty([])
+    ch_proteins = Channel.empty().ifEmpty([])
+    ch_hintsfile = Channel.empty().ifEmpty([])
+
+    BRAKER3(
+        REPEATMASKER.out.fasta_masked,
+        ch_bam,
+        ch_rnaseq_sets_dirs,
+        ch_rnaseq_sets_ids,
+        ch_proteins,
+        ch_hintsfile
+    )
 }
