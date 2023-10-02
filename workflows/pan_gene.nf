@@ -105,7 +105,7 @@ workflow PAN_GENE {
     )
 
     ch_versions
-    | mix(REPEATMASKER.out.versions)
+    | mix(REPEATMASKER.out.versions.first())
     | set { ch_versions }
 
     // EXTRACT_SAMPLES
@@ -113,8 +113,13 @@ workflow PAN_GENE {
     // MIT: https://github.com/nf-core/rnaseq/blob/master/LICENSE
     // Changes
     // Use meta.id as key for groupTuple as groupTuple does not work when there is a sublist in the key list
+    ch_samplesheet_path = Channel.empty()
+    if(params.samplesheet != null) {
+        ch_samplesheet_path = Channel.fromPath(params.samplesheet)
+    }
+    
     EXTRACT_SAMPLES(
-        Channel.fromPath(params.samplesheet),
+        ch_samplesheet_path,
         Channel.of(params.target_assemblies.collect{tag, fastaPath -> tag.strip()}.join(","))
     )
     .reads
@@ -146,7 +151,7 @@ workflow PAN_GENE {
     | set { ch_cat_fastq }
     
     ch_versions
-    | mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
+    | mix(CAT_FASTQ.out.versions.first())
     | set { ch_versions }
 
     // FASTQ_FASTQC_UMITOOLS_FASTP
