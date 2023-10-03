@@ -2,7 +2,7 @@
 
 
 #SBATCH --job-name PAN_GENE
-#SBATCH --time=01:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
