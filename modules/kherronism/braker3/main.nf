@@ -38,10 +38,13 @@ process BRAKER3 {
     def rna_dirs = rnaseq_sets_dirs ? "--rnaseq_sets_dirs=${rnaseq_sets_dirs}" : ''
     def rna_ids  = rnaseq_sets_ids ? "--rnaseq_sets_ids=${rnaseq_sets_ids}" : ''
     """
+    cp -r /usr/share/augustus/config augustus_config
+
     braker.pl \\
         --genome ${fasta} \\
         --species ${prefix} \\
         --workingdir ${prefix} \\
+        --AUGUSTUS_CONFIG_PATH "\$(pwd)/augustus_config" \\
         --threads ${task.cpus} \\
         ${hints} \\
         ${bam} \\

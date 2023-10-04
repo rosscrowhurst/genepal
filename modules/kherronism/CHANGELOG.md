@@ -16,3 +16,4 @@
 1. Added stub
 2. Added author in meta.yml
 3. Made output hintsfile optional as it is not produced for ab-initio annotation.
+4. Directed `--AUGUSTUS_CONFIG_PATH` to work folder. This avoids "species already exists" error on subsequent runs with same species.
