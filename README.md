@@ -22,13 +22,16 @@ flowchart LR
     SKIP_EDTA --> REPEATMASKER
     FASTA_PERFORM_EDTA --> REPEATMASKER
     REPEATMASKER --> BRAKER3
+    REPEATMASKER --> STAR_GENOMEGENERATE
 
     SAMPLESHEET --> SAMPLESHEET_CHECK
     SAMPLESHEET_CHECK --> |Technical replicates|CAT_FASTQ
     CAT_FASTQ --> FASTQC
     SAMPLESHEET_CHECK --> FASTQC
     FASTQC --> FASTP
-    FASTP --> pend
+    FASTP --> STAR_ALIGN
+    STAR_GENOMEGENERATE --> STAR_ALIGN
+    STAR_ALIGN --> pend
 
     subgraph Params
     TARGET_ASSEMBLIES
@@ -36,16 +39,14 @@ flowchart LR
     SAMPLESHEET
     end
 
-    subgraph Validate
+    subgraph GenomePrep
     GUNZIP
     FASTA_VALIDATE
-    end
-
-    subgraph Repeatmask
     GUNZIP_TE
     FASTA_PERFORM_EDTA
     SKIP_EDTA
     REPEATMASKER
+    STAR_GENOMEGENERATE
     end
 
     subgraph SamplePrep
@@ -53,12 +54,17 @@ flowchart LR
     CAT_FASTQ
     FASTQC
     FASTP
+    STAR_ALIGN
+    end
+
+    subgraph Annotation
+    BRAKER3
     end
 
     style Params fill:#00FFFF21,stroke:#00FFFF21
-    style Validate fill:#00FFFF21,stroke:#00FFFF21
-    style Repeatmask fill:#00FFFF21,stroke:#00FFFF21
+    style GenomePrep fill:#00FFFF21,stroke:#00FFFF21
     style SamplePrep fill:#00FFFF21,stroke:#00FFFF21
+    style Annotation fill:#00FFFF21,stroke:#00FFFF21
 ```
 
 ## Plant&Food Users
