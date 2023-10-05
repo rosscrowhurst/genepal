@@ -4,6 +4,7 @@ include { GUNZIP as GUNZIP_TARGET_ASSEMBLY  } from '../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
 include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
 include { REPEATMASKER                      } from '../modules/kherronism/repeatmasker'
+include { STAR_GENOMEGENERATE               } from '../modules/nf-core/star/genomegenerate'
 include { CAT_FASTQ                         } from '../modules/nf-core/cat/fastq'
 include { BRAKER3                           } from '../modules/kherronism/braker3'
 
@@ -101,12 +102,26 @@ workflow PAN_GENE {
     | set { ch_assemblies_n_te_libs }
 
     REPEATMASKER(
-        ch_assemblies_n_te_libs.map {meta, assembly, te_lib -> [meta, assembly]},
-        ch_assemblies_n_te_libs.map {meta, assembly, te_lib -> te_lib},
+        ch_assemblies_n_te_libs.map {meta, assembly, teLib -> [meta, assembly]},
+        ch_assemblies_n_te_libs.map {meta, assembly, teLib -> teLib},
     )
 
     ch_versions
     | mix(REPEATMASKER.out.versions.first())
+    | set { ch_versions }
+
+    // STAR_GENOMEGENERATE
+    def star_ignore_sjdbgtf = true
+    STAR_GENOMEGENERATE(
+        REPEATMASKER.out.fasta_masked,
+        REPEATMASKER.out.fasta_masked.map{meta, maskedFasta -> [meta, []]},
+        star_ignore_sjdbgtf
+    )
+    .index
+    | set { ch_assembly_index }
+
+    ch_versions
+    | mix(STAR_GENOMEGENERATE.out.versions.first())
     | set { ch_versions }
 
     // EXTRACT_SAMPLES
