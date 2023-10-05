@@ -6,6 +6,7 @@ include { FASTA_VALIDATE                    } from '../modules/local/fasta_valid
 include { REPEATMASKER                      } from '../modules/kherronism/repeatmasker'
 include { STAR_GENOMEGENERATE               } from '../modules/nf-core/star/genomegenerate'
 include { CAT_FASTQ                         } from '../modules/nf-core/cat/fastq'
+include { STAR_ALIGN                        } from '../modules/nf-core/star/align'
 include { BRAKER3                           } from '../modules/kherronism/braker3'
 
 include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
@@ -188,10 +189,59 @@ workflow PAN_GENE {
         params.sample_prep.save_trimmed,
         params.sample_prep.min_trimmed_reads
     )
+    .reads
+    | set { ch_trim_reads }
+
+    ch_trim_reads
+    | flatMap { meta, reads ->
+        def targetAssemblies = meta["target_assemblies"]
+
+        readsByAssembly = []
+
+        for(assembly in targetAssemblies) {
+            readsByAssembly += [[[id: "${meta.id}.on.${assembly}", single_end: meta.single_end, target_assembly: assembly], reads]]
+        }
+
+        return readsByAssembly
+    }
+    | set { ch_trim_reads_by_assembly }
 
     ch_versions
     | mix(FASTQ_FASTQC_UMITOOLS_FASTP.out.versions)
     | set { ch_versions }
+
+    // STAR_ALIGN
+    ch_assembly_index
+    | map { meta, index ->
+        [meta.id, index]
+    }
+    | cross(
+        ch_trim_reads_by_assembly.map{meta, reads -> [meta.target_assembly, meta, reads]}
+    )
+    | map { indexWithExt, readsWithExt ->
+        def index = indexWithExt[1]
+
+        def readsMeta = readsWithExt[1]
+        def reads = readsWithExt[2]
+
+        [
+            readsMeta,
+            reads,
+            index
+        ]
+    }
+    | set { ch_trim_reads_by_assembly_with_index }
+
+    def seq_platform = false
+    def seq_center = false
+    STAR_ALIGN(
+        ch_trim_reads_by_assembly_with_index.map{meta, reads, index -> [meta, reads]},
+        ch_trim_reads_by_assembly_with_index.map{meta, reads, index -> [[id: meta.target_assembly], index]},
+        ch_trim_reads_by_assembly_with_index.map{meta, reads, index -> [[id: meta.target_assembly], []]},
+        star_ignore_sjdbgtf,
+        seq_platform,
+        seq_center
+    )
 
     // BRAKER3
     ch_bam = REPEATMASKER.out.fasta_masked.map {return []}
