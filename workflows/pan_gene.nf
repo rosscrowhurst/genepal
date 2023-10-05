@@ -242,6 +242,12 @@ workflow PAN_GENE {
         seq_platform,
         seq_center
     )
+    .bam_sorted
+    | set { ch_mapped_reads }
+
+    ch_versions
+    | mix(STAR_ALIGN.out.versions.first())
+    | set { ch_versions }
 
     // BRAKER3
     ch_bam = REPEATMASKER.out.fasta_masked.map {return []}
