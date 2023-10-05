@@ -243,21 +243,45 @@ workflow PAN_GENE {
         seq_center
     )
     .bam_sorted
-    | set { ch_mapped_reads }
+    .tap { ch_mapped_reads }
+    .map { meta, bam ->
+        [
+            [id: meta.target_assembly],
+            bam
+        ]
+    }
+    | groupTuple
+    | set { ch_mapped_reads_by_assembly }
 
     ch_versions
     | mix(STAR_ALIGN.out.versions.first())
     | set { ch_versions }
 
     // BRAKER3
-    ch_bam = REPEATMASKER.out.fasta_masked.map {return []}
-    ch_rnaseq_sets_dirs = REPEATMASKER.out.fasta_masked.map {return []}
-    ch_rnaseq_sets_ids = REPEATMASKER.out.fasta_masked.map {return []}
-    ch_proteins = REPEATMASKER.out.fasta_masked.map {return []}
-    ch_hintsfile = REPEATMASKER.out.fasta_masked.map {return []}
+    REPEATMASKER.out.fasta_masked
+    | mix(ch_mapped_reads_by_assembly) // 
+    | groupTuple(size: 2, remainder: true)
+    | map { meta, groupedItems ->
+        def maskedFasta = groupedItems[0]
+
+        if(groupedItems.size() == 2) {
+            def mappedReads = groupedItems[1].sort()
+            return [meta, maskedFasta, mappedReads]
+        } else {
+            return [meta, maskedFasta, []]
+        }
+    }
+    | set { ch_braker_inputs }
+
+    ch_fasta            = ch_braker_inputs.map{meta, assembly, bams -> [meta, assembly]}
+    ch_bam              = ch_braker_inputs.map{meta, assembly, bams -> bams}
+    ch_rnaseq_sets_dirs = ch_braker_inputs.map{meta, assembly, bams -> []}
+    ch_rnaseq_sets_ids  = ch_braker_inputs.map{meta, assembly, bams -> []}
+    ch_proteins         = ch_braker_inputs.map{meta, assembly, bams -> []}
+    ch_hintsfile        = ch_braker_inputs.map{meta, assembly, bams -> []}
 
     BRAKER3(
-        REPEATMASKER.out.fasta_masked,
+        ch_fasta,
         ch_bam,
         ch_rnaseq_sets_dirs,
         ch_rnaseq_sets_ids,
