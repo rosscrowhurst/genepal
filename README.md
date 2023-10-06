@@ -31,7 +31,11 @@ flowchart LR
     FASTQC --> FASTP
     FASTP --> STAR_ALIGN
     STAR_GENOMEGENERATE --> STAR_ALIGN
-    STAR_ALIGN --> pend
+    STAR_ALIGN --> GROUP_BY_ASSEMBLY([Group by assembly])
+    GROUP_BY_ASSEMBLY --> SAMTOOLS_CAT
+    SAMTOOLS_CAT --> |RNASeq bam|BRAKER3
+
+    BRAKER3 --> pend
 
     subgraph Params
     TARGET_ASSEMBLIES
@@ -55,6 +59,8 @@ flowchart LR
     FASTQC
     FASTP
     STAR_ALIGN
+    GROUP_BY_ASSEMBLY
+    SAMTOOLS_CAT
     end
 
     subgraph Annotation
