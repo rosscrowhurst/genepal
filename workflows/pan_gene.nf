@@ -7,6 +7,7 @@ include { REPEATMASKER                      } from '../modules/kherronism/repeat
 include { STAR_GENOMEGENERATE               } from '../modules/nf-core/star/genomegenerate'
 include { CAT_FASTQ                         } from '../modules/nf-core/cat/fastq'
 include { STAR_ALIGN                        } from '../modules/nf-core/star/align'
+include { SAMTOOLS_CAT                      } from '../modules/nf-core/samtools/cat'
 include { BRAKER3                           } from '../modules/kherronism/braker3'
 
 include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
@@ -44,7 +45,7 @@ workflow PAN_GENE {
     | set { ch_gunzip_target_assemblies }
 
     ch_versions
-    | mix(GUNZIP_TARGET_ASSEMBLY.out.versions)
+    | mix(GUNZIP_TARGET_ASSEMBLY.out.versions.first())
     | set { ch_versions }
 
     // FASTA_VALIDATE
@@ -53,7 +54,7 @@ workflow PAN_GENE {
     | set { ch_validated_target_assemblies }
 
     ch_versions
-    | mix(FASTA_VALIDATE.out.versions)
+    | mix(FASTA_VALIDATE.out.versions.first())
     | set { ch_versions }
 
     // GUNZIP: te_libraries
@@ -77,7 +78,7 @@ workflow PAN_GENE {
     | set { ch_gunzip_te_libraries }
 
     ch_versions
-    | mix(GUNZIP_TE_LIBRARY.out.versions)
+    | mix(GUNZIP_TE_LIBRARY.out.versions.first())
     | set { ch_versions }
 
     // PERFORM_EDTA_ANNOTATION
@@ -247,7 +248,7 @@ workflow PAN_GENE {
     .map { meta, bam ->
         [
             [id: meta.target_assembly],
-            bam
+            bam instanceof List ? bam.find {it =~ /Aligned/} : bam
         ]
     }
     | groupTuple
@@ -257,22 +258,49 @@ workflow PAN_GENE {
     | mix(STAR_ALIGN.out.versions.first())
     | set { ch_versions }
 
+    // SAMTOOLS_CAT
+    ch_mapped_reads_by_assembly
+    | branch { meta, bamList ->
+        bams: bamList.size() > 1
+        bam: bamList.size() <= 1
+    }
+    | set { ch_samtools_cat_inputs_branches }
+
+    SAMTOOLS_CAT(
+        ch_samtools_cat_inputs_branches.bams
+    )
+    .bam
+    | map { meta, bam ->
+        [
+            meta,
+            [bam]
+        ]
+    }
+    | mix(
+        ch_samtools_cat_inputs_branches.bam
+    )
+    | set { ch_cat_bam_by_assembly }
+
+    ch_versions
+    | mix(SAMTOOLS_CAT.out.versions.first())
+    | set { ch_versions }
+
     // BRAKER3
     REPEATMASKER.out.fasta_masked
-    | mix(ch_mapped_reads_by_assembly) // 
+    | mix(ch_cat_bam_by_assembly)
     | groupTuple(size: 2, remainder: true)
     | map { meta, groupedItems ->
         def maskedFasta = groupedItems[0]
 
         if(groupedItems.size() == 2) {
-            def mappedReads = groupedItems[1].sort()
-            return [meta, maskedFasta, mappedReads]
+            def bam = groupedItems[1]
+            return [meta, maskedFasta, bam]
         } else {
             return [meta, maskedFasta, []]
         }
     }
     | set { ch_braker_inputs }
-
+    
     ch_fasta            = ch_braker_inputs.map{meta, assembly, bams -> [meta, assembly]}
     ch_bam              = ch_braker_inputs.map{meta, assembly, bams -> bams}
     ch_rnaseq_sets_dirs = ch_braker_inputs.map{meta, assembly, bams -> []}
@@ -288,4 +316,8 @@ workflow PAN_GENE {
         ch_proteins,
         ch_hintsfile
     )
+
+    ch_versions
+    | mix(BRAKER3.out.versions.first())
+    | set { ch_versions }
 }

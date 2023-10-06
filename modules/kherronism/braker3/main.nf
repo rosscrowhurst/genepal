@@ -55,7 +55,7 @@ process BRAKER3 {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        braker3: \$(braker.pl --version 2>&1 | sed 's/^.*BRAKER3 v//; s/ .*\$//')
+        braker3: \$(braker.pl --version 2>&1 | grep "version" | sed 's/braker.pl version//; s/\\s*//')
     END_VERSIONS
     """
 
@@ -73,7 +73,7 @@ process BRAKER3 {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        braker3: \$(braker.pl --version 2>&1 | sed 's/^.*BRAKER3 v//; s/ .*\$//')
+        braker3: \$(braker.pl --version 2>&1 | grep "version" | sed 's/braker.pl version//; s/\\s*//')
     END_VERSIONS
     """
 }

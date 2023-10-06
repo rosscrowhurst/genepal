@@ -27,13 +27,13 @@ workflow PERFORM_EDTA_ANNOTATION {
 
         Channel.empty()
         | mix(
-            SHORTEN_EDTA_IDS.out.versions
+            SHORTEN_EDTA_IDS.out.versions.first()
         )
         | mix(
-            EDTA.out.versions
+            EDTA.out.versions.first()
         )
         | mix(
-            RESTORE_EDTA_IDS.out.versions
+            RESTORE_EDTA_IDS.out.versions.first()
         )
         | set { ch_versions }
     
