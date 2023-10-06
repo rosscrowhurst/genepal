@@ -4,7 +4,7 @@ A NextFlow pipeline for pan-genome annotation.
 ## Pipeline Flowchart
 
 ```mermaid
-flowchart LR
+flowchart TD
     TARGET_ASSEMBLIES((target_assemblies))
     TE_LIBRARIES((te_libraries))
     SAMPLESHEET((samplesheet))
