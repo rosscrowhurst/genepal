@@ -1,20 +1,22 @@
 nextflow.enable.dsl=2
 
-include { GUNZIP as GUNZIP_TARGET_ASSEMBLY  } from '../modules/nf-core/gunzip'
-include { GUNZIP as GUNZIP_TE_LIBRARY       } from '../modules/nf-core/gunzip'
-include { FASTA_VALIDATE                    } from '../modules/local/fasta_validate'
-include { REPEATMASKER                      } from '../modules/kherronism/repeatmasker'
-include { STAR_GENOMEGENERATE               } from '../modules/nf-core/star/genomegenerate'
-include { CAT_FASTQ                         } from '../modules/nf-core/cat/fastq'
-include { STAR_ALIGN                        } from '../modules/nf-core/star/align'
-include { SAMTOOLS_CAT                      } from '../modules/nf-core/samtools/cat'
-include { BRAKER3                           } from '../modules/kherronism/braker3'
+include { GUNZIP as GUNZIP_TARGET_ASSEMBLY      } from '../modules/nf-core/gunzip'
+include { GUNZIP as GUNZIP_TE_LIBRARY           } from '../modules/nf-core/gunzip'
+include { GUNZIP as GUNZIP_EXTERNAL_PROTEIN_SEQ } from '../modules/nf-core/gunzip'
+include { FASTA_VALIDATE                        } from '../modules/local/fasta_validate'
+include { REPEATMASKER                          } from '../modules/kherronism/repeatmasker'
+include { STAR_GENOMEGENERATE                   } from '../modules/nf-core/star/genomegenerate'
+include { CAT_FASTQ                             } from '../modules/nf-core/cat/fastq'
+include { STAR_ALIGN                            } from '../modules/nf-core/star/align'
+include { SAMTOOLS_CAT                          } from '../modules/nf-core/samtools/cat'
+include { CAT_CAT as CAT_PROTEIN_SEQS           } from '../modules/nf-core/cat/cat'
+include { BRAKER3                               } from '../modules/kherronism/braker3'
 
-include { PERFORM_EDTA_ANNOTATION           } from '../subworkflows/local/perform_edta_annotation'
-include { EXTRACT_SAMPLES                   } from '../subworkflows/local/extract_samples'
-include { FASTQ_FASTQC_UMITOOLS_FASTP       } from '../subworkflows/nf-core/fastq_fastqc_umitools_fastp'
+include { PERFORM_EDTA_ANNOTATION               } from '../subworkflows/local/perform_edta_annotation'
+include { EXTRACT_SAMPLES                       } from '../subworkflows/local/extract_samples'
+include { FASTQ_FASTQC_UMITOOLS_FASTP           } from '../subworkflows/nf-core/fastq_fastqc_umitools_fastp'
 
-include { validateParams                    } from '../modules/local/validate_params'
+include { validateParams                        } from '../modules/local/validate_params'
 
 validateParams(params)
 
@@ -285,6 +287,45 @@ workflow PAN_GENE {
     | mix(SAMTOOLS_CAT.out.versions.first())
     | set { ch_versions }
 
+    // GUNZIP: external_protein_seqs
+    Channel.fromList(params.external_protein_seqs)
+    | map { filePath ->
+        def fileHandle = file(filePath, checkIfExists: true)
+        [[id:fileHandle.getSimpleName()], fileHandle]
+    }
+    | branch { meta, file ->
+        gz: "$file".endsWith(".gz")
+        rest: !"$file".endsWith(".gz")
+    }
+    | set { ch_external_protein_seqs }
+
+    GUNZIP_EXTERNAL_PROTEIN_SEQ(
+        ch_external_protein_seqs.gz
+    )
+    .gunzip
+    | mix(
+        ch_external_protein_seqs.rest
+    )
+    | set { ch_gunzip_external_protein_seqs }
+
+    ch_versions
+    | mix(GUNZIP_EXTERNAL_PROTEIN_SEQ.out.versions.first())
+    | set { ch_versions }
+
+    // CAT_PROTEIN_SEQS
+    ch_gunzip_external_protein_seqs
+    | map{meta, filePath -> filePath}
+    | collect
+    | map{fileList -> [[id:"protein_seqs"], fileList]}
+    | CAT_PROTEIN_SEQS
+    
+    CAT_PROTEIN_SEQS.out.file_out
+    | set { ch_protein_seq }
+
+    ch_versions
+    | mix(CAT_PROTEIN_SEQS.out.versions)
+    | set { ch_versions }
+
     // BRAKER3
     REPEATMASKER.out.fasta_masked
     | mix(ch_cat_bam_by_assembly)
@@ -299,14 +340,15 @@ workflow PAN_GENE {
             return [meta, maskedFasta, []]
         }
     }
+    | combine(ch_protein_seq.map{meta, filePath -> filePath})
     | set { ch_braker_inputs }
     
-    ch_fasta            = ch_braker_inputs.map{meta, assembly, bams -> [meta, assembly]}
-    ch_bam              = ch_braker_inputs.map{meta, assembly, bams -> bams}
-    ch_rnaseq_sets_dirs = ch_braker_inputs.map{meta, assembly, bams -> []}
-    ch_rnaseq_sets_ids  = ch_braker_inputs.map{meta, assembly, bams -> []}
-    ch_proteins         = ch_braker_inputs.map{meta, assembly, bams -> []}
-    ch_hintsfile        = ch_braker_inputs.map{meta, assembly, bams -> []}
+    ch_fasta            = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> [meta, assembly]}
+    ch_bam              = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> bams}
+    ch_rnaseq_sets_dirs = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> []}
+    ch_rnaseq_sets_ids  = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> []}
+    ch_proteins         = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> proteinSeq}
+    ch_hintsfile        = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> []}
 
     BRAKER3(
         ch_fasta,
