@@ -5,9 +5,12 @@ A NextFlow pipeline for pan-genome annotation.
 
 ```mermaid
 flowchart TD
-    TARGET_ASSEMBLIES((target_assemblies))
-    TE_LIBRARIES((te_libraries))
+    TARGET_ASSEMBLIES(("[target_assemblies]"))
+    TE_LIBRARIES(("[te_libraries]"))
     SAMPLESHEET((samplesheet))
+    EXTERNAL_PROTEIN_SEQS(("[external_protein_seqs]"))
+    
+    GUNZIP_PROT[GUNZIP]
     GUNZIP_TE[GUNZIP]
     SKIP_EDTA{Skip EDTA}
     pend((dev))
@@ -35,12 +38,17 @@ flowchart TD
     GROUP_BY_ASSEMBLY --> SAMTOOLS_CAT
     SAMTOOLS_CAT --> |RNASeq bam|BRAKER3
 
+    EXTERNAL_PROTEIN_SEQS --> GUNZIP_PROT
+    GUNZIP_PROT --> CAT
+    CAT --> BRAKER3
+    
     BRAKER3 --> pend
 
     subgraph Params
     TARGET_ASSEMBLIES
     TE_LIBRARIES
     SAMPLESHEET
+    EXTERNAL_PROTEIN_SEQS
     end
 
     subgraph GenomePrep
@@ -63,14 +71,9 @@ flowchart TD
     SAMTOOLS_CAT
     end
 
-    subgraph Annotation
-    BRAKER3
-    end
-
     style Params fill:#00FFFF21,stroke:#00FFFF21
     style GenomePrep fill:#00FFFF21,stroke:#00FFFF21
     style SamplePrep fill:#00FFFF21,stroke:#00FFFF21
-    style Annotation fill:#00FFFF21,stroke:#00FFFF21
 ```
 
 ## Plant&Food Users
