@@ -288,7 +288,12 @@ workflow PAN_GENE {
     | set { ch_versions }
 
     // GUNZIP: external_protein_seqs
-    Channel.fromList(params.external_protein_seqs)
+    ch_external_protein_seqs = Channel.empty()
+    if(params.external_protein_seqs != null) {
+        ch_external_protein_seqs = Channel.fromList(params.external_protein_seqs)
+    }
+    
+    ch_external_protein_seqs
     | map { filePath ->
         def fileHandle = file(filePath, checkIfExists: true)
         [[id:fileHandle.getSimpleName()], fileHandle]
@@ -297,14 +302,14 @@ workflow PAN_GENE {
         gz: "$file".endsWith(".gz")
         rest: !"$file".endsWith(".gz")
     }
-    | set { ch_external_protein_seqs }
+    | set { ch_external_protein_seqs_branch }
 
     GUNZIP_EXTERNAL_PROTEIN_SEQ(
-        ch_external_protein_seqs.gz
+        ch_external_protein_seqs_branch.gz
     )
     .gunzip
     | mix(
-        ch_external_protein_seqs.rest
+        ch_external_protein_seqs_branch.rest
     )
     | set { ch_gunzip_external_protein_seqs }
 
@@ -340,8 +345,17 @@ workflow PAN_GENE {
             return [meta, maskedFasta, []]
         }
     }
-    | combine(ch_protein_seq.map{meta, filePath -> filePath})
     | set { ch_braker_inputs }
+    
+    if(params.external_protein_seqs) {
+        ch_braker_inputs
+        | combine(ch_protein_seq.map{meta, filePath -> filePath})
+        | set { ch_braker_inputs }
+    } else {
+        ch_braker_inputs
+        | map{meta, assembly, bams -> [meta, assembly, bams, []]}
+        | set { ch_braker_inputs }
+    }
     
     ch_fasta            = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> [meta, assembly]}
     ch_bam              = ch_braker_inputs.map{meta, assembly, bams, proteinSeq -> bams}
