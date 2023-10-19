@@ -7,6 +7,7 @@ include { FASTA_VALIDATE                        } from '../modules/local/fasta_v
 include { REPEATMASKER                          } from '../modules/kherronism/repeatmasker'
 include { STAR_GENOMEGENERATE                   } from '../modules/nf-core/star/genomegenerate'
 include { CAT_FASTQ                             } from '../modules/nf-core/cat/fastq'
+include { SORTMERNA                             } from '../modules/nf-core/sortmerna'
 include { STAR_ALIGN                            } from '../modules/nf-core/star/align'
 include { SAMTOOLS_CAT                          } from '../modules/nf-core/samtools/cat'
 include { CAT_CAT as CAT_PROTEIN_SEQS           } from '../modules/nf-core/cat/cat'
@@ -19,6 +20,13 @@ include { FASTQ_FASTQC_UMITOOLS_FASTP           } from '../subworkflows/nf-core/
 include { validateParams                        } from '../modules/local/validate_params'
 
 validateParams(params)
+
+// Additional validation
+// Check rRNA databases for sortmerna
+if (params.sample_prep.remove_ribo_rna) {
+    ch_ribo_db = file(params.sample_prep.ribo_database_manifest, checkIfExists: true)
+    if (ch_ribo_db.isEmpty()) {exit 1, "File provided with --ribo_database_manifest is empty: ${ch_ribo_db.getName()}!"}
+}
 
 workflow PAN_GENE {
 
@@ -194,6 +202,25 @@ workflow PAN_GENE {
     )
     .reads
     | set { ch_trim_reads }
+
+    // SORTMERNA
+    if (params.sample_prep.remove_ribo_rna) {
+        Channel.from(ch_ribo_db.readLines())
+        | map { row -> file(row, checkIfExists: true) }
+        | collect
+        | set { ch_sortmerna_fastas }
+
+        SORTMERNA (
+            ch_trim_reads,
+            ch_sortmerna_fastas
+        )
+        .reads
+        | set { ch_trim_reads }
+
+        ch_versions
+        | mix(SORTMERNA.out.versions.first())
+        | set { ch_versions }
+    }
 
     ch_trim_reads
     | flatMap { meta, reads ->
