@@ -18,3 +18,9 @@
 ### star/genomegenerate
 
 1. Added star_ignore_sjdbgtf
+2. Added author in meta.yml
+
+### sortmerna
+
+1. Added stub
+2. Added author in meta.yml

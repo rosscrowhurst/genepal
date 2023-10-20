@@ -5,26 +5,27 @@ A NextFlow pipeline for pan-genome annotation.
 
 ```mermaid
 flowchart TD
-    TARGET_ASSEMBLIES(("[target_assemblies]"))
-    TE_LIBRARIES(("[te_libraries]"))
-    SAMPLESHEET((samplesheet))
-    EXTERNAL_PROTEIN_SEQS(("[external_protein_seqs]"))
+    ribo_db((ribo_db))
+    SAMPLESHEET((samples))
+    TE_LIBRARIES(("[te_libs]"))
+    TARGET_ASSEMBLIES(("[assemblies]"))
+    EXTERNAL_PROTEIN_SEQS(("[ext_prots]"))
     
     GUNZIP_PROT[GUNZIP]
     GUNZIP_TE[GUNZIP]
     SKIP_EDTA{Skip EDTA}
     pend((dev))
     
+    TE_LIBRARIES --> GUNZIP_TE
+    GUNZIP_TE --> SKIP_EDTA
+    
     TARGET_ASSEMBLIES --> GUNZIP
     GUNZIP --> FASTA_VALIDATE
     FASTA_VALIDATE --> FASTA_PERFORM_EDTA
     FASTA_VALIDATE --> SKIP_EDTA
     
-    TE_LIBRARIES --> GUNZIP_TE
-    GUNZIP_TE --> SKIP_EDTA
     SKIP_EDTA --> REPEATMASKER
     FASTA_PERFORM_EDTA --> REPEATMASKER
-    REPEATMASKER --> BRAKER3
     REPEATMASKER --> STAR_GENOMEGENERATE
 
     SAMPLESHEET --> SAMPLESHEET_CHECK
@@ -32,11 +33,16 @@ flowchart TD
     CAT_FASTQ --> FASTQC
     SAMPLESHEET_CHECK --> FASTQC
     FASTQC --> FASTP
-    FASTP --> STAR_ALIGN
+    
+    ribo_db --> SORTMERNA
+    FASTP --> SORTMERNA
+    SORTMERNA --> STAR_ALIGN
     STAR_GENOMEGENERATE --> STAR_ALIGN
     STAR_ALIGN --> GROUP_BY_ASSEMBLY([Group by assembly])
     GROUP_BY_ASSEMBLY --> SAMTOOLS_CAT
     SAMTOOLS_CAT --> |RNASeq bam|BRAKER3
+
+    REPEATMASKER --> BRAKER3
 
     EXTERNAL_PROTEIN_SEQS --> GUNZIP_PROT
     GUNZIP_PROT --> CAT
@@ -48,6 +54,7 @@ flowchart TD
     TARGET_ASSEMBLIES
     TE_LIBRARIES
     SAMPLESHEET
+    ribo_db
     EXTERNAL_PROTEIN_SEQS
     end
 
@@ -61,11 +68,18 @@ flowchart TD
     STAR_GENOMEGENERATE
     end
 
+    subgraph Braker
+    CAT
+    GUNZIP_PROT
+    BRAKER3
+    end
+
     subgraph SamplePrep
     SAMPLESHEET_CHECK
     CAT_FASTQ
     FASTQC
     FASTP
+    SORTMERNA
     STAR_ALIGN
     GROUP_BY_ASSEMBLY
     SAMTOOLS_CAT
@@ -74,6 +88,7 @@ flowchart TD
     style Params fill:#00FFFF21,stroke:#00FFFF21
     style GenomePrep fill:#00FFFF21,stroke:#00FFFF21
     style SamplePrep fill:#00FFFF21,stroke:#00FFFF21
+    style Braker fill:#00FFFF21,stroke:#00FFFF21
 ```
 
 ## Plant&Food Users
