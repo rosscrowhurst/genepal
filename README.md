@@ -68,7 +68,7 @@ flowchart TD
     STAR_GENOMEGENERATE
     end
 
-    subgraph braker
+    subgraph Braker
     CAT
     GUNZIP_PROT
     BRAKER3
@@ -88,7 +88,7 @@ flowchart TD
     style Params fill:#00FFFF21,stroke:#00FFFF21
     style GenomePrep fill:#00FFFF21,stroke:#00FFFF21
     style SamplePrep fill:#00FFFF21,stroke:#00FFFF21
-    style braker fill:#00FFFF21,stroke:#00FFFF21
+    style Braker fill:#00FFFF21,stroke:#00FFFF21
 ```
 
 ## Plant&Food Users
