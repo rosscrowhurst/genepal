@@ -1,0 +1,91 @@
+# Adopted from https://github.com/nf-core/modules/blob/master/.github/workflows/test.yml
+
+name: Run tests
+on:
+  pull_request:
+    branches: [master]
+
+# Cancel if a newer run is started
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Prettier
+        run: npm install -g prettier
+
+      - name: Run Prettier --check
+        run: prettier --check .
+
+  editorconfig:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install editorconfig-checker
+        run: npm install -g editorconfig-checker
+
+      - name: Run ECLint check
+        run: editorconfig-checker -exclude README.md $(git ls-files | grep -v test)
+
+  stub-test:
+    runs-on: ubuntu-latest
+    name: Run stub test with docker
+    env:
+      NXF_ANSI_LOG: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: PlantandFoodResearch/pangene-test
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      - name: Setup Nextflow
+        uses: nf-core/setup-nextflow@v1
+
+      - name: Run stub-test
+        run: |
+          nextflow \
+            main.nf \
+            -profile local,docker \
+            -resume \
+            -stub \
+            -params-file conf/test_params.json
+
+  confirm-pass:
+    runs-on: ubuntu-latest
+    needs: [prettier, editorconfig, stub-test]
+    if: always()
+    steps:
+      - name: All tests ok
+        if: ${{ success() || !contains(needs.*.result, 'failure') }}
+        run: exit 0
+      - name: One or more tests failed
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+
+      - name: debug-print
+        if: always()
+        run: |
+          echo "toJSON(needs) = ${{ toJSON(needs) }}"
+          echo "toJSON(needs.*.result) = ${{ toJSON(needs.*.result) }}"
