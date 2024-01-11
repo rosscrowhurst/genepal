@@ -41,7 +41,7 @@ jobs:
         run: npm install -g editorconfig-checker
 
       - name: Run ECLint check
-        run: editorconfig-checker -exclude README.md $(git ls-files | grep -v test)
+        run: editorconfig-checker -exclude README.md $(git ls-files | grep -v test | grep -v LICENSE)
 
   stub-test:
     runs-on: ubuntu-latest
@@ -51,10 +51,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Get test data from pangene-test
+        run: |
+          if [ ! -d pangene-test ]; then
+            echo "pangene-test not cloned yet. Cloning now..."
+            mkdir -p pangene-test
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            echo "${{ secrets.PANGENE_TEST_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            git clone git@github.com:PlantandFoodResearch/pangene-test.git
+          else
+            echo "pangene-test already cloned. Running a sync..."
+            cd pangene-test
+            git pull
+            cd -
+          fi
 
-      - uses: actions/checkout@v4
-        with:
-          repository: PlantandFoodResearch/pangene-test
+          cd pangene
+          ln -s ../pangene-test
+          cd -
 
       - uses: actions/setup-java@v3
         with:
