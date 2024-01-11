@@ -1,5 +1,7 @@
 # PANGENE
 
+[![Lint and -stub on Linux/Docker](https://github.com/PlantandFoodResearch/pangene/actions/workflows/test.yml/badge.svg)](https://github.com/PlantandFoodResearch/pangene/actions/workflows/test.yml)
+
 A NextFlow pipeline for pan-genome annotation.
 
 ## Pipeline Flowchart

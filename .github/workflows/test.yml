@@ -1,7 +1,9 @@
 # Adopted from https://github.com/nf-core/modules/blob/master/.github/workflows/test.yml
 
-name: Run tests
+name: Lint and -stub on Linux/Docker
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
