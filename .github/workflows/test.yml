@@ -56,7 +56,7 @@ jobs:
         with:
           repository: PlantandFoodResearch/pangene-test
           ssh-key: ${{ secrets.PANGENE_TEST_DEPLOY_KEY }}
-          path: pangene/pangene-test
+          path: pangene-test
 
       - uses: actions/setup-java@v3
         with:
