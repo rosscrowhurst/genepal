@@ -51,26 +51,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Get test data from pangene-test
-        run: |
-          if [ ! -d pangene-test ]; then
-            echo "pangene-test not cloned yet. Cloning now..."
-            mkdir -p pangene-test
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
-            echo "${{ secrets.PANGENE_TEST_DEPLOY_KEY }}" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            git clone git@github.com:PlantandFoodResearch/pangene-test.git
-          else
-            echo "pangene-test already cloned. Running a sync..."
-            cd pangene-test
-            git pull
-            cd -
-          fi
 
-          cd pangene
-          ln -s ../pangene-test
-          cd -
+      - uses: actions/checkout@v4
+        with:
+          repository: PlantandFoodResearch/pangene-test
+          ssh-key: ${{ secrets.PANGENE_TEST_DEPLOY_KEY }}
+          path: pangene/pangene-test
 
       - uses: actions/setup-java@v3
         with:
