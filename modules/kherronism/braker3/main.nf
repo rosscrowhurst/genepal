@@ -42,8 +42,12 @@ process BRAKER3 {
     """
     cp -r /usr/share/augustus/config augustus_config
 
+    perl -p -e 's/^(>\\S+).*\$/\$1/' \\
+        ${fasta} \\
+        > ${prefix}.name.only.genome.masked.fasta
+
     braker.pl \\
-        --genome ${fasta} \\
+        --genome ${prefix}.name.only.genome.masked.fasta \\
         ${new_species} \\
         --workingdir ${prefix} \\
         --AUGUSTUS_CONFIG_PATH "\$(pwd)/augustus_config" \\
