@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.2 - [13-May-2024]
+
+### `Added`
+
+### `Fixed`
+
+1. Increased time limit for REPEATMODELER_REPEATMODELER to 5 days
+2. Now removing comments from fasta file before feeding it to BRAKER added tests for the perl one liner
+3. Fixed CHANGELOG version check failure in `version_check.sh`
+4. Increased the SLURM job time limit to 14 days
+
+### `Dependencies`
+
+1. NextFlow!>=23.04.4
+2. nf-validation=1.1.3
+
+### `Deprecated`
+
 ## 0.3.1 - [10-May-2024]
 
 ### `Added`
