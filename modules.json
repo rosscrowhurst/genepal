@@ -153,6 +153,11 @@
                         "git_sha": "8ce34a40589137b75b65dfe8bb334c9b94f1d6c8",
                         "installed_by": ["modules"]
                     },
+                    "orthofinder": {
+                        "branch": "master",
+                        "git_sha": "07f10f34d88408af7c71f13227d11f23b7f53b50",
+                        "installed_by": ["modules"]
+                    },
                     "samtools/cat": {
                         "branch": "master",
                         "git_sha": "f4596fe0bdc096cf53ec4497e83defdb3a94ff62",

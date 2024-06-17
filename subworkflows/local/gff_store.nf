@@ -1,11 +1,13 @@
 import java.net.URLEncoder
 
 include { GT_GFF3 as FINAL_GFF_CHECK    } from '../../modules/nf-core/gt/gff3/main'
+include { GFFREAD as EXTRACT_PROTEINS   } from '../../modules/nf-core/gffread/main'
 
 workflow GFF_STORE {
     take:
     ch_target_gff               // [ meta, gff ]
     ch_eggnogmapper_annotations // [ meta, annotations ]
+    ch_fasta                    // [ meta, fasta ]
 
     main:
     ch_versions                 = Channel.empty()
@@ -112,8 +114,21 @@ workflow GFF_STORE {
     ch_final_gff                = FINAL_GFF_CHECK.out.gt_gff3
     ch_versions                 = ch_versions.mix(FINAL_GFF_CHECK.out.versions.first())
 
+    // MODULE: GFFREAD as EXTRACT_PROTEINS
+    ch_extraction_inputs        = ch_final_gff
+                                | join(ch_fasta)
+
+    EXTRACT_PROTEINS(
+        ch_extraction_inputs.map { meta, gff, fasta -> [ meta, gff ] },
+        ch_extraction_inputs.map { meta, gff, fasta -> fasta }
+    )
+
+    ch_final_proteins           = EXTRACT_PROTEINS.out.gffread_fasta
+    ch_versions                 = ch_versions.mix(FINAL_GFF_CHECK.out.versions.first())
+
 
     emit:
     final_gff                   = ch_final_gff          // [ meta, gff ]
+    final_proteins              = ch_final_proteins     // [ meta, fasta ]
     versions                    = ch_versions           // [ versions.yml ]
 }
