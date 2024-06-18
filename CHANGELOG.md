@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.3 - [18-Jun-2024]
+
+### `Added`
+
+1. Added a stub test to evaluate the case where an assembly is soft masked but has no annotations
+
+### `Fixed`
+
+1. Fixed a bug where `is_masked` was ignored by the pipeline
+2. Fixed a bug in param validation which allowed specification of `braker_hints` without `braker_gff3`
+
+### `Dependencies`
+
+1. NextFlow!>=23.04.4
+2. nf-validation=1.1.3
+
+### `Deprecated`
+
 ## 0.3.2 - [13-May-2024]
 
 ### `Added`

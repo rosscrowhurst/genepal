@@ -42,7 +42,7 @@ workflow PANGENE {
                                     it.join(",")
                                 }
 
-    ch_masked                   = ch_input
+    ch_is_masked                = ch_input
                                 | map { it ->
                                     def tag         = it[0]
                                     def is_masked   = it[2]
@@ -144,7 +144,8 @@ workflow PANGENE {
         ch_target_assembly,
         ch_te_library,
         params.repeat_annotator,
-        ch_braker_ex_asm_str
+        ch_braker_ex_asm_str,
+        ch_is_masked
     )
 
     ch_valid_target_assembly    = PREPARE_ASSEMBLY.out.target_assemby
