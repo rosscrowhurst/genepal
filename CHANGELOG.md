@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+1. Added a stub test to evaluate the case where an assembly is soft masked but has no annotations
+
 ### `Fixed`
 
 1. Fixed a bug where `is_masked` was ignored by the pipeline
