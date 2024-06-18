@@ -61,7 +61,8 @@
                         "maxLength": 0
                     }
                 ],
-                "errorMessage": "BRAKER hints GFF/GFF3 file path cannot contain spaces and must have extension '.gff.gz', '.gff3.gz', '.gff' or '.gff3'"
+                "errorMessage": "BRAKER hints GFF/GFF3 file path cannot contain spaces and must have extension '.gff.gz', '.gff3.gz', '.gff' or '.gff3'",
+                "dependentRequired": ["braker_gff3"]
             }
         },
         "required": ["tag", "fasta", "is_masked"]

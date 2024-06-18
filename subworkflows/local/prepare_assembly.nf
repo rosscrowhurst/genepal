@@ -14,6 +14,7 @@ workflow PREPARE_ASSEMBLY {
     te_library                  // channel: [ meta, fasta ]
     repeat_annotator            // val(String), 'repeatmodeler' or 'edta'
     exclude_assemblies          // channel: val(assembly_x,assembly_y)
+    ch_is_masked                // channel: [ meta, val(true|false) ]
 
     main:
     ch_versions                 = Channel.empty()
@@ -63,26 +64,35 @@ workflow PREPARE_ASSEMBLY {
     ch_versions                 = ch_versions.mix(GUNZIP_TE_LIBRARY.out.versions.first())
 
     // SUBWORKFLOW: FASTA_EDTA_LAI
-    ch_annotator_inputs         = ch_validated_assembly
+    ch_unmasked_masked_branch   = ch_validated_assembly
+                                | combine( exclude_assemblies )
+                                | map { meta, fasta, ex_assemblies ->
+                                    ex_assemblies.tokenize(",").contains( meta.id )
+                                    ? null
+                                    : [ meta, fasta ]
+                                }
+                                | join(
+                                    ch_is_masked
+                                )
+                                | branch { meta, fasta, is_masked ->
+                                    unmasked: ! is_masked
+                                        return [ meta, fasta ]
+                                    masked: is_masked
+                                        return [ meta, fasta ]
+                                }
+
+    ch_annotator_inputs         = ch_unmasked_masked_branch.unmasked
                                 | join(
                                     ch_gunzip_te_library, remainder: true
                                 )
                                 | filter { meta, assembly, teLib ->
-                                    teLib == null
+                                    teLib == null && ( assembly != null )
                                 }
-                                | map { meta, assembly, teLib -> [meta, assembly] }
+                                | map { meta, assembly, teLib -> [ meta, assembly ] }
 
     ch_edta_inputs              = repeat_annotator != 'edta'
                                 ? Channel.empty()
                                 : ch_annotator_inputs
-                                | combine( exclude_assemblies )
-                                | map { meta, fasta, ex_assemblies ->
-                                    def ex_list = ex_assemblies.split(",")
-
-                                    if ( !( ex_list.contains( meta.id ) ) ) {
-                                        [ meta, fasta ]
-                                    }
-                                }
 
     FASTA_EDTA_LAI(
         ch_edta_inputs,
@@ -96,14 +106,6 @@ workflow PREPARE_ASSEMBLY {
     ch_repeatmodeler_inputs     = repeat_annotator != 'repeatmodeler'
                                 ? Channel.empty()
                                 : ch_annotator_inputs
-                                | combine( exclude_assemblies )
-                                | map { meta, fasta, ex_assemblies ->
-                                    def ex_list = ex_assemblies.split(",")
-
-                                    if ( !( ex_list.contains( meta.id ) ) ) {
-                                        [ meta, fasta ]
-                                    }
-                                }
 
     REPEATMODELER_BUILDDATABASE ( ch_repeatmodeler_inputs )
 
@@ -112,7 +114,7 @@ workflow PREPARE_ASSEMBLY {
     // MODULE: REPEATMODELER_REPEATMODELER
     REPEATMODELER_REPEATMODELER ( REPEATMODELER_BUILDDATABASE.out.db )
 
-    ch_assembly_and_te_lib      = ch_validated_assembly
+    ch_assembly_and_te_lib      = ch_unmasked_masked_branch.unmasked
                                 | join(
                                     repeat_annotator == 'edta'
                                     ? FASTA_EDTA_LAI.out.te_lib_fasta.mix(ch_gunzip_te_library)
@@ -123,21 +125,21 @@ workflow PREPARE_ASSEMBLY {
 
     // MODULE: REPEATMASKER
     REPEATMASKER(
-        ch_assembly_and_te_lib.map { meta, assembly, teLib -> [meta, assembly] },
+        ch_assembly_and_te_lib.map { meta, assembly, teLib -> [ meta, assembly ] },
         ch_assembly_and_te_lib.map { meta, assembly, teLib -> teLib },
     )
 
+    ch_masked_assembly          = ch_unmasked_masked_branch.masked
+                                | mix(REPEATMASKER.out.fasta_masked)
     ch_versions                 = ch_versions.mix(REPEATMASKER.out.versions.first())
 
     // MODULE: STAR_GENOMEGENERATE
     ch_genomegenerate_inputs    = ch_validated_assembly
                                 | combine( exclude_assemblies )
                                 | map { meta, fasta, ex_assemblies ->
-                                    def ex_list = ex_assemblies.split(",")
-
-                                    if ( !( ex_list.contains( meta.id ) ) ) {
-                                        [ meta, fasta ]
-                                    }
+                                    ex_assemblies.tokenize(",").contains( meta.id )
+                                    ? null
+                                    : [ meta, fasta ]
                                 }
 
 
@@ -151,7 +153,7 @@ workflow PREPARE_ASSEMBLY {
 
     emit:
     target_assemby              = ch_validated_assembly         // channel: [ meta, fasta ]
-    masked_target_assembly      = REPEATMASKER.out.fasta_masked // channel: [ meta, fasta ]
+    masked_target_assembly      = ch_masked_assembly            // channel: [ meta, fasta ]
     target_assemby_index        = ch_assembly_index             // channel: [ meta, star_index ]
     versions                    = ch_versions                   // channel: [ versions.yml ]
 }
