@@ -11,7 +11,7 @@ include { GFF_MERGE_CLEANUP                     } from '../subworkflows/local/gf
 include { GFF_EGGNOGMAPPER                      } from '../subworkflows/local/gff_eggnogmapper'
 include { PURGE_NOHIT_MODELS                    } from '../subworkflows/local/purge_nohit_models'
 include { GFF_STORE                             } from '../subworkflows/local/gff_store'
-include { ORTHOFINDER                           } from '../modules/nf-core/orthofinder/main'
+include { FASTA_GFFF_ORTHOFINDER                } from '../subworkflows/local/fasta_gfff_orthofinder'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions'
 
 log.info paramsSummaryLog(workflow)
@@ -140,6 +140,23 @@ workflow PANGENE {
                                 ? "${projectDir}/assets/tsebra-default.cfg"
                                 : "${projectDir}/assets/tsebra-1form.cfg"
 
+    ch_orthofinder_mm           = ! params.orthofinder_annotations
+                                ? Channel.empty()
+                                : Channel.fromSamplesheet('orthofinder_annotations')
+                                | multiMap { tag, fasta, gff ->
+
+                                    fasta:  [ [ id: tag ], file(fasta, checkIfExists:true)  ]
+                                    gff:    [ [ id: tag ], file(gff, checkIfExists:true)    ]
+                                }
+
+    ch_orthofinder_fasta        = params.orthofinder_annotations
+                                ? ch_orthofinder_mm.fasta
+                                : Channel.empty()
+
+    ch_orthofinder_gff          = params.orthofinder_annotations
+                                ? ch_orthofinder_mm.gff
+                                : Channel.empty()
+
     // SUBWORKFLOW: PREPARE_ASSEMBLY
     PREPARE_ASSEMBLY(
         ch_target_assembly,
@@ -264,15 +281,14 @@ workflow PANGENE {
     ch_final_proteins           = GFF_STORE.out.final_proteins
     ch_versions                 = ch_versions.mix(GFF_STORE.out.versions)
 
-    // MODULE: ORTHOFINDER
-    ch_orthofinder_peps         = ch_final_proteins
-                                | map { meta, fasta -> fasta }
-                                | collect
-                                | filter { it.size() > 1 }
+    // SUBWORKFLOW: FASTA_GFFF_ORTHOFINDER
+    FASTA_GFFF_ORTHOFINDER(
+        ch_final_proteins,
+        ch_orthofinder_fasta,
+        ch_orthofinder_gff
+    )
 
-    ORTHOFINDER ( ch_orthofinder_peps.map { fastas -> [ [ id: 'pangene' ], fastas ] } )
-
-    ch_versions                 = ch_versions.mix(ORTHOFINDER.out.versions)
+    ch_versions                 = ch_versions.mix(FASTA_GFFF_ORTHOFINDER.out.versions)
 
     // MODULE: CUSTOM_DUMPSOFTWAREVERSIONS
     CUSTOM_DUMPSOFTWAREVERSIONS (

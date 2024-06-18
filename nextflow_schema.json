@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "",
-            "required": ["input", "outdir", "external_protein_fastas", "eggnogmapper_db_dir", "eggnogmapper_tax_scope"],
+            "required": ["input", "external_protein_fastas", "eggnogmapper_db_dir", "eggnogmapper_tax_scope", "outdir"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -19,13 +19,11 @@
                     "schema": "assets/schema_input.json",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Target assemblies listed in a CSV sheet",
-                    "fa_icon": "fas fa-file-csv",
-                    "help_text": "FASTA and other associated files for target assemblies provided as a CSV sheet"
+                    "fa_icon": "fas fa-file-csv"
                 },
                 "external_protein_fastas": {
                     "type": "string",
                     "description": "External protein fastas listed in a text sheet",
-                    "help_text": "A text file listing FASTA files to provide protein evidence for annotation",
                     "format": "file-path",
                     "mimetype": "text/txt",
                     "fa_icon": "far fa-file-alt"
@@ -46,7 +44,6 @@
                     "mimetype": "text/csv",
                     "schema": "assets/schema_fastq.json",
                     "pattern": "^\\S+\\.csv$",
-                    "help_text": "FASTQ files for RNASeq samples corresponding to each target assembly provided in a CSV sheet",
                     "fa_icon": "fas fa-file-csv",
                     "description": "FASTQ samples listed in a CSV sheet"
                 },
@@ -57,7 +54,15 @@
                     "schema": "assets/schema_liftoff.json",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Reference annotations listed in a CSV sheet",
-                    "help_text": "FASTA and GFF3 files for reference annotations for liftoff listed in a CSV sheet",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "orthofinder_annotations": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "schema": "/assets/schema_orthofinder.json",
+                    "pattern": "^\\S+\\.csv$",
+                    "description": "Additional annotations for orthology listed in a CSV sheet",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
@@ -65,8 +70,7 @@
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved",
                     "fa_icon": "fas fa-folder-open",
-                    "default": "./results",
-                    "help_text": " Use absolute paths to storage on Cloud infrastructure"
+                    "default": "./results"
                 }
             }
         },
