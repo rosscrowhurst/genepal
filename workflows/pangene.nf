@@ -6,12 +6,12 @@ include { ALIGN_RNASEQ                          } from '../subworkflows/local/al
 include { PREPARE_EXT_PROTS                     } from '../subworkflows/local/prepare_ext_prots'
 include { FASTA_BRAKER3                         } from '../subworkflows/local/fasta_braker3'
 include { FASTA_LIFTOFF                         } from '../subworkflows/local/fasta_liftoff'
-include { PURGE_BREAKER_MODELS                  } from '../subworkflows/local/purge_breaker_models'
+include { PURGE_BRAKER_MODELS                   } from '../subworkflows/local/purge_braker_models'
 include { GFF_MERGE_CLEANUP                     } from '../subworkflows/local/gff_merge_cleanup'
 include { GFF_EGGNOGMAPPER                      } from '../subworkflows/local/gff_eggnogmapper'
 include { PURGE_NOHIT_MODELS                    } from '../subworkflows/local/purge_nohit_models'
 include { GFF_STORE                             } from '../subworkflows/local/gff_store'
-include { FASTA_GFFF_ORTHOFINDER                } from '../subworkflows/local/fasta_gfff_orthofinder'
+include { FASTA_GFF_ORTHOFINDER                 } from '../subworkflows/local/fasta_gff_orthofinder'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions'
 
 log.info paramsSummaryLog(workflow)
@@ -229,8 +229,8 @@ workflow PANGENE {
     ch_liftoff_gff3             = FASTA_LIFTOFF.out.gff3
     ch_versions                 = ch_versions.mix(FASTA_LIFTOFF.out.versions)
 
-    // SUBWORKFLOW: PURGE_BREAKER_MODELS
-    PURGE_BREAKER_MODELS(
+    // SUBWORKFLOW: PURGE_BRAKER_MODELS
+    PURGE_BRAKER_MODELS(
         ch_braker_gff3,
         ch_braker_hints,
         ch_liftoff_gff3,
@@ -238,8 +238,8 @@ workflow PANGENE {
         params.braker_allow_isoforms
     )
 
-    ch_braker_purged_gff        = PURGE_BREAKER_MODELS.out.braker_purged_gff
-    ch_versions                 = ch_versions.mix(PURGE_BREAKER_MODELS.out.versions)
+    ch_braker_purged_gff        = PURGE_BRAKER_MODELS.out.braker_purged_gff
+    ch_versions                 = ch_versions.mix(PURGE_BRAKER_MODELS.out.versions)
 
     // SUBWORKFLOW: GFF_MERGE_CLEANUP
     GFF_MERGE_CLEANUP(
@@ -281,14 +281,14 @@ workflow PANGENE {
     ch_final_proteins           = GFF_STORE.out.final_proteins
     ch_versions                 = ch_versions.mix(GFF_STORE.out.versions)
 
-    // SUBWORKFLOW: FASTA_GFFF_ORTHOFINDER
-    FASTA_GFFF_ORTHOFINDER(
+    // SUBWORKFLOW: FASTA_GFF_ORTHOFINDER
+    FASTA_GFF_ORTHOFINDER(
         ch_final_proteins,
         ch_orthofinder_fasta,
         ch_orthofinder_gff
     )
 
-    ch_versions                 = ch_versions.mix(FASTA_GFFF_ORTHOFINDER.out.versions)
+    ch_versions                 = ch_versions.mix(FASTA_GFF_ORTHOFINDER.out.versions)
 
     // MODULE: CUSTOM_DUMPSOFTWAREVERSIONS
     CUSTOM_DUMPSOFTWAREVERSIONS (

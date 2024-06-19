@@ -7,7 +7,7 @@ include { AGAT_SPFILTERFEATUREFROMKILLLIST                          } from '../.
 include { GFFCOMPARE as VALIDATE_PURGING_BY_AGAT                    } from '../../modules/nf-core/gffcompare/main'
 include { AGAT_SPMERGEANNOTATIONS as MERGE_BRAKER_LIFTOFF           } from '../../modules/pfr/agat/spmergeannotations/main'
 
-workflow PURGE_BREAKER_MODELS {
+workflow PURGE_BRAKER_MODELS {
     take:
     braker_gff3                 // [ meta, gff3 ]
     braker_hints                // [ meta, gff ]

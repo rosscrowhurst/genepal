@@ -3,7 +3,7 @@ include { FILE_GUNZIP as GFF_GUNZIP     } from '../../subworkflows/local/file_gu
 include { GFFREAD as EXTRACT_PROTEINS   } from '../../modules/nf-core/gffread/main'
 include { ORTHOFINDER                   } from '../../modules/nf-core/orthofinder/main'
 
-workflow FASTA_GFFF_ORTHOFINDER {
+workflow FASTA_GFF_ORTHOFINDER {
     take:
     ch_pep_fasta                // [ meta, fasta ]
     ch_fasta                    // [ meta, fasta ]

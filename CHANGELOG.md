@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.4 - [19-Jun-2024]
+
+### `Added`
+
+1. Added `orthofinder_annotations` param
+2. Added `FASTA_GFF_ORTHOFINDER` sub-workflow
+
+### `Fixed`
+
+1. Fixed BRAKER spellings [#36](https://github.com/PlantandFoodResearch/pangene/issues/36)
+
+### `Dependencies`
+
+1. NextFlow!>=23.04.4
+2. nf-validation=1.1.3
+
+### `Deprecated`
+
 ## 0.3.3 - [18-Jun-2024]
 
 ### `Added`
@@ -80,7 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 20. Now using a txt file for `params.external_protein_fastas`
 21. Now using nf-validation for `params.liftoff_annotations`
 22. Now using nf-validation for all the parameters
-23. Added `PURGE_BREAKER_MODELS` sub-workflow
+23. Added `PURGE_BRAKER_MODELS` sub-workflow
 24. Added `GFF_EGGNOGMAPPER` sub-workflow
 25. Now using a custom version of `GFFREAD` which supports `meta` and `fasta`
 26. Now using TSEBRA to purge models which do not have full intron support from BRAKER hints
