@@ -14,7 +14,7 @@ nextflow_process {
 
         setup {
             run("REPEATMODELER_BUILDDATABASE") {
-                script "../../../../pfr/repeatmodeler/builddatabase"
+                script "../../../../nf-core/repeatmodeler/builddatabase"
 
                 process {
                     """
@@ -41,16 +41,7 @@ nextflow_process {
                 { assert snapshot(process.out.fasta).match("fasta") },
                 { assert snapshot(process.out.stk).match("stk") },
                 { assert file(process.out.log[0][1]).text.contains('1 families discovered.') },
-                { assert snapshot(process.out.versions).match("versions") },
-                {
-                    assert snapshot(
-                        (
-                            process.out.fasta.collect { file(it[1]).getName() } +
-                            process.out.stk.collect { file(it[1]).getName() } +
-                            process.out.log.collect { file(it[1]).getName() }
-                        ).sort()
-                    ).match("for-stub-match")
-                }
+                { assert snapshot(process.out.versions).match("versions") }
             )
         }
 
@@ -74,16 +65,7 @@ nextflow_process {
         then {
             assertAll(
                 { assert process.success },
-                { assert snapshot(process.out.versions).match("versions") },
-                {
-                    assert snapshot(
-                        (
-                            process.out.fasta.collect { file(it[1]).getName() } +
-                            process.out.stk.collect { file(it[1]).getName() } +
-                            process.out.log.collect { file(it[1]).getName() }
-                        ).sort()
-                    ).match("for-stub-match")
-                }
+                { assert snapshot(process.out).match() }
             )
         }
 

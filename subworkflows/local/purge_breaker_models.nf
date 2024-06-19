@@ -1,5 +1,5 @@
 include { AGAT_CONVERTSPGFF2GTF                                     } from '../../modules/nf-core/agat/convertspgff2gtf/main'
-include { TSEBRA                                                    } from '../../modules/pfr/tsebra/main'
+include { TSEBRA                                                    } from '../../modules/nf-core/tsebra/main'
 include { AGAT_CONVERTSPGXF2GXF                                     } from '../../modules/nf-core/agat/convertspgxf2gxf/main'
 include { AGAT_SPFILTERFEATUREFROMKILLLIST as KILL_TSEBRA_ISOFORMS  } from '../../modules/pfr/agat/spfilterfeaturefromkilllist/main'
 include { GFFCOMPARE as COMPARE_BRAKER_TO_LIFTOFF                   } from '../../modules/nf-core/gffcompare/main'

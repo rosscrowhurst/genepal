@@ -26,7 +26,8 @@ nextflow_process {
             assertAll(
                 { assert process.success },
                 { assert snapshot(process.out.versions).match("versions") },
-                { assert snapshot(process.out.db[0][1].collect { file(it).name }.sort().toString()).match("for-stub-match") }
+                { assert snapshot(process.out.db[0][1].collect { file(it).name }.sort().toString()).match("db") },
+                { assert snapshot(process.out.db[0][1].findAll { ! ( "$it"[-3..-1] in [ 'nin', 'njs' ] ) }  ).match("stable_md5") }
             )
         }
 
@@ -50,8 +51,7 @@ nextflow_process {
         then {
             assertAll(
                 { assert process.success },
-                { assert snapshot(process.out.versions).match("versions") },
-                { assert snapshot(process.out.db[0][1].collect { file(it).name }.sort().toString()).match("for-stub-match") }
+                { assert snapshot(process.out).match() }
             )
         }
 

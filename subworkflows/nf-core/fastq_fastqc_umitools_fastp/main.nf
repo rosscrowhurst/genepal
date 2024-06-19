@@ -12,18 +12,12 @@ include { FASTP                 } from '../../../modules/nf-core/fastp/main'
 //
 import groovy.json.JsonSlurper
 
-def getFastpReadsAfterFiltering(json_file, min_trimmed_reads) {
-
-    if (!json_file.text) { return min_trimmed_reads } // Usman Rashid: To allow -stub with FASTP
-
+def getFastpReadsAfterFiltering(json_file) {
     def Map json = (Map) new JsonSlurper().parseText(json_file.text).get('summary')
     return json['after_filtering']['total_reads'].toLong()
 }
 
 def getFastpAdapterSequence(json_file){
-
-    if (!json_file.text) { return "" } // Usman Rashid: To allow -stub with FASTP
-
     def Map json = (Map) new JsonSlurper().parseText(json_file.text)
     try{
         adapter = json['adapter_cutting']['read1_adapter_sequence']
@@ -97,6 +91,7 @@ workflow FASTQ_FASTQC_UMITOOLS_FASTP {
         FASTP (
             umi_reads,
             adapter_fasta,
+            false, // don't want to set discard_trimmed_pass, else there will be no reads output
             save_trimmed_fail,
             save_merged
         )
@@ -114,7 +109,7 @@ workflow FASTQ_FASTQC_UMITOOLS_FASTP {
             .out
             .reads
             .join(trim_json)
-            .map { meta, reads, json -> [ meta, reads, getFastpReadsAfterFiltering(json, min_trimmed_reads) ] }
+            .map { meta, reads, json -> [ meta, reads, getFastpReadsAfterFiltering(json) ] }
             .set { ch_num_trimmed_reads }
 
         ch_num_trimmed_reads

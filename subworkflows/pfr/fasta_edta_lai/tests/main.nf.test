@@ -6,7 +6,7 @@ nextflow_workflow {
     config "./nextflow.config"
 
     tag "subworkflows"
-    tag "subworkflows_nfcore"
+    tag "subworkflows_pfr"
     tag "subworkflows/fasta_edta_lai"
     tag "fasta_edta_lai"
     tag "modules/nf-core/gunzip"
@@ -15,22 +15,22 @@ nextflow_workflow {
     tag "ltrretriever/lai"
     tag "custom/restoregffids"
 
-    test("actinidia_chinensis-genome_21_fasta_gz") {
+    setup {
+        run("GUNZIP") {
+            script "../../../../modules/nf-core/gunzip"
 
-        setup {
-            run("GUNZIP") {
-                script "../../../../modules/nf-core/gunzip"
-
-                process {
-                    """
-                    input[0] = [
-                        [ id:'test' ],
-                        file(params.test_data['actinidia_chinensis']['genome']['genome_21_fasta_gz'], checkIfExists: true)
-                    ]
-                    """
-                }
+            process {
+                """
+                input[0] = [
+                [ id:'test' ],
+                file(params.test_data['actinidia_chinensis']['genome']['genome_1_fasta_gz'], checkIfExists: true)
+                ]
+                """
             }
         }
+    }
+
+    test("actinidia_chinensis-genome_1_fasta_gz") {
 
         when {
             workflow {
@@ -48,30 +48,16 @@ nextflow_workflow {
                 { assert file(workflow.out.te_anno_gff3[0][1]).text.contains('Copia_LTR_retrotransposon') },
                 { assert file(workflow.out.lai_log[0][1]).text.contains('Calculate LAI:') },
                 { assert file(workflow.out.lai_log[0][1]).text.contains('Done!') },
-                { assert Math.abs(Float.parseFloat(path(workflow.out.lai_out[0][1]).text.split("\n")[1].split("\t")[6]) - 31.29) <= 1.0 },
-                { assert file(workflow.out.te_lib_fasta[0][1]).text.contains('#LTR/Copia') }
+                { assert Math.abs(Float.parseFloat(path(workflow.out.lai_out[0][1]).text.split("\n")[1].split("\t")[6]) - 31.87) <= 2.0 },
+                { assert file(workflow.out.te_lib_fasta[0][1]).text.contains('#LTR/Copia') },
+                { assert snapshot(workflow.out.versions).match() }
             )
         }
     }
 
-    test("actinidia_chinensis-genome_21_fasta_gz-stub") {
+    test("actinidia_chinensis-genome_1_fasta_gz-stub") {
 
         options '-stub'
-
-        setup {
-            run("GUNZIP") {
-                script "../../../../modules/nf-core/gunzip"
-
-                process {
-                    """
-                    input[0] = [
-                        [ id:'test' ],
-                        file(params.test_data['actinidia_chinensis']['genome']['genome_21_fasta_gz'], checkIfExists: true)
-                    ]
-                    """
-                }
-            }
-        }
 
         when {
             workflow {

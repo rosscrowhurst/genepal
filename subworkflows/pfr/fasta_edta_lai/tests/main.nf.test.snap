@@ -1,5 +1,5 @@
 {
-    "actinidia_chinensis-genome_21_fasta_gz-stub": {
+    "actinidia_chinensis-genome_1_fasta_gz-stub": {
         "content": [
             {
                 "0": [
@@ -80,8 +80,22 @@
         ],
         "meta": {
             "nf-test": "0.8.4",
+            "nextflow": "24.04.2"
+        },
+        "timestamp": "2024-06-04T14:00:09.252745"
+    },
+    "actinidia_chinensis-genome_1_fasta_gz": {
+        "content": [
+            [
+                "versions.yml:md5,0d4bc49e94acb8995ca552d4e666e3ce",
+                "versions.yml:md5,65666e975bdfd71978843ca963e84d0c",
+                "versions.yml:md5,754bb19f86be761d90c002a0af2faf1c"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-03-20T18:05:46.667121"
+        "timestamp": "2024-05-10T13:22:28.063183"
     }
 }

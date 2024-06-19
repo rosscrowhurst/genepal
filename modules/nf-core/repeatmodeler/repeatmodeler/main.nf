@@ -1,6 +1,6 @@
 process REPEATMODELER_REPEATMODELER {
     tag "$meta.id"
-    label 'process_high'
+    label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -11,10 +11,10 @@ process REPEATMODELER_REPEATMODELER {
     tuple val(meta), path(db)
 
     output:
-    tuple val(meta), path("*.fa")   , emit: fasta
-    tuple val(meta), path("*.stk")  , emit: stk
-    tuple val(meta), path("*.log")  , emit: log
-    path "versions.yml"             , emit: versions
+    tuple val(meta), path("*.fa") , emit: fasta
+    tuple val(meta), path("*.stk"), emit: stk
+    tuple val(meta), path("*.log"), emit: log
+    path "versions.yml"           , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
