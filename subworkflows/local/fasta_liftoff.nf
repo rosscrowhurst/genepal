@@ -98,7 +98,12 @@ workflow FASTA_LIFTOFF {
         []
     )
 
-    ch_merged_gff                   = MERGE_LIFTOFF_ANNOTATIONS.out.gff.mix(ch_merge_inputs.one)
+    ch_merged_gff                   = MERGE_LIFTOFF_ANNOTATIONS.out.gff
+                                    | mix(
+                                        ch_merge_inputs.one
+                                        | map { meta, gffs -> [ meta, gffs[0] ] }
+                                        // Unlist the upstream groupTuple
+                                    )
     ch_versions                     = ch_versions.mix(MERGE_LIFTOFF_ANNOTATIONS.out.versions.first())
 
     // COLLECTFILE: Transcript level kill list
