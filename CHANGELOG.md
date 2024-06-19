@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2. Added `FASTA_GFF_ORTHOFINDER` sub-workflow
 3. Updated modules: `AGAT_CONVERTSPGFF2GTF`, `CAT_FASTQ`, `CUSTOM_DUMPSOFTWAREVERSIONS`, `EGGNOGMAPPER`, `FASTP`, `GFFREAD`, `SAMTOOLS_CAT`, `CUSTOM_RESTOREGFFIDS`, `CUSTOM_SHORTENFASTAIDS` and `EDTA_EDTA`
 4. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
+5. Added evaluation by BUSCO [#41](https://github.com/PlantandFoodResearch/pangene/issues/41)
 
 ### `Fixed`
 

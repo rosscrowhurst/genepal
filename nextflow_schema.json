@@ -216,6 +216,26 @@
                 }
             }
         },
+        "evaluation_options": {
+            "title": "Evaluation options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-balance-scale-right",
+            "properties": {
+                "busco_skip": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip evaluation by BUSCO"
+                },
+                "busco_lineage_datasets": {
+                    "type": "string",
+                    "fa_icon": "fas fa-tree",
+                    "description": "BUSCO lineages. It should be provided as a space-separated list of lineages: 'fungi_odb10 microsporidia_odb10'",
+                    "default": "eukaryota_odb10"
+                }
+            }
+        },
         "max_job_request_options": {
             "title": "Max job request options",
             "type": "object",
@@ -286,6 +306,9 @@
         },
         {
             "$ref": "#/definitions/annotation_options"
+        },
+        {
+            "$ref": "#/definitions/evaluation_options"
         },
         {
             "$ref": "#/definitions/max_job_request_options"

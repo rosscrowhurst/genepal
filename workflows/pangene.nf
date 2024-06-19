@@ -12,6 +12,7 @@ include { GFF_EGGNOGMAPPER                      } from '../subworkflows/local/gf
 include { PURGE_NOHIT_MODELS                    } from '../subworkflows/local/purge_nohit_models'
 include { GFF_STORE                             } from '../subworkflows/local/gff_store'
 include { FASTA_GFF_ORTHOFINDER                 } from '../subworkflows/local/fasta_gff_orthofinder'
+include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/pfr/fasta_gxf_busco_plot/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions'
 
 log.info paramsSummaryLog(workflow)
@@ -278,6 +279,7 @@ workflow PANGENE {
         ch_valid_target_assembly
     )
 
+    ch_final_gff                = GFF_STORE.out.final_gff
     ch_final_proteins           = GFF_STORE.out.final_proteins
     ch_versions                 = ch_versions.mix(GFF_STORE.out.versions)
 
@@ -289,6 +291,18 @@ workflow PANGENE {
     )
 
     ch_versions                 = ch_versions.mix(FASTA_GFF_ORTHOFINDER.out.versions)
+
+    // SUBWORKFLOW: FASTA_GXF_BUSCO_PLOT
+    FASTA_GXF_BUSCO_PLOT(
+        params.busco_skip ? Channel.empty() : ch_valid_target_assembly,
+        params.busco_skip ? Channel.empty() : ch_final_gff,
+        'genome',
+        params.busco_lineage_datasets?.tokenize(' '),
+        [], // val_busco_lineages_path
+        [] // val_busco_config
+    )
+
+    ch_versions                 = ch_versions.mix(FASTA_GXF_BUSCO_PLOT.out.versions)
 
     // MODULE: CUSTOM_DUMPSOFTWAREVERSIONS
     CUSTOM_DUMPSOFTWAREVERSIONS (
