@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 1. Fixed BRAKER spellings [#36](https://github.com/PlantandFoodResearch/pangene/issues/36)
 2. Fixed liftoff failure when lifting off from a single reference [#40](https://github.com/PlantandFoodResearch/pangene/issues/40)
+3. Added versions from GFF_STORE sub-workflows [#33](https://github.com/PlantandFoodResearch/pangene/issues/33)
 
 ### `Dependencies`
 
