@@ -35,7 +35,7 @@
                 },
                 "eggnogmapper_tax_scope": {
                     "type": "integer",
-                    "description": "Eggnogmapper taxonomy scopre",
+                    "description": "Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1",
                     "minimum": 0
                 },
                 "fastq": {
@@ -232,7 +232,7 @@
                     "type": "string",
                     "pattern": "^(\\w+_odb10\\s)*\\w+_odb10$",
                     "fa_icon": "fas fa-tree",
-                    "description": "BUSCO lineages. It should be provided as a space-separated list of lineages: 'fungi_odb10 microsporidia_odb10'",
+                    "description": "BUSCO lineages as a space-separated list: 'fungi_odb10 microsporidia_odb10'",
                     "default": "eukaryota_odb10"
                 }
             }
@@ -242,15 +242,13 @@
             "type": "object",
             "fa_icon": "fab fa-acquisitions-incorporated",
             "description": "Set the top limit for requested resources for any single job.",
-            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
             "properties": {
                 "max_cpus": {
                     "type": "integer",
                     "description": "Maximum number of CPUs that can be requested for any single job.",
                     "default": 12,
                     "fa_icon": "fas fa-microchip",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                    "hidden": true
                 },
                 "max_memory": {
                     "type": "string",
@@ -258,8 +256,7 @@
                     "default": "200.GB",
                     "fa_icon": "fas fa-memory",
                     "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                    "hidden": true
                 },
                 "max_time": {
                     "type": "string",
@@ -267,8 +264,7 @@
                     "default": "7.day",
                     "fa_icon": "far fa-clock",
                     "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                    "hidden": true
                 }
             }
         },

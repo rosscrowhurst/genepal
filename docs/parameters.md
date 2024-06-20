@@ -4,15 +4,16 @@ A NextFlow pipeline for pan-genome annotation
 
 ## Input/output options
 
-| Parameter                 | Description                                                                                                                                                                               | Type      | Default   | Required | Hidden |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
-| `input`                   | Target assemblies listed in a CSV sheet <details><summary>Help</summary><small>FASTA and other associated files for target assemblies provided as a CSV sheet</small></details>           | `string`  |           | True     |        |
-| `external_protein_fastas` | External protein fastas listed in a text sheet <details><summary>Help</summary><small>A text file listing FASTA files to provide protein evidence for annotation</small></details>        | `string`  |           | True     |        |
-| `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                                                                                                           | `string`  |           | True     |        |
-| `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre                                                                                                                                                              | `integer` |           | True     |        |
-| `fastq`                   | FASTQ samples listed in a CSV sheet <details><summary>Help</summary><small>FASTQ files for RNASeq samples corresponding to each target assembly provided in a CSV sheet</small></details> | `string`  |           |          |        |
-| `liftoff_annotations`     | Reference annotations listed in a CSV sheet <details><summary>Help</summary><small>FASTA and GFF3 files for reference annotations for liftoff listed in a CSV sheet</small></details>     | `string`  |           |          |        |
-| `outdir`                  | The output directory where the results will be saved <details><summary>Help</summary><small> Use absolute paths to storage on Cloud infrastructure</small></details>                      | `string`  | ./results | True     |        |
+| Parameter                 | Description                                                                                              | Type      | Default   | Required | Hidden |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
+| `input`                   | Target assemblies listed in a CSV sheet                                                                  | `string`  |           | True     |        |
+| `external_protein_fastas` | External protein fastas listed in a text sheet                                                           | `string`  |           | True     |        |
+| `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                          | `string`  |           | True     |        |
+| `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1 | `integer` |           | True     |        |
+| `fastq`                   | FASTQ samples listed in a CSV sheet                                                                      | `string`  |           |          |        |
+| `liftoff_annotations`     | Reference annotations listed in a CSV sheet                                                              | `string`  |           |          |        |
+| `orthofinder_annotations` | Additional annotations for orthology listed in a CSV sheet                                               | `string`  |           |          |        |
+| `outdir`                  | The output directory where the results will be saved                                                     | `string`  | ./results | True     |        |
 
 ## Repeat annotation options
 
@@ -57,12 +58,26 @@ A NextFlow pipeline for pan-genome annotation
 | `eggnogmapper_pident`       | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
 | `eggnogmapper_purge_nohits` | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
 
+## Evaluation options
+
+| Parameter                | Description                                                                 | Type      | Default         | Required | Hidden |
+| ------------------------ | --------------------------------------------------------------------------- | --------- | --------------- | -------- | ------ |
+| `busco_skip`             | Skip evaluation by BUSCO                                                    | `boolean` |                 |          |        |
+| `busco_lineage_datasets` | BUSCO lineages as a space-separated list: 'fungi_odb10 microsporidia_odb10' | `string`  | eukaryota_odb10 |          |        |
+
 ## Max job request options
 
 Set the top limit for requested resources for any single job.
 
-| Parameter    | Description                                                                                                                                                                                                                                                                 | Type      | Default | Required | Hidden |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `max_cpus`   | Maximum number of CPUs that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`</small></details>                                      | `integer` | 12      |          | True   |
-| `max_memory` | Maximum amount of memory that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`</small></details> | `string`  | 200.GB  |          | True   |
-| `max_time`   | Maximum amount of time that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`</small></details>        | `string`  | 7.day   |          | True   |
+| Parameter    | Description                                                        | Type      | Default | Required | Hidden |
+| ------------ | ------------------------------------------------------------------ | --------- | ------- | -------- | ------ |
+| `max_cpus`   | Maximum number of CPUs that can be requested for any single job.   | `integer` | 12      |          | True   |
+| `max_memory` | Maximum amount of memory that can be requested for any single job. | `string`  | 200.GB  |          | True   |
+| `max_time`   | Maximum amount of time that can be requested for any single job.   | `string`  | 7.day   |          | True   |
+
+## Infrastructure options
+
+| Parameter                      | Description | Type      | Default | Required | Hidden |
+| ------------------------------ | ----------- | --------- | ------- | -------- | ------ |
+| `validationSkipDuplicateCheck` |             | `boolean` | True    |          | True   |
+| `validationS3PathCheck`        |             | `boolean` | True    |          | True   |

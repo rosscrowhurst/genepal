@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4 - [19-Jun-2024]
+## 0.4 - [20-Jun-2024]
 
 ### `Added`
 
@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 3. Updated modules: `AGAT_CONVERTSPGFF2GTF`, `CAT_FASTQ`, `CUSTOM_DUMPSOFTWAREVERSIONS`, `EGGNOGMAPPER`, `FASTP`, `GFFREAD`, `SAMTOOLS_CAT`, `CUSTOM_RESTOREGFFIDS`, `CUSTOM_SHORTENFASTAIDS` and `EDTA_EDTA`
 4. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
 5. Added evaluation by BUSCO [#41](https://github.com/PlantandFoodResearch/pangene/issues/41)
+6. Included common tax ids for eggnog mapper [#27](https://github.com/PlantandFoodResearch/pangene/issues/27)
 
 ### `Fixed`
 
