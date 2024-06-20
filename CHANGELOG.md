@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4 - [20-Jun-2024]
+## 0.4 - [21-Jun-2024]
 
 ### `Added`
 
@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 5. Added evaluation by BUSCO [#41](https://github.com/PlantandFoodResearch/pangene/issues/41)
 6. Included common tax ids for eggnog mapper [#27](https://github.com/PlantandFoodResearch/pangene/issues/27)
 7. Implemented hierarchical naming scheme: geneI.tJ, geneI.tJ.exonK, geneI.tJ.cdsK [#19](https://github.com/PlantandFoodResearch/pangene/issues/19), [#34](https://github.com/PlantandFoodResearch/pangene/issues/34)
+8. Now sorting list of bam and list of fastq before cat to avoid resume cache misses
 
 ### `Fixed`
 

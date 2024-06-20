@@ -60,10 +60,12 @@ workflow ALIGN_RNASEQ {
                                     bam: bamList.size() <= 1
                                 }
 
-    SAMTOOLS_CAT ( ch_star_bam_branch.bams )
+    SAMTOOLS_CAT(
+        ch_star_bam_branch.bams.map { meta, bams -> [ meta, bams.toSorted() ] }
+    )
 
     ch_samtools_bam             = SAMTOOLS_CAT.out.bam
-                                | map { meta, bam -> [meta, [bam]] }
+                                | map { meta, bam -> [ meta, [ bam ] ] }
                                 | mix(
                                     ch_star_bam_branch.bam
                                 )

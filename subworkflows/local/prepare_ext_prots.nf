@@ -20,7 +20,14 @@ workflow PREPARE_EXT_PROTS {
     ch_ext_prot_gunzip_fastas   = GUNZIP.out.gunzip.mix(ch_ext_prot_seqs_branch.rest)
                                 | map { meta, filePath -> filePath }
                                 | collect
-                                | map { fileList -> [ [ id: "ext_protein_seqs" ], fileList ] }
+                                | map { fileList ->
+                                    [
+                                        [ id: "ext_protein_seqs" ],
+                                        ( fileList instanceof List )
+                                        ? fileList.toSorted()
+                                        : fileList
+                                    ]
+                                }
 
     ch_versions                 = ch_versions.mix(GUNZIP.out.versions.first())
 
