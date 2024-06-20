@@ -7,7 +7,7 @@ A NextFlow pipeline for pan-genome annotation
 | Parameter                 | Description                                                                                              | Type      | Default   | Required | Hidden |
 | ------------------------- | -------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
 | `input`                   | Target assemblies listed in a CSV sheet                                                                  | `string`  |           | True     |        |
-| `external_protein_fastas` | External protein fastas listed in a text sheet                                                           | `string`  |           | True     |        |
+| `protein_evidence`        | Protein evidence provided as fasta files listed in a text sheet                                          | `string`  |           | True     |        |
 | `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                          | `string`  |           | True     |        |
 | `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1 | `integer` |           | True     |        |
 | `fastq`                   | FASTQ samples listed in a CSV sheet                                                                      | `string`  |           |          |        |

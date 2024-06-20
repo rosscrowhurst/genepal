@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "",
-            "required": ["input", "external_protein_fastas", "eggnogmapper_db_dir", "eggnogmapper_tax_scope", "outdir"],
+            "required": ["input", "protein_evidence", "eggnogmapper_db_dir", "eggnogmapper_tax_scope", "outdir"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -21,9 +21,9 @@
                     "description": "Target assemblies listed in a CSV sheet",
                     "fa_icon": "fas fa-file-csv"
                 },
-                "external_protein_fastas": {
+                "protein_evidence": {
                     "type": "string",
-                    "description": "External protein fastas listed in a text sheet",
+                    "description": "Protein evidence provided as fasta files listed in a text sheet",
                     "format": "file-path",
                     "mimetype": "text/txt",
                     "fa_icon": "far fa-file-alt"

@@ -110,9 +110,9 @@ workflow PANGENE {
                                 | collect
                                 : Channel.empty()
 
-    ch_ext_prot_fastas          = ! params.external_protein_fastas
+    ch_ext_prot_fastas          = ! params.protein_evidence
                                 ? Channel.empty()
-                                : Channel.fromPath(params.external_protein_fastas)
+                                : Channel.fromPath(params.protein_evidence)
                                 | splitText
                                 | map { file_path ->
                                     def file_handle = file(file_path.strip(), checkIfExists: true)

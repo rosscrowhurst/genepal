@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Deprecated`
 
+1. Renamed `external_protein_fastas` param to `protein_evidence`
+
 ## 0.3.3 - [18-Jun-2024]
 
 ### `Added`
