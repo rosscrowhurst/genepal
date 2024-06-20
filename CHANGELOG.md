@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 4. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
 5. Added evaluation by BUSCO [#41](https://github.com/PlantandFoodResearch/pangene/issues/41)
 6. Included common tax ids for eggnog mapper [#27](https://github.com/PlantandFoodResearch/pangene/issues/27)
+7. Implemented hierarchical naming scheme: geneI.tJ, geneI.tJ.exonK, geneI.tJ.cdsK [#19](https://github.com/PlantandFoodResearch/pangene/issues/19), [#34](https://github.com/PlantandFoodResearch/pangene/issues/34)
 
 ### `Fixed`
 

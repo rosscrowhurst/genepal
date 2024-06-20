@@ -80,11 +80,21 @@ workflow GFF_MERGE_CLEANUP {
     ch_agat_gff                 = AGAT_CONVERTSPGXF2GXF.out.output_gff
     ch_versions                 = ch_versions.mix(AGAT_CONVERTSPGXF2GXF.out.versions.first())
 
-    // COLLECTFILE: Format AGAT_CONVERTSPGXF2GXF output
-    ch_final_gff                = ch_agat_gff
+    // COLLECTFILE: Format AGAT_CONVERTSPGXF2GXF output and only allow: [ 'gene', 'mRNA', 'exon', 'CDS' ]
+    ch_agat_formatted_gff       = ch_agat_gff
                                 | map { meta, gff ->
 
-                                    def lines = gff.readLines()
+                                    def filtered_lines = gff.readLines()
+                                        .findAll { line ->
+                                            if ( line.startsWith('#') ) { return true }
+
+                                            def cols    = line.split('\t')
+                                            def feat    = cols[2].trim()
+
+                                            ( feat in [ 'gene', 'mRNA', 'exon', 'CDS' ] )
+                                            ? true
+                                            : false
+                                        }
                                         .collect { line ->
                                             if ( line.startsWith('#') ) { return line }
 
@@ -103,9 +113,55 @@ workflow GFF_MERGE_CLEANUP {
                                             def atts_g  = "ID=${newID};liftoffID=${oldID}"
 
                                             return ( cols[0..7] + [ atts_g ] ).join('\t')
-                                        }.join('\n')
+                                        }
 
-                                    [ "${meta.id}.agat.cleanup.gff" ] + [ lines ]
+                                    def tx_formatted_lines  = []
+                                    def current_gene_id     = ''
+                                    def current_mrna_id     = -1
+                                    def current_exon_id     = -1
+                                    def current_cds_id      = -1
+
+                                    filtered_lines.each { line ->
+                                        if ( line.startsWith('#') ) {
+                                            tx_formatted_lines << line
+                                            return
+                                        }
+
+                                        def cols    = line.split('\t')
+                                        def feat    = cols[2]
+                                        def atts    = cols[8]
+                                        def id      = ( atts =~ /ID=([^;]*)/ )[0][1]
+
+                                        if ( feat == 'gene' ) {
+                                            tx_formatted_lines << line
+                                            current_gene_id = id
+                                            current_mrna_id = 0
+                                            return
+                                        }
+
+                                        if ( feat == 'mRNA' ) {
+                                            current_mrna_id     += 1
+                                            current_exon_id     = 0
+                                            current_cds_id      = 0
+                                            tx_formatted_lines << ( ( cols[0..7] + [ "ID=${current_gene_id}.t${current_mrna_id};Parent=${current_gene_id}" ] ).join('\t') )
+                                            return
+                                        }
+
+                                        if ( feat == 'exon' ) {
+                                            current_exon_id += 1
+                                            tx_formatted_lines << ( ( cols[0..7] + [ "ID=${current_gene_id}.t${current_mrna_id}.exon${current_exon_id};Parent=${current_gene_id}.t${current_mrna_id}" ] ).join('\t') )
+                                            return
+                                        }
+
+                                        if ( feat == 'CDS' ) {
+                                            current_cds_id += 1
+                                            tx_formatted_lines << ( ( cols[0..7] + [ "ID=${current_gene_id}.t${current_mrna_id}.cds${current_cds_id};Parent=${current_gene_id}.t${current_mrna_id}" ] ).join('\t') )
+                                            return
+                                        }
+
+                                    }
+
+                                    [ "${meta.id}.agat.cleanup.gff" ] + [ tx_formatted_lines.join('\n') ]
                                 }
                                 | collectFile(newLine: true)
                                 | map { file ->
@@ -113,6 +169,6 @@ workflow GFF_MERGE_CLEANUP {
                                 }
 
     emit:
-    gff                         = ch_final_gff      // [ meta, gff ]
-    versions                    = ch_versions       // [ versions.yml ]
+    gff                         = ch_agat_formatted_gff     // [ meta, gff ]
+    versions                    = ch_versions               // [ versions.yml ]
 }
