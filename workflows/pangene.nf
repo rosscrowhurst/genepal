@@ -293,9 +293,19 @@ workflow PANGENE {
     ch_versions                 = ch_versions.mix(FASTA_GFF_ORTHOFINDER.out.versions)
 
     // SUBWORKFLOW: FASTA_GXF_BUSCO_PLOT
+    ch_busco_fasta              = params.busco_skip
+                                ? Channel.empty()
+                                : ch_valid_target_assembly
+                                | mix ( FASTA_GFF_ORTHOFINDER.out.fasta_unzipped )
+
+    ch_busco_gff                = params.busco_skip
+                                ? Channel.empty()
+                                : ch_final_gff
+                                | mix ( FASTA_GFF_ORTHOFINDER.out.gff_unzipped )
+
     FASTA_GXF_BUSCO_PLOT(
-        params.busco_skip ? Channel.empty() : ch_valid_target_assembly,
-        params.busco_skip ? Channel.empty() : ch_final_gff,
+        ch_busco_fasta,
+        ch_busco_gff,
         'genome',
         params.busco_lineage_datasets?.tokenize(' '),
         [], // val_busco_lineages_path

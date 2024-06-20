@@ -49,5 +49,7 @@ workflow FASTA_GFF_ORTHOFINDER {
     ch_versions                 = ch_versions.mix(ORTHOFINDER.out.versions)
 
     emit:
+    fasta_unzipped              = ch_fasta_unzipped     // [ meta, fasta ]
+    gff_unzipped                = ch_gff_unzipped       // [ meta, gff ]
     versions                    = ch_versions           // [ versions.yml ]
 }
