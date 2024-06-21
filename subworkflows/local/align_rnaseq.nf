@@ -5,6 +5,7 @@ workflow ALIGN_RNASEQ {
     take:
     reads_target                // channel: [ meta, assembly_id ]
     trim_reads                  // channel: [ meta, [ fq ] ]
+    rna_bam_by_assembly         // channel: [ meta, [ bam ] ]
     assembly_index              // channel: [ meta2, star_index ]
 
     main:
@@ -54,7 +55,9 @@ workflow ALIGN_RNASEQ {
                                         bam instanceof List ? bam.find { it =~ /Aligned/ } : bam
                                     ]
                                 }
+                                | mix ( rna_bam_by_assembly )
                                 | groupTuple
+                                | map { meta, bams -> [ meta, bams.flatten() ] }
                                 | branch { meta, bamList ->
                                     bams: bamList.size() > 1
                                     bam: bamList.size() <= 1

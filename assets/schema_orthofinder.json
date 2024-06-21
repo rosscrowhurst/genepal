@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/pangene/master/assets/schema_fastq.json",
+    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/pangene/master/assets/schema_orthofinder.json",
     "title": "plantandfoodresearch/pangene pipeline - params.orthofinder_annotations schema",
     "description": "Schema for the file provided with params.orthofinder_annotations",
     "type": "array",

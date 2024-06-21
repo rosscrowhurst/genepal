@@ -1,5 +1,6 @@
 include { fromSamplesheet; paramsSummaryLog     } from 'plugin/nf-validation'
 include { idFromFileName; validateFastqMetadata } from '../modules/local/utils'
+include { validateBamMetadata                   } from '../modules/local/utils'
 include { PREPARE_ASSEMBLY                      } from '../subworkflows/local/prepare_assembly'
 include { PREPROCESS_RNASEQ                     } from '../subworkflows/local/preprocess_rnaseq'
 include { ALIGN_RNASEQ                          } from '../subworkflows/local/align_rnaseq'
@@ -83,22 +84,57 @@ workflow PANGENE {
                                 | map { it.join(",") }
                                 | ifEmpty( "" )
 
-    ch_reads                    = ! params.fastq
+    ch_rna_branch               = ! params.rna_evidence
                                 ? Channel.empty()
-                                : Channel.fromSamplesheet('fastq')
-                                | map { meta, fq1, fq2 ->
-                                    fq2
-                                    ? [ meta + [ single_end: false ], [ file(fq1, checkIfExists:true), file(fq2, checkIfExists:true) ] ]
-                                    : [ meta + [ single_end: true ], [ file(fq1, checkIfExists:true) ] ]
+                                : Channel.fromSamplesheet('rna_evidence')
+                                | map { meta, f1, f2 ->
+                                    f2
+                                    ? [ meta + [ single_end: false ], [ file(f1, checkIfExists:true), file(f2, checkIfExists:true) ] ]
+                                    : [ meta + [ single_end: true ], [ file(f1, checkIfExists:true) ] ]
                                 }
-                                | map { meta, fqs ->
-                                    [ meta.id, meta + [ target_assemblies: meta.target_assemblies.split(';').sort() ], fqs ]
+                                | map { meta, files ->
+                                    [ meta + [ target_assemblies: meta.target_assemblies.split(';').sort() ], files ]
                                 }
+                                | branch { meta, files ->
+                                    fq:  files.first().extension != 'bam'
+                                    bam: files.first().extension == 'bam'
+                                }
+
+    ch_rna_fq                   = ch_rna_branch.fq
+                                | map { meta, files -> [ meta.id, meta, files ] }
                                 | groupTuple
                                 | combine(ch_tar_assm_str)
-                                | map { id, metas, fqs, tar_assm_str ->
-                                    validateFastqMetadata(metas, fqs, tar_assm_str)
+                                | map { id, metas, files, tar_assm_str ->
+                                    validateFastqMetadata(metas, files, tar_assm_str)
                                 }
+
+    ch_rna_bam                  = ch_rna_branch.bam
+                                | map { meta, files -> [ meta.id, meta, files ] }
+                                | groupTuple
+                                | combine(ch_tar_assm_str)
+                                | flatMap { id, metas, files, tar_assm_str ->
+                                    validateBamMetadata(metas, files, tar_assm_str)
+                                }
+
+    // Check if each sample for a given assembly has either bam or fastq files
+    ch_rna_bam
+    | flatMap { meta, bams ->
+        meta.target_assemblies.collect { [ [ meta.id, it ], 'bam' ] }
+    }
+    | join(
+        ch_rna_fq
+        | flatMap { meta, fqs ->
+            meta.target_assemblies.collect { [ [ meta.id, it ], 'fq' ] }
+        }
+    )
+    | map { combination, bam, fq ->
+        error "Sample ${combination[0]} for assembly ${combination[1]} can not have both fastq and bam files"
+    }
+
+    ch_rna_bam_by_assembly      = ch_rna_bam
+                                | map { meta, bams -> [ [ id: meta.target_assemblies.first() ], bams ] }
+                                | groupTuple
+                                | map { meta, bams -> [ meta, bams.flatten() ] }
 
     ch_ribo_db                  = params.remove_ribo_rna
                                 ? file(params.ribo_database_manifest, checkIfExists: true)
@@ -174,7 +210,7 @@ workflow PANGENE {
 
     // SUBWORKFLOW: PREPROCESS_RNASEQ
     PREPROCESS_RNASEQ(
-        ch_reads,
+        ch_rna_fq,
         ch_tar_assm_str,
         ch_braker_ex_asm_str,
         params.skip_fastqc,
@@ -193,6 +229,7 @@ workflow PANGENE {
     ALIGN_RNASEQ(
         ch_reads_target,
         ch_trim_reads,
+        ch_rna_bam_by_assembly,
         ch_target_assemby_index,
     )
 

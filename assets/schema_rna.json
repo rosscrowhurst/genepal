@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/pangene/master/assets/schema_fastq.json",
-    "title": "plantandfoodresearch/pangene pipeline - params.fastq schema",
-    "description": "Schema for the file provided with params.fastq",
+    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/pangene/master/assets/schema_rna.json",
+    "title": "plantandfoodresearch/pangene pipeline - params.rna_evidence schema",
+    "description": "Schema for the file provided with params.rna_evidence",
     "type": "array",
     "items": {
         "type": "object",
@@ -13,13 +13,14 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "file_1": {
                 "type": "string",
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.(f(ast)?q\\.gz|bam)$",
+                "errorMessage": "FASTQ file for reads 1 or BAM file containing mapped reads must be provided, cannot contain spaces and must have extension '.fq.gz', '.fastq.gz' or '.bam'",
+                "unique": true
             },
-            "fastq_2": {
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
+            "file_2": {
+                "errorMessage": "FASTQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "anyOf": [
                     {
                         "type": "string",
@@ -30,7 +31,8 @@
                         "maxLength": 0
                     }
                 ],
-                "dependentRequired": ["fastq_1"]
+                "dependentRequired": ["file_1"],
+                "unique": true
             },
             "target_assemblies": {
                 "type": "string",
@@ -39,6 +41,6 @@
                 "meta": ["target_assemblies"]
             }
         },
-        "required": ["sample", "fastq_1", "target_assemblies"]
+        "required": ["sample", "file_1", "target_assemblies"]
     }
 }

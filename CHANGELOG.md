@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 6. Included common tax ids for eggnog mapper [#27](https://github.com/PlantandFoodResearch/pangene/issues/27)
 7. Implemented hierarchical naming scheme: geneI.tJ, geneI.tJ.exonK, geneI.tJ.cdsK [#19](https://github.com/PlantandFoodResearch/pangene/issues/19), [#34](https://github.com/PlantandFoodResearch/pangene/issues/34)
 8. Now sorting list of bam and list of fastq before cat to avoid resume cache misses
+9. Added a local modification to `FASTQ_FASTQC_UMITOOLS_FASTP` for stub and PR to nf-core/modules <https://github.com/nf-core/modules/pull/5858>
+10. Allowed BAM files for RNA evidence [#3](https://github.com/PlantandFoodResearch/pangene/issues/3)
 
 ### `Fixed`
 
@@ -30,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Deprecated`
 
 1. Renamed `external_protein_fastas` param to `protein_evidence`
+2. Renamed `fastq` param to `rna_evidence`
 
 ## 0.3.3 - [18-Jun-2024]
 

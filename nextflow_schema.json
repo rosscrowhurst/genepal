@@ -38,14 +38,14 @@
                     "description": "Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1",
                     "minimum": 0
                 },
-                "fastq": {
+                "rna_evidence": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
-                    "schema": "assets/schema_fastq.json",
+                    "schema": "assets/schema_rna.json",
                     "pattern": "^\\S+\\.csv$",
                     "fa_icon": "fas fa-file-csv",
-                    "description": "FASTQ samples listed in a CSV sheet"
+                    "description": "FASTQ/BAM samples listed in a CSV sheet"
                 },
                 "liftoff_annotations": {
                     "type": "string",

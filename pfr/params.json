@@ -3,6 +3,6 @@
     "protein_evidence": "/workspace/pangene/test_data/external-protein-fastas.txt",
     "eggnogmapper_db_dir": "/workspace/ComparativeDataSources/emapperdb/5.0.2",
     "eggnogmapper_tax_scope": 33090,
-    "fastq": "/workspace/pangene/test_data/fastqsheet.csv",
+    "rna_evidence": "/workspace/pangene/test_data/fastqsheet.csv",
     "liftoff_annotations": "/workspace/pangene/test_data/liftoffannotations.csv"
 }
