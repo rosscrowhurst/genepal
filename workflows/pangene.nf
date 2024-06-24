@@ -16,6 +16,8 @@ include { FASTA_GFF_ORTHOFINDER                 } from '../subworkflows/local/fa
 include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/pfr/fasta_gxf_busco_plot/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions'
 
+include { GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES } from '../subworkflows/pfr/gxf_fasta_agat_spaddintrons_spextractsequences/main'
+
 log.info paramsSummaryLog(workflow)
 
 workflow PANGENE {
@@ -350,6 +352,15 @@ workflow PANGENE {
     )
 
     ch_versions                 = ch_versions.mix(FASTA_GXF_BUSCO_PLOT.out.versions)
+
+    // SUBWORKFLOW: GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES
+    GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES(
+        ch_final_gff,
+        ch_valid_target_assembly
+    )
+
+    ch_splicing_marked_gff3     = GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES.out.marked_gff3
+    ch_versions                 = ch_versions.mix(GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES.out.versions)
 
     // MODULE: CUSTOM_DUMPSOFTWAREVERSIONS
     CUSTOM_DUMPSOFTWAREVERSIONS (

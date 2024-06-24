@@ -5,6 +5,16 @@
         "https://github.com/PlantandFoodResearch/nxf-modules.git": {
             "modules": {
                 "pfr": {
+                    "agat/spaddintrons": {
+                        "branch": "main",
+                        "git_sha": "f373339d099de4e7330cd8f3c400ad9a080358c9",
+                        "installed_by": ["gxf_fasta_agat_spaddintrons_spextractsequences"]
+                    },
+                    "agat/spextractsequences": {
+                        "branch": "main",
+                        "git_sha": "e2a6ed64cb035a16da154f738f65639ace7e0c74",
+                        "installed_by": ["gxf_fasta_agat_spaddintrons_spextractsequences"]
+                    },
                     "agat/spfilterfeaturefromkilllist": {
                         "branch": "main",
                         "git_sha": "10b046eaac396f279c08e7e2bb067482ccd9c74e",
@@ -62,6 +72,11 @@
                     "fasta_gxf_busco_plot": {
                         "branch": "main",
                         "git_sha": "0e4afaff4964485d2d93f1115c5254a99765b9c1",
+                        "installed_by": ["subworkflows"]
+                    },
+                    "gxf_fasta_agat_spaddintrons_spextractsequences": {
+                        "branch": "main",
+                        "git_sha": "f373339d099de4e7330cd8f3c400ad9a080358c9",
                         "installed_by": ["subworkflows"]
                     }
                 }
