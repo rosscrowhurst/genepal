@@ -175,7 +175,7 @@ workflow PANGENE {
                                 ? ch_liftoff_mm.gff
                                 : Channel.empty()
 
-    val_tsebra_config           = params.braker_allow_isoforms
+    val_tsebra_config           = params.allow_isoforms
                                 ? "${projectDir}/assets/tsebra-default.cfg"
                                 : "${projectDir}/assets/tsebra-1form.cfg"
 
@@ -265,7 +265,7 @@ workflow PANGENE {
         ch_braker_hints,
         ch_liftoff_gff3,
         val_tsebra_config,
-        params.braker_allow_isoforms
+        params.allow_isoforms
     )
 
     ch_braker_purged_gff        = PURGE_BRAKER_MODELS.out.braker_purged_gff

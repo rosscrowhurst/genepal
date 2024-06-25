@@ -13,7 +13,7 @@ workflow PURGE_BRAKER_MODELS {
     braker_hints                // [ meta, gff ]
     liftoff_gff3                // [ meta, gff3 ]
     tsebra_config               // val(tsebra_config)
-    braker_allow_isoforms       // val(true|false)
+    allow_isoforms              // val(true|false)
 
     main:
     ch_versions                 = Channel.empty()
@@ -117,8 +117,8 @@ workflow PURGE_BRAKER_MODELS {
                                     [ [ id: file.baseName ], file ]
                                 }
 
-    // COLLECTFILE: Iso-form kill list if braker_allow_isoforms=true
-    ch_post_tsebra_kill_list    = braker_allow_isoforms
+    // COLLECTFILE: Iso-form kill list if allow_isoforms=true
+    ch_post_tsebra_kill_list    = allow_isoforms
                                 ? Channel.empty()
                                 : ch_tsebra_gff
                                 | map { meta, gff ->

@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4 - [24-Jun-2024]
+## 0.4 - [25-Jun-2024]
 
 ### `Added`
 
@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 1. Renamed `external_protein_fastas` param to `protein_evidence`
 2. Renamed `fastq` param to `rna_evidence`
+3. Renamed `braker_allow_isoforms` param to `allow_isoforms`
 
 ## 0.3.3 - [18-Jun-2024]
 

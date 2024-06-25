@@ -51,9 +51,9 @@ A NextFlow pipeline for pan-genome annotation
 | Parameter                   | Description                                                                       | Type      | Default | Required | Hidden |
 | --------------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
 | `braker_extra_args`         | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
-| `braker_allow_isoforms`     | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |
 | `liftoff_coverage`          | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
 | `liftoff_identity`          | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
+| `allow_isoforms`            | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |
 | `eggnogmapper_evalue`       | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
 | `eggnogmapper_pident`       | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
 | `eggnogmapper_purge_nohits` | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
