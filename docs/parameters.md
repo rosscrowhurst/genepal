@@ -10,7 +10,7 @@ A NextFlow pipeline for pan-genome annotation
 | `protein_evidence`        | Protein evidence provided as fasta files listed in a text sheet                                          | `string`  |           | True     |        |
 | `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                          | `string`  |           | True     |        |
 | `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1 | `integer` |           | True     |        |
-| `fastq`                   | FASTQ samples listed in a CSV sheet                                                                      | `string`  |           |          |        |
+| `rna_evidence`            | FASTQ/BAM samples listed in a CSV sheet                                                                  | `string`  |           |          |        |
 | `liftoff_annotations`     | Reference annotations listed in a CSV sheet                                                              | `string`  |           |          |        |
 | `orthofinder_annotations` | Additional annotations for orthology listed in a CSV sheet                                               | `string`  |           |          |        |
 | `outdir`                  | The output directory where the results will be saved                                                     | `string`  | ./results | True     |        |
@@ -48,15 +48,16 @@ A NextFlow pipeline for pan-genome annotation
 
 ## Annotation options
 
-| Parameter                   | Description                                                                       | Type      | Default | Required | Hidden |
-| --------------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `braker_extra_args`         | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
-| `liftoff_coverage`          | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
-| `liftoff_identity`          | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
-| `allow_isoforms`            | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |
-| `eggnogmapper_evalue`       | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
-| `eggnogmapper_pident`       | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
-| `eggnogmapper_purge_nohits` | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
+| Parameter                     | Description                                                                       | Type      | Default | Required | Hidden |
+| ----------------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
+| `braker_extra_args`           | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
+| `liftoff_coverage`            | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
+| `liftoff_identity`            | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
+| `allow_isoforms`              | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |
+| `enforce_full_intron_support` | Require every model to have external evidence for all its introns                 | `boolean` | True    |          |        |
+| `eggnogmapper_evalue`         | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
+| `eggnogmapper_pident`         | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
+| `eggnogmapper_purge_nohits`   | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
 
 ## Evaluation options
 

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 10. Added `GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES` sub-workflow for splice type statistics [#11](https://github.com/PlantandFoodResearch/pangene/issues/11)
 11. Added a local patch for `GUNZIP`
 12. Changed `orthofinder_annotations` from FASTA/GFF to protein FASTA [#43](https://github.com/PlantandFoodResearch/pangene/issues/43)
+13. Added param `enforce_full_intron_support` to turn on/off strict model purging by TSEBRA [#21](https://github.com/PlantandFoodResearch/pangene/issues/21)
 
 ### `Fixed`
 

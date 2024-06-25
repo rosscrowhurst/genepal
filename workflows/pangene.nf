@@ -175,9 +175,28 @@ workflow PANGENE {
                                 ? ch_liftoff_mm.gff
                                 : Channel.empty()
 
-    val_tsebra_config           = params.allow_isoforms
-                                ? "${projectDir}/assets/tsebra-default.cfg"
-                                : "${projectDir}/assets/tsebra-1form.cfg"
+    ch_tsebra_config            = Channel.of ( file("${projectDir}/assets/tsebra-template.cfg", checkIfExists: true) )
+                                | map { cfg ->
+                                    def param_intron_support = params.enforce_full_intron_support ? '1.0' : '0.0'
+
+                                    def param_e1 = params.allow_isoforms ? '0.1'    : '0.0'
+                                    def param_e2 = params.allow_isoforms ? '0.5'    : '0.0'
+                                    def param_e3 = params.allow_isoforms ? '0.05'   : '0.0'
+                                    def param_e4 = params.allow_isoforms ? '0.2'    : '0.0'
+
+                                    [
+                                        'tsebra-config.cfg',
+                                        cfg
+                                        .text
+                                        .replace('PARAM_INTRON_SUPPORT', param_intron_support)
+                                        .replace('PARAM_E1', param_e1)
+                                        .replace('PARAM_E2', param_e2)
+                                        .replace('PARAM_E3', param_e3)
+                                        .replace('PARAM_E4', param_e4)
+                                    ]
+                                }
+                                | collectFile
+
 
     ch_orthofinder_pep          = ! params.orthofinder_annotations
                                 ? Channel.empty()
@@ -264,7 +283,7 @@ workflow PANGENE {
         ch_braker_gff3,
         ch_braker_hints,
         ch_liftoff_gff3,
-        val_tsebra_config,
+        ch_tsebra_config,
         params.allow_isoforms
     )
 

@@ -196,7 +196,14 @@
                 "allow_isoforms": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Allow multiple isoforms for gene models"
+                    "description": "Allow multiple isoforms for gene models",
+                    "fa_icon": "fas fa-question-circle"
+                },
+                "enforce_full_intron_support": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-question-circle",
+                    "description": "Require every model to have external evidence for all its introns"
                 },
                 "eggnogmapper_evalue": {
                     "type": "number",

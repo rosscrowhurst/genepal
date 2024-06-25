@@ -12,7 +12,7 @@ workflow PURGE_BRAKER_MODELS {
     braker_gff3                 // [ meta, gff3 ]
     braker_hints                // [ meta, gff ]
     liftoff_gff3                // [ meta, gff3 ]
-    tsebra_config               // val(tsebra_config)
+    tsebra_config               // Channel: [ cfg ]
     allow_isoforms              // val(true|false)
 
     main:
@@ -56,7 +56,7 @@ workflow PURGE_BRAKER_MODELS {
     // MODULE: TSEBRA
     ch_tsebra_inputs            = ch_tsebra_input_gtf
                                 | join(braker_hints)
-                                | combine(Channel.fromPath(tsebra_config))
+                                | combine(tsebra_config)
     TSEBRA(
         ch_tsebra_inputs.map { meta, gtf, gff, cfg -> [ meta, [ gtf ] ] },
         ch_tsebra_inputs.map { meta, gtf, gff, cfg -> [ gff ] },
