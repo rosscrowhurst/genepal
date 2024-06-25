@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 8. Now sorting list of bam and list of fastq before cat to avoid resume cache misses
 9. Allowed BAM files for RNA evidence [#3](https://github.com/PlantandFoodResearch/pangene/issues/3)
 10. Added `GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES` sub-workflow for splice type statistics [#11](https://github.com/PlantandFoodResearch/pangene/issues/11)
+11. Added a local patch for `GUNZIP`
+12. Changed `orthofinder_annotations` from FASTA/GFF to protein FASTA [#43](https://github.com/PlantandFoodResearch/pangene/issues/43)
 
 ### `Fixed`
 

@@ -1,0 +1,259 @@
+Changes in module 'nf-core/gunzip'
+--- modules/nf-core/gunzip/meta.yml
++++ modules/nf-core/gunzip/meta.yml
+@@ -37,3 +37,4 @@
+   - "@joseespinosa"
+   - "@drpatelh"
+   - "@jfy133"
++  - "@gallvp"
+
+--- modules/nf-core/gunzip/main.nf
++++ modules/nf-core/gunzip/main.nf
+@@ -18,8 +18,11 @@
+     task.ext.when == null || task.ext.when
+ 
+     script:
+-    def args = task.ext.args ?: ''
+-    gunzip = archive.toString() - '.gz'
++    def args        = task.ext.args ?: ''
++    def extension   = ( archive.toString() - '.gz' ).tokenize('.')[-1]
++    def name        = archive.toString() - '.gz' - ".$extension"
++    def prefix      = task.ext.prefix ?: name
++    gunzip          = prefix + ".$extension"
+     """
+     # Not calling gunzip itself because it creates files
+     # with the original group ownership rather than the
+@@ -37,7 +40,11 @@
+     """
+ 
+     stub:
+-    gunzip = archive.toString() - '.gz'
++    def args        = task.ext.args ?: ''
++    def extension   = ( archive.toString() - '.gz' ).tokenize('.')[-1]
++    def name        = archive.toString() - '.gz' - ".$extension"
++    def prefix      = task.ext.prefix ?: name
++    gunzip          = prefix + ".$extension"
+     """
+     touch $gunzip
+     cat <<-END_VERSIONS > versions.yml
+
+--- modules/nf-core/gunzip/tests/main.nf.test.snap
++++ modules/nf-core/gunzip/tests/main.nf.test.snap
+@@ -1,4 +1,70 @@
+ {
++    "Should run without failures - prefix - stub": {
++        "content": [
++            {
++                "0": [
++                    [
++                        {
++                            "id": "test"
++                        },
++                        "test.xyz.fastq:md5,d41d8cd98f00b204e9800998ecf8427e"
++                    ]
++                ],
++                "1": [
++                    "versions.yml:md5,54376d32aca20e937a4ec26dac228e84"
++                ],
++                "gunzip": [
++                    [
++                        {
++                            "id": "test"
++                        },
++                        "test.xyz.fastq:md5,d41d8cd98f00b204e9800998ecf8427e"
++                    ]
++                ],
++                "versions": [
++                    "versions.yml:md5,54376d32aca20e937a4ec26dac228e84"
++                ]
++            }
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "24.04.2"
++        },
++        "timestamp": "2024-06-25T11:35:10.861293"
++    },
++    "Should run without failures - stub": {
++        "content": [
++            {
++                "0": [
++                    [
++                        [
++                            
++                        ],
++                        "test_1.fastq:md5,d41d8cd98f00b204e9800998ecf8427e"
++                    ]
++                ],
++                "1": [
++                    "versions.yml:md5,54376d32aca20e937a4ec26dac228e84"
++                ],
++                "gunzip": [
++                    [
++                        [
++                            
++                        ],
++                        "test_1.fastq:md5,d41d8cd98f00b204e9800998ecf8427e"
++                    ]
++                ],
++                "versions": [
++                    "versions.yml:md5,54376d32aca20e937a4ec26dac228e84"
++                ]
++            }
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "24.04.2"
++        },
++        "timestamp": "2024-06-25T11:35:05.857145"
++    },
+     "Should run without failures": {
+         "content": [
+             {
+@@ -26,6 +92,43 @@
+                 ]
+             }
+         ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "24.04.2"
++        },
+         "timestamp": "2023-10-17T15:35:37.690477896"
++    },
++    "Should run without failures - prefix": {
++        "content": [
++            {
++                "0": [
++                    [
++                        {
++                            "id": "test"
++                        },
++                        "test.xyz.fastq:md5,4161df271f9bfcd25d5845a1e220dbec"
++                    ]
++                ],
++                "1": [
++                    "versions.yml:md5,54376d32aca20e937a4ec26dac228e84"
++                ],
++                "gunzip": [
++                    [
++                        {
++                            "id": "test"
++                        },
++                        "test.xyz.fastq:md5,4161df271f9bfcd25d5845a1e220dbec"
++                    ]
++                ],
++                "versions": [
++                    "versions.yml:md5,54376d32aca20e937a4ec26dac228e84"
++                ]
++            }
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "24.04.2"
++        },
++        "timestamp": "2024-06-25T11:33:32.921739"
+     }
+ }
+--- /dev/null
++++ modules/nf-core/gunzip/tests/nextflow.config
+@@ -0,0 +1,5 @@
++process {
++    withName: GUNZIP {
++        ext.prefix = { "${meta.id}.xyz" }
++    }
++}
+
+--- modules/nf-core/gunzip/tests/main.nf.test
++++ modules/nf-core/gunzip/tests/main.nf.test
+@@ -33,4 +33,89 @@
+ 
+     }
+ 
++    test("Should run without failures - prefix") {
++
++        config './nextflow.config'
++
++        when {
++            params {
++                outdir = "$outputDir"
++            }
++            process {
++                """
++                input[0] = Channel.of([
++                        [ id: 'test' ],
++                        file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
++                    ]
++                )
++                """
++            }
++        }
++
++        then {
++            assertAll(
++            { assert process.success },
++            { assert snapshot(process.out).match() }
++            )
++        }
++
++    }
++
++    test("Should run without failures - stub") {
++
++        options '-stub'
++
++        when {
++            params {
++                outdir = "$outputDir"
++            }
++            process {
++                """
++                input[0] = Channel.of([
++                        [],
++                        file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
++                    ]
++                )
++                """
++            }
++        }
++
++        then {
++            assertAll(
++            { assert process.success },
++            { assert snapshot(process.out).match() }
++            )
++        }
++
++    }
++
++    test("Should run without failures - prefix - stub") {
++
++        options '-stub'
++        config './nextflow.config'
++
++        when {
++            params {
++                outdir = "$outputDir"
++            }
++            process {
++                """
++                input[0] = Channel.of([
++                        [ id: 'test' ],
++                        file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
++                    ]
++                )
++                """
++            }
++        }
++
++        then {
++            assertAll(
++            { assert process.success },
++            { assert snapshot(process.out).match() }
++            )
++        }
++
++    }
++
+ }
+
+************************************************************

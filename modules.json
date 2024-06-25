@@ -164,7 +164,8 @@
                     "gunzip": {
                         "branch": "master",
                         "git_sha": "3a5fef109d113b4997c9822198664ca5f2716208",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gunzip/gunzip.diff"
                     },
                     "liftoff": {
                         "branch": "master",

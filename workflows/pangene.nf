@@ -12,7 +12,7 @@ include { GFF_MERGE_CLEANUP                     } from '../subworkflows/local/gf
 include { GFF_EGGNOGMAPPER                      } from '../subworkflows/local/gff_eggnogmapper'
 include { PURGE_NOHIT_MODELS                    } from '../subworkflows/local/purge_nohit_models'
 include { GFF_STORE                             } from '../subworkflows/local/gff_store'
-include { FASTA_GFF_ORTHOFINDER                 } from '../subworkflows/local/fasta_gff_orthofinder'
+include { FASTA_ORTHOFINDER                     } from '../subworkflows/local/fasta_orthofinder'
 include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/pfr/fasta_gxf_busco_plot/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions'
 
@@ -179,22 +179,12 @@ workflow PANGENE {
                                 ? "${projectDir}/assets/tsebra-default.cfg"
                                 : "${projectDir}/assets/tsebra-1form.cfg"
 
-    ch_orthofinder_mm           = ! params.orthofinder_annotations
+    ch_orthofinder_pep          = ! params.orthofinder_annotations
                                 ? Channel.empty()
                                 : Channel.fromSamplesheet('orthofinder_annotations')
-                                | multiMap { tag, fasta, gff ->
-
-                                    fasta:  [ [ id: tag ], file(fasta, checkIfExists:true)  ]
-                                    gff:    [ [ id: tag ], file(gff, checkIfExists:true)    ]
+                                | map { tag, fasta ->
+                                    [ [ id: tag ], file(fasta, checkIfExists:true)  ]
                                 }
-
-    ch_orthofinder_fasta        = params.orthofinder_annotations
-                                ? ch_orthofinder_mm.fasta
-                                : Channel.empty()
-
-    ch_orthofinder_gff          = params.orthofinder_annotations
-                                ? ch_orthofinder_mm.gff
-                                : Channel.empty()
 
     // SUBWORKFLOW: PREPARE_ASSEMBLY
     PREPARE_ASSEMBLY(
@@ -322,25 +312,22 @@ workflow PANGENE {
     ch_final_proteins           = GFF_STORE.out.final_proteins
     ch_versions                 = ch_versions.mix(GFF_STORE.out.versions)
 
-    // SUBWORKFLOW: FASTA_GFF_ORTHOFINDER
-    FASTA_GFF_ORTHOFINDER(
+    // SUBWORKFLOW: FASTA_ORTHOFINDER
+    FASTA_ORTHOFINDER(
         ch_final_proteins,
-        ch_orthofinder_fasta,
-        ch_orthofinder_gff
+        ch_orthofinder_pep
     )
 
-    ch_versions                 = ch_versions.mix(FASTA_GFF_ORTHOFINDER.out.versions)
+    ch_versions                 = ch_versions.mix(FASTA_ORTHOFINDER.out.versions)
 
     // SUBWORKFLOW: FASTA_GXF_BUSCO_PLOT
     ch_busco_fasta              = params.busco_skip
                                 ? Channel.empty()
                                 : ch_valid_target_assembly
-                                | mix ( FASTA_GFF_ORTHOFINDER.out.fasta_unzipped )
 
     ch_busco_gff                = params.busco_skip
                                 ? Channel.empty()
                                 : ch_final_gff
-                                | mix ( FASTA_GFF_ORTHOFINDER.out.gff_unzipped )
 
     FASTA_GXF_BUSCO_PLOT(
         ch_busco_fasta,

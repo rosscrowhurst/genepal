@@ -15,17 +15,11 @@
             },
             "fasta": {
                 "type": "string",
-                "pattern": "^\\S+\\.f(a|asta|as|sa|na)(\\.gz)?$",
-                "errorMessage": "FASTA file path cannot contain spaces and must have extension '.f(a|asta|as|sa|na)' or '.f(a|asta|as|sa|na).gz'",
-                "unique": true
-            },
-            "gff3": {
-                "type": "string",
-                "pattern": "^\\S+\\.gff(3)?(\\.gz)?$",
-                "errorMessage": "Annotation GFF3 file path cannot contain spaces and must have extension '.gff.gz', '.gff3.gz', '.gff' or '.gff3'",
+                "pattern": "^\\S+\\.(fa|fas|pep|faa|fasta)(\\.gz)?$",
+                "errorMessage": "Proteins FASTA file path cannot contain spaces and must have extension '.(fa|fas|pep|faa|fasta)' or '.(fa|fas|pep|faa|fasta).gz'. Orthofinder does not allow 'fna' extension",
                 "unique": true
             }
         },
-        "required": ["tag", "fasta", "gff3"]
+        "required": ["tag", "fasta"]
     }
 }
