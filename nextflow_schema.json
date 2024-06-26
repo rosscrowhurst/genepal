@@ -205,6 +205,12 @@
                     "fa_icon": "fas fa-question-circle",
                     "description": "Require every model to have external evidence for all its introns"
                 },
+                "filter_liftoff_by_hints": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-question-circle",
+                    "description": "Use BRAKER hints to filter Liftoff models"
+                },
                 "eggnogmapper_evalue": {
                     "type": "number",
                     "default": 1e-5,
@@ -260,7 +266,7 @@
                 "max_memory": {
                     "type": "string",
                     "description": "Maximum amount of memory that can be requested for any single job.",
-                    "default": "200.GB",
+                    "default": "72.GB",
                     "fa_icon": "fas fa-memory",
                     "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
                     "hidden": true

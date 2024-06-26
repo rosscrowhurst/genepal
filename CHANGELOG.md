@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 11. Added a local patch for `GUNZIP`
 12. Changed `orthofinder_annotations` from FASTA/GFF to protein FASTA [#43](https://github.com/PlantandFoodResearch/pangene/issues/43)
 13. Added param `enforce_full_intron_support` to turn on/off strict model purging by TSEBRA [#21](https://github.com/PlantandFoodResearch/pangene/issues/21)
+14. Added param `filter_liftoff_by_hints` to evaluate liftoff models with TSEBRA to make sure they have the same level of evidence as BRAKER [#28](ttps://github.com/PlantandFoodResearch/pangene/issues/28)
 
 ### `Fixed`
 
@@ -37,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 1. Renamed `external_protein_fastas` param to `protein_evidence`
 2. Renamed `fastq` param to `rna_evidence`
 3. Renamed `braker_allow_isoforms` param to `allow_isoforms`
+4. Moved liftoffID from gene level to mRNA/transcript level
 
 ## 0.3.3 - [18-Jun-2024]
 

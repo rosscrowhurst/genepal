@@ -55,6 +55,7 @@ A NextFlow pipeline for pan-genome annotation
 | `liftoff_identity`            | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
 | `allow_isoforms`              | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |
 | `enforce_full_intron_support` | Require every model to have external evidence for all its introns                 | `boolean` | True    |          |        |
+| `filter_liftoff_by_hints`     | Use BRAKER hints to filter Liftoff models                                         | `boolean` | True    |          |        |
 | `eggnogmapper_evalue`         | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
 | `eggnogmapper_pident`         | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
 | `eggnogmapper_purge_nohits`   | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
@@ -73,7 +74,7 @@ Set the top limit for requested resources for any single job.
 | Parameter    | Description                                                        | Type      | Default | Required | Hidden |
 | ------------ | ------------------------------------------------------------------ | --------- | ------- | -------- | ------ |
 | `max_cpus`   | Maximum number of CPUs that can be requested for any single job.   | `integer` | 12      |          | True   |
-| `max_memory` | Maximum amount of memory that can be requested for any single job. | `string`  | 200.GB  |          | True   |
+| `max_memory` | Maximum amount of memory that can be requested for any single job. | `string`  | 72.GB   |          | True   |
 | `max_time`   | Maximum amount of time that can be requested for any single job.   | `string`  | 7.day   |          | True   |
 
 ## Infrastructure options

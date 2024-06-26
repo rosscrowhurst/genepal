@@ -272,7 +272,11 @@ workflow PANGENE {
     FASTA_LIFTOFF(
         ch_valid_target_assembly,
         ch_liftoff_fasta,
-        ch_liftoff_gff
+        ch_liftoff_gff,
+        params.filter_liftoff_by_hints,
+        ch_braker_hints,
+        ch_tsebra_config,
+        params.allow_isoforms
     )
 
     ch_liftoff_gff3             = FASTA_LIFTOFF.out.gff3

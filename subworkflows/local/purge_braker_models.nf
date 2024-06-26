@@ -20,7 +20,8 @@ workflow PURGE_BRAKER_MODELS {
         braker_gff3,
         braker_hints,
         tsebra_config,
-        allow_isoforms
+        allow_isoforms,
+        'braker'
     )
 
     ch_tsebra_killed_gff        = GFF_TSEBRA_SPFILTERFEATUREFROMKILLLIST.out.tsebra_killed_gff

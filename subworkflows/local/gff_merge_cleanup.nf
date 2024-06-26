@@ -56,14 +56,18 @@ workflow GFF_MERGE_CLEANUP {
                                             def feat_r  = feat == 'transcript' ? 'mRNA' : feat
                                             // Use mRNA inplace of transcript
 
-                                            if ( feat != 'gene' || program != 'Liftoff' ) {
+                                            if ( feat_r != 'mRNA' || program != 'Liftoff' ) {
                                                 return ( cols[0..1] + [ feat_r ] + cols[3..7] + [ atts_r ] ).join('\t')
                                             }
 
-                                            def gene_id = ( atts =~ /ID=([^;]*)/ )[0][1]
-                                            def atts_g  = "liftoffID=$gene_id"
+                                            def tx_id   = ( atts =~ /ID=([^;]*)/ )[0][1]
+                                            def matches = ( atts =~ /liftoffID=([^;]*)/ )
 
-                                            return ( cols[0..7] + [ atts_g ] ).join('\t')
+                                            def liftoffID = matches ? matches[0][1] : tx_id
+
+                                            def atts_g  = "liftoffID=$liftoffID"
+
+                                            return ( cols[0..1] + [ feat_r ] + cols[3..7] + [ atts_g ] ).join('\t')
 
                                         }.join('\n')
 
@@ -104,13 +108,14 @@ workflow GFF_MERGE_CLEANUP {
                                             def atts    = cols[8]
                                             def atts_r  = atts.replace('-', '').replace('agat', '')
 
-                                            if ( feat != 'gene' || program != 'Liftoff' ) {
+                                            if ( feat != 'mRNA' || program != 'Liftoff' ) {
                                                 return ( cols[0..7] + [ atts_r ] ).join('\t')
                                             }
 
                                             def oldID   = ( atts =~ /liftoffID=([^;]*)/ )[0][1]
                                             def newID   = ( atts =~ /ID=([^;]*)/ )[0][1].replace('-', '').replace('agat', '')
-                                            def atts_g  = "ID=${newID};liftoffID=${oldID}"
+                                            def pID     = ( atts =~ /Parent=([^;]*)/ )[0][1].replace('-', '').replace('agat', '')
+                                            def atts_g  = "ID=${newID};Parent=${pID};liftoffID=${oldID}"
 
                                             return ( cols[0..7] + [ atts_g ] ).join('\t')
                                         }
@@ -143,7 +148,11 @@ workflow GFF_MERGE_CLEANUP {
                                             current_mrna_id     += 1
                                             current_exon_id     = 0
                                             current_cds_id      = 0
-                                            tx_formatted_lines << ( ( cols[0..7] + [ "ID=${current_gene_id}.t${current_mrna_id};Parent=${current_gene_id}" ] ).join('\t') )
+
+                                            def matches         = ( atts =~ /liftoffID=([^;]*)/ )
+                                            def liftoffIDStr    = matches ? ";liftoffID=${matches[0][1]}" : ''
+
+                                            tx_formatted_lines << ( ( cols[0..7] + [ "ID=${current_gene_id}.t${current_mrna_id};Parent=${current_gene_id}${liftoffIDStr}" ] ).join('\t') )
                                             return
                                         }
 

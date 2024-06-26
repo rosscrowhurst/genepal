@@ -10,6 +10,7 @@ workflow GFF_TSEBRA_SPFILTERFEATUREFROMKILLLIST {
     braker_hints                // [ meta, gff ]
     tsebra_config               // Channel: [ cfg ]
     allow_isoforms              // val(true|false)
+    val_prefix                  // val(String)
 
     main:
     ch_versions                 = Channel.empty()
@@ -72,11 +73,22 @@ workflow GFF_TSEBRA_SPFILTERFEATUREFROMKILLLIST {
                                             if ( line.startsWith('#') ) { return line }
 
                                             def cols    = line.split('\t')
+                                            def program = cols[1]
+                                            def feat    = cols[2]
+                                            def atts    = cols[8]
+
                                             def atts_r  = ''
                                             // Remove attributes and use AGAT_CONVERTSPGXF2GXF
                                             // to create attributes based on sequential layout
 
-                                            return ( cols[0..7] + [ atts_r ] ).join('\t')
+                                            if ( feat != 'transcript' || program != 'Liftoff' ) {
+                                                return ( cols[0..7] + [ atts_r ] ).join('\t')
+                                            }
+
+                                            def tx_id = atts.trim().replaceFirst('anno1.', '')
+                                            def atts_g  = "liftoffID $tx_id"
+
+                                            return ( cols[0..7] + [ atts_g ] ).join('\t')
                                         }.join('\n')
 
                                     [ "${meta.id}.gtf" ] + [ lines ]
@@ -106,11 +118,11 @@ workflow GFF_TSEBRA_SPFILTERFEATUREFROMKILLLIST {
                                             return ( cols[0..7] + [ atts_r ] ).join('\t')
                                         }.join('\n')
 
-                                    [ "${meta.id}.gff3" ] + [ lines ]
+                                    [ "${meta.id}.${val_prefix}.gff3" ] + [ lines ]
                                 }
                                 | collectFile(newLine: true)
                                 | map { file ->
-                                    [ [ id: file.baseName ], file ]
+                                    [ [ id: file.baseName.replace(".${val_prefix}", '') ], file ]
                                 }
 
     // COLLECTFILE: Iso-form kill list if allow_isoforms=true
