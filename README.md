@@ -6,7 +6,7 @@ A NextFlow pipeline for pan-genome annotation. It can also be used for annotatio
 
 ## Flowchart
 
-<p align="center"><img src="docs/img/pangene.png" width="95%"></p>
+<p align="center"><img src="docs/img/pangene.png" width="100%"></p>
 
 ## Alpha Release
 
