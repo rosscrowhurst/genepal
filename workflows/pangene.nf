@@ -14,6 +14,7 @@ include { PURGE_NOHIT_MODELS                    } from '../subworkflows/local/pu
 include { GFF_STORE                             } from '../subworkflows/local/gff_store'
 include { FASTA_ORTHOFINDER                     } from '../subworkflows/local/fasta_orthofinder'
 include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/pfr/fasta_gxf_busco_plot/main'
+include { CAT_CAT as SAVE_MARKED_GFF3           } from '../modules/nf-core/cat/cat/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions'
 
 include { GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES } from '../subworkflows/pfr/gxf_fasta_agat_spaddintrons_spextractsequences/main'
@@ -371,6 +372,9 @@ workflow PANGENE {
 
     ch_splicing_marked_gff3     = GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES.out.marked_gff3
     ch_versions                 = ch_versions.mix(GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES.out.versions)
+
+    // MODULE: CAT_CAT as SAVE_MARKED_GFF3
+    SAVE_MARKED_GFF3 ( ch_splicing_marked_gff3 )
 
     // MODULE: CUSTOM_DUMPSOFTWAREVERSIONS
     CUSTOM_DUMPSOFTWAREVERSIONS (

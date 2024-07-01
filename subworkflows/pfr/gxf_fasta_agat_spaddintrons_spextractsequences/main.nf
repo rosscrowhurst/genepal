@@ -110,25 +110,6 @@ workflow GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES {
                                         )
                                         | map { id, gff3, meta -> [ meta, gff3 ] }
 
-    // collectFile: Stats
-    ch_stats_tsv                        = ch_marked_gff3
-                                        | map { meta, gff3 ->
-                                            def summary = gff3.readLines().findAll { line ->
-                                                if ( line.startsWith('#') ) { return false }
-
-                                                def cols = line.tokenize('\t')
-                                                def feat = cols[2].trim().toLowerCase()
-
-                                                if ( feat == 'intron' ) { return true }
-
-                                                return false
-                                            }
-                                            .collect { line ->
-
-                                            }
-                                        }
-
-
     emit:
     motifs_tsv                          = ch_splice_motifs  // channel: [ val(meta), tsv ]
     marked_gff3                         = ch_marked_gff3    // channel: [ val(meta), gff3 ]
