@@ -22,9 +22,9 @@ sbatch ./pfr_pangene
 
 ## Credits
 
-plantandfoodresearch/pangene workflows were originally scripted by Jason Shiller. Usman Rashid wrote the NextFLow pipeline.
+plantandfoodresearch/pangene workflows were originally scripted by Jason Shiller ([@jasonshiller](https://github.com/jasonshiller)). Usman Rashid ([@gallvp](https://github.com/gallvp)) wrote the NextFLow pipeline.
 
-We thank the following people for their extensive assistance in the development of this pipeline.
+We thank the following people for their extensive assistance in the development of this pipeline:
 
 - Cecilia Deng [@CeciliaDeng](https://github.com/CeciliaDeng)
 - Charles David [@charlesdavid](https://github.com/charlesdavid)
@@ -34,7 +34,7 @@ We thank the following people for their extensive assistance in the development 
 - Susan Thomson [@cflsjt](https://github.com/cflsjt)
 - Ting-Hsuan Chen [@ting-hsuan-chen](https://github.com/ting-hsuan-chen)
 
-The pipeline uses nf-core modules contributed by following authors.
+The pipeline uses nf-core modules contributed by following authors:
 
 <a href="https://github.com/gallvp"><img src="https://github.com/gallvp.png" width="50" height="50"></a>
 <a href="https://github.com/drpatelh"><img src="https://github.com/drpatelh.png" width="50" height="50"></a>
