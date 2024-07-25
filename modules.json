@@ -2,6 +2,22 @@
     "name": "PlantandFoodResearch/pangene",
     "homePage": "https://github.com/PlantandFoodResearch/pangene",
     "repos": {
+        "https://github.com/GallVp/nxf-components.git": {
+            "modules": {
+                "gallvp": {
+                    "braker3": {
+                        "branch": "main",
+                        "git_sha": "be636e1e7d50b12ee1f50ed0bb9b21b0fade7cfd",
+                        "installed_by": ["modules"]
+                    },
+                    "repeatmasker": {
+                        "branch": "main",
+                        "git_sha": "76c4ba86319c935f4003e7d18e5dfdd967d9af95",
+                        "installed_by": ["modules"]
+                    }
+                }
+            }
+        },
         "https://github.com/PlantandFoodResearch/nxf-modules.git": {
             "modules": {
                 "pfr": {
@@ -78,22 +94,6 @@
                         "branch": "main",
                         "git_sha": "d67a48075392ac63ce680780dd87415244a66b3a",
                         "installed_by": ["subworkflows"]
-                    }
-                }
-            }
-        },
-        "https://github.com/kherronism/nf-modules.git": {
-            "modules": {
-                "kherronism": {
-                    "braker3": {
-                        "branch": "dev",
-                        "git_sha": "b01fec253f3b73b24e3f166a96d4beb49e58b0a6",
-                        "installed_by": ["modules"]
-                    },
-                    "repeatmasker": {
-                        "branch": "dev",
-                        "git_sha": "6778d5bb4c9f3d597753c699226fcde8d0811bfb",
-                        "installed_by": ["modules"]
                     }
                 }
             }

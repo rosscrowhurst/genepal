@@ -3,7 +3,7 @@ include { GUNZIP as GUNZIP_TE_LIBRARY           } from '../../modules/nf-core/gu
 include { FASTAVALIDATOR                        } from '../../modules/nf-core/fastavalidator'
 include { REPEATMODELER_BUILDDATABASE           } from '../../modules/nf-core/repeatmodeler/builddatabase'
 include { REPEATMODELER_REPEATMODELER           } from '../../modules/nf-core/repeatmodeler/repeatmodeler'
-include { REPEATMASKER                          } from '../../modules/kherronism/repeatmasker'
+include { REPEATMASKER                          } from '../../modules/gallvp/repeatmasker'
 include { STAR_GENOMEGENERATE                   } from '../../modules/nf-core/star/genomegenerate'
 
 include { FASTA_EDTA_LAI                        } from '../../subworkflows/pfr/fasta_edta_lai'

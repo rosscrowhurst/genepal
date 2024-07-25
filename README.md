@@ -43,6 +43,7 @@ The pipeline uses nf-core modules contributed by following authors:
 <a href="https://github.com/toniher"><img src="https://github.com/toniher.png" width="50" height="50"></a>
 <a href="https://github.com/joseespinosa"><img src="https://github.com/joseespinosa.png" width="50" height="50"></a>
 <a href="https://github.com/edmundmiller"><img src="https://github.com/edmundmiller.png" width="50" height="50"></a>
+<a href="https://github.com/kherronism"><img src="https://github.com/kherronism.png" width="50" height="50"></a>
 <a href="https://github.com/vagkaratzas"><img src="https://github.com/vagkaratzas.png" width="50" height="50"></a>
 <a href="https://github.com/robsyme"><img src="https://github.com/robsyme.png" width="50" height="50"></a>
 <a href="https://github.com/priyanka-surana"><img src="https://github.com/priyanka-surana.png" width="50" height="50"></a>
@@ -51,7 +52,6 @@ The pipeline uses nf-core modules contributed by following authors:
 <a href="https://github.com/matthdsm"><img src="https://github.com/matthdsm.png" width="50" height="50"></a>
 <a href="https://github.com/mashehu"><img src="https://github.com/mashehu.png" width="50" height="50"></a>
 <a href="https://github.com/mahesh-panchal"><img src="https://github.com/mahesh-panchal.png" width="50" height="50"></a>
-<a href="https://github.com/kherronism"><img src="https://github.com/kherronism.png" width="50" height="50"></a>
 <a href="https://github.com/jvhagey"><img src="https://github.com/jvhagey.png" width="50" height="50"></a>
 <a href="https://github.com/jfy133"><img src="https://github.com/jfy133.png" width="50" height="50"></a>
 <a href="https://github.com/jemten"><img src="https://github.com/jemten.png" width="50" height="50"></a>

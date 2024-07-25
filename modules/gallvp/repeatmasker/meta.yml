@@ -5,7 +5,8 @@ description: |
 keywords:
   - genome
   - annotation
-  - repeats
+  - repeat
+  - mask
 
 tools:
   - repeatmasker:
@@ -15,7 +16,6 @@ tools:
       homepage: "https://www.repeatmasker.org/"
       documentation: "https://www.repeatmasker.org/webrepeatmaskerhelp.html"
       tool_dev_url: "https://github.com/rmhubley/RepeatMasker"
-      doi: "10.1073/pnas.1921046117"
       licence: ["Open Software License v. 2.1"]
 
 input:
@@ -23,21 +23,29 @@ input:
       type: map
       description: |
         Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
+        e.g. [ id:'test' ]
   - fasta:
       type: file
       description: Genome assembly
-      pattern: "*.{fasta,fa,fas,faa,fna}"
+      pattern: "*.{fasta,fa,fas,fsa,faa,fna}"
+  - lib:
+      type: file
+      description: Custom library (e.g. from another species)
+      pattern: "*.{fasta,fa,fas,fsa,faa,fna}"
 
 output:
-  - rm_fasta:
+  - masked:
       type: file
-      description: Gene transfer format file as output by BRAKER3
-      pattern: "*.{-families.fa}"
-  - rm_stk:
-      type:
-      description: ""
-      pattern: "*.{stk}"
+      description: Masked fasta
+      pattern: "*.masked"
+  - out:
+      type: file
+      description: Out file
+      pattern: "*.out"
+  - tbl:
+      type: file
+      description: tbl file
+      pattern: "*.tbl"
   - versions:
       type: file
       description: File containing software versions
@@ -45,3 +53,8 @@ output:
 
 authors:
   - "@kherronism"
+  - "@gallvp"
+
+maintainers:
+  - "@kherronism"
+  - "@gallvp"

@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.0 - [24-Jul-2024]
+## 0.4.0 - [26-Jul-2024]
 
 ### `Added`
 
@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 3. Renamed `braker_allow_isoforms` param to `allow_isoforms`
 4. Moved liftoffID from gene level to mRNA/transcript level
 5. Moved `version_check.sh` to `.github/version_checks.sh`
+6. Removed dependency on <https://github.com/kherronism/nf-modules.git> for `BRAKER3` and `REPEATMASKER` modules which are now installed from <https://github.com/GallVp/nxf-components.git>
 
 ## 0.3.3 - [18-Jun-2024]
 
