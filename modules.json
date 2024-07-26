@@ -113,12 +113,12 @@
                     },
                     "cat/cat": {
                         "branch": "master",
-                        "git_sha": "9437e6053dccf4aafa022bfd6e7e9de67e625af8",
+                        "git_sha": "5bb8ca085e17549e185e1823495ab8d20727a805",
                         "installed_by": ["modules"]
                     },
                     "cat/fastq": {
                         "branch": "master",
-                        "git_sha": "4fc983ad0b30e6e32696fa7d980c76c7bfe1c03e",
+                        "git_sha": "1ceaa8ba4d0fd886dbca0e545815d905b7407de7",
                         "installed_by": ["modules"]
                     },
                     "custom/dumpsoftwareversions": {
@@ -138,12 +138,12 @@
                     },
                     "fastp": {
                         "branch": "master",
-                        "git_sha": "b90b5cd93149a1b3be263d916c7234fe0708a71c",
+                        "git_sha": "1ceaa8ba4d0fd886dbca0e545815d905b7407de7",
                         "installed_by": ["fastq_fastqc_umitools_fastp"]
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "285a50500f9e02578d90b3ce6382ea3c30216acd",
+                        "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["fastq_fastqc_umitools_fastp", "modules"]
                     },
                     "gffcompare": {
@@ -163,13 +163,13 @@
                     },
                     "gunzip": {
                         "branch": "master",
-                        "git_sha": "3a5fef109d113b4997c9822198664ca5f2716208",
+                        "git_sha": "4e5f4687318f24ba944a13609d3ea6ebd890737d",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/gunzip/gunzip.diff"
                     },
                     "liftoff": {
                         "branch": "master",
-                        "git_sha": "8ce34a40589137b75b65dfe8bb334c9b94f1d6c8",
+                        "git_sha": "fb8d53f339dc130223367ca7fde3695946f5da64",
                         "installed_by": ["modules"]
                     },
                     "orthofinder": {
@@ -199,12 +199,12 @@
                     },
                     "star/align": {
                         "branch": "master",
-                        "git_sha": "a21faa6a3481af92a343a10926f59c189a2c16c9",
+                        "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["modules"]
                     },
                     "star/genomegenerate": {
                         "branch": "master",
-                        "git_sha": "a21faa6a3481af92a343a10926f59c189a2c16c9",
+                        "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["modules"]
                     },
                     "tsebra": {
@@ -214,7 +214,7 @@
                     },
                     "umitools/extract": {
                         "branch": "master",
-                        "git_sha": "d2c5e76f291379f3dd403e48e46ed7e6ba5da744",
+                        "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
                         "installed_by": ["fastq_fastqc_umitools_fastp"]
                     }
                 }
@@ -223,7 +223,7 @@
                 "nf-core": {
                     "fastq_fastqc_umitools_fastp": {
                         "branch": "master",
-                        "git_sha": "db35d26edeafacf9906a517827df621a29adc13d",
+                        "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["subworkflows"]
                     }
                 }
