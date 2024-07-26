@@ -130,7 +130,7 @@ workflow PREPARE_ASSEMBLY {
     )
 
     ch_masked_assembly          = ch_unmasked_masked_branch.masked
-                                | mix(REPEATMASKER.out.fasta_masked)
+                                | mix(REPEATMASKER.out.masked)
     ch_versions                 = ch_versions.mix(REPEATMASKER.out.versions.first())
 
     // MODULE: STAR_GENOMEGENERATE

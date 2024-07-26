@@ -95,6 +95,16 @@
                         "git_sha": "b7d09fae1f4fd5880138af68a68c9587528f0de8",
                         "installed_by": ["modules"]
                     },
+                    "agat/spfilterfeaturefromkilllist": {
+                        "branch": "master",
+                        "git_sha": "d1535889747781d919bc81da2344952f4bfa2be4",
+                        "installed_by": ["modules"]
+                    },
+                    "agat/spmergeannotations": {
+                        "branch": "master",
+                        "git_sha": "8e30f5d09155b45ddafc2d1357fc5f447f1aaa03",
+                        "installed_by": ["modules"]
+                    },
                     "cat/cat": {
                         "branch": "master",
                         "git_sha": "5bb8ca085e17549e185e1823495ab8d20727a805",
