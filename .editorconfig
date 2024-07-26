@@ -29,7 +29,7 @@ indent_style = unset
 indent_size = unset
 
 # These files are edited and tested upstream in pfr/modules
-[/modules/pfr/**]
+[/modules/gallvp/**]
 charset = unset
 end_of_line = unset
 insert_final_newline = unset
@@ -37,7 +37,7 @@ trim_trailing_whitespace = unset
 indent_style = unset
 indent_size = unset
 
-[/subworkflows/pfr/**]
+[/subworkflows/gallvp/**]
 charset = unset
 end_of_line = unset
 insert_final_newline = unset

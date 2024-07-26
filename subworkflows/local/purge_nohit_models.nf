@@ -1,4 +1,4 @@
-include { AGAT_SPFILTERFEATUREFROMKILLLIST                  } from '../../modules/pfr/agat/spfilterfeaturefromkilllist/main'
+include { AGAT_SPFILTERFEATUREFROMKILLLIST                  } from '../../modules/nf-core/agat/spfilterfeaturefromkilllist/main'
 
 workflow PURGE_NOHIT_MODELS {
     take:

@@ -2,8 +2,8 @@ include { GUNZIP as GUNZIP_FASTA                                } from '../../mo
 include { GUNZIP as GUNZIP_GFF                                  } from '../../modules/nf-core/gunzip/main'
 include { GFFREAD as GFFREAD_BEFORE_LIFTOFF                     } from '../../modules/nf-core/gffread/main'
 include { LIFTOFF                                               } from '../../modules/nf-core/liftoff/main'
-include { AGAT_SPMERGEANNOTATIONS as MERGE_LIFTOFF_ANNOTATIONS  } from '../../modules/pfr/agat/spmergeannotations/main'
-include { AGAT_SPFILTERFEATUREFROMKILLLIST                      } from '../../modules/pfr/agat/spfilterfeaturefromkilllist/main'
+include { AGAT_SPMERGEANNOTATIONS as MERGE_LIFTOFF_ANNOTATIONS  } from '../../modules/nf-core/agat/spmergeannotations/main'
+include { AGAT_SPFILTERFEATUREFROMKILLLIST                      } from '../../modules/nf-core/agat/spfilterfeaturefromkilllist/main'
 include { GFFREAD as GFFREAD_AFTER_LIFTOFF                      } from '../../modules/nf-core/gffread/main'
 include { GFF_TSEBRA_SPFILTERFEATUREFROMKILLLIST                    } from '../../subworkflows/local/gff_tsebra_spfilterfeaturefromkilllist'
 

@@ -1,8 +1,8 @@
 include { GFF_TSEBRA_SPFILTERFEATUREFROMKILLLIST                    } from '../../subworkflows/local/gff_tsebra_spfilterfeaturefromkilllist'
 include { GFFCOMPARE as COMPARE_BRAKER_TO_LIFTOFF                   } from '../../modules/nf-core/gffcompare/main'
-include { AGAT_SPFILTERFEATUREFROMKILLLIST                          } from '../../modules/pfr/agat/spfilterfeaturefromkilllist/main'
+include { AGAT_SPFILTERFEATUREFROMKILLLIST                          } from '../../modules/nf-core/agat/spfilterfeaturefromkilllist/main'
 include { GFFCOMPARE as VALIDATE_PURGING_BY_AGAT                    } from '../../modules/nf-core/gffcompare/main'
-include { AGAT_SPMERGEANNOTATIONS as MERGE_BRAKER_LIFTOFF           } from '../../modules/pfr/agat/spmergeannotations/main'
+include { AGAT_SPMERGEANNOTATIONS as MERGE_BRAKER_LIFTOFF           } from '../../modules/nf-core/agat/spmergeannotations/main'
 
 workflow PURGE_BRAKER_MODELS {
     take:

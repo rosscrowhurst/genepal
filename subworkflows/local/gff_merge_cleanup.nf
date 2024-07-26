@@ -1,4 +1,4 @@
-include { AGAT_SPMERGEANNOTATIONS               } from '../../modules/pfr/agat/spmergeannotations/main'
+include { AGAT_SPMERGEANNOTATIONS               } from '../../modules/nf-core/agat/spmergeannotations/main'
 include { GT_GFF3                               } from '../../modules/nf-core/gt/gff3/main'
 include { AGAT_CONVERTSPGXF2GXF                 } from '../../modules/nf-core/agat/convertspgxf2gxf/main'
 

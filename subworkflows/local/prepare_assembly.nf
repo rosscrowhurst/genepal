@@ -6,7 +6,7 @@ include { REPEATMODELER_REPEATMODELER           } from '../../modules/nf-core/re
 include { REPEATMASKER                          } from '../../modules/gallvp/repeatmasker'
 include { STAR_GENOMEGENERATE                   } from '../../modules/nf-core/star/genomegenerate'
 
-include { FASTA_EDTA_LAI                        } from '../../subworkflows/pfr/fasta_edta_lai'
+include { FASTA_EDTA_LAI                        } from '../../subworkflows/gallvp/fasta_edta_lai'
 
 workflow PREPARE_ASSEMBLY {
     take:

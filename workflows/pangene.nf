@@ -13,11 +13,11 @@ include { GFF_EGGNOGMAPPER                      } from '../subworkflows/local/gf
 include { PURGE_NOHIT_MODELS                    } from '../subworkflows/local/purge_nohit_models'
 include { GFF_STORE                             } from '../subworkflows/local/gff_store'
 include { FASTA_ORTHOFINDER                     } from '../subworkflows/local/fasta_orthofinder'
-include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/pfr/fasta_gxf_busco_plot/main'
+include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/gallvp/fasta_gxf_busco_plot/main'
 include { CAT_CAT as SAVE_MARKED_GFF3           } from '../modules/nf-core/cat/cat/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions'
 
-include { GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES } from '../subworkflows/pfr/gxf_fasta_agat_spaddintrons_spextractsequences/main'
+include { GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES } from '../subworkflows/gallvp/gxf_fasta_agat_spaddintrons_spextractsequences/main'
 
 log.info paramsSummaryLog(workflow)
 
