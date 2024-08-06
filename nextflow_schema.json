@@ -181,6 +181,11 @@
                     "type": "string",
                     "description": "Extra arguments for BRAKER"
                 },
+                "braker_save_outputs": {
+                    "type": "boolean",
+                    "description": "Save BRAKER files",
+                    "fa_icon": "fas fa-question-circle"
+                },
                 "liftoff_coverage": {
                     "type": "number",
                     "default": 0.9,

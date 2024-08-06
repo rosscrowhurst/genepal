@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 13. Updated modules: `AGAT/CONVERTSPGFF2GTF`, `CAT_FASTQ`, `CUSTOM/DUMPSOFTWAREVERSIONS`, `EGGNOGMAPPER`, `FASTP`, `GFFREAD`, `SAMTOOLS/CAT`, `CUSTOM/RESTOREGFFIDS`, `CUSTOM/SHORTENFASTAIDS`, `EDTA/EDTA`, `CAT/CAT`, `FASTQC`, `GUNZIP`, `LIFTOFF`, `STAR/ALIGN`, `STAR/GENOMEGENERATE`, `UMITOOLS/EXTRACT`,
 14. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
 15. Reduced `BRAKER3` threads to 8 [#55](https://github.com/PlantandFoodResearch/pangene/issues/55)
+16. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/PlantandFoodResearch/pangene/issues/53)
 
 ### `Fixed`
 
@@ -43,6 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 5. Moved `version_check.sh` to `.github/version_checks.sh`
 6. Removed dependency on <https://github.com/kherronism/nf-modules.git> for `BRAKER3` and `REPEATMASKER` modules which are now installed from <https://github.com/GallVp/nxf-components.git>
 7. Removed dependency on <https://github.com/PlantandFoodResearch/nxf-modules.git>
+8. Now the final annotations are not stored in the `final` folder
+9. Now BRAKER3 outputs are not saved by default [#53](https://github.com/PlantandFoodResearch/pangene/issues/53)
 
 ## 0.3.3 - [18-Jun-2024]
 
