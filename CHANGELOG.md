@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.0 - [26-Jul-2024]
+## 0.4.0 - [07-Aug-2024]
 
 ### `Added`
 
@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 12. Added a script to automatically check module version updates
 13. Updated modules: `AGAT/CONVERTSPGFF2GTF`, `CAT_FASTQ`, `CUSTOM/DUMPSOFTWAREVERSIONS`, `EGGNOGMAPPER`, `FASTP`, `GFFREAD`, `SAMTOOLS/CAT`, `CUSTOM/RESTOREGFFIDS`, `CUSTOM/SHORTENFASTAIDS`, `EDTA/EDTA`, `CAT/CAT`, `FASTQC`, `GUNZIP`, `LIFTOFF`, `STAR/ALIGN`, `STAR/GENOMEGENERATE`, `UMITOOLS/EXTRACT`,
 14. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
+15. Reduced `BRAKER3` threads to 8 [#55](https://github.com/PlantandFoodResearch/pangene/issues/55)
 
 ### `Fixed`
 
