@@ -55,9 +55,9 @@
                         "git_sha": "490f8ab54c632d84f99edd6f208305ac5e283ab3",
                         "installed_by": ["fasta_edta_lai"]
                     },
-                    "repeatmasker": {
+                    "repeatmasker/repeatmasker": {
                         "branch": "main",
-                        "git_sha": "76c4ba86319c935f4003e7d18e5dfdd967d9af95",
+                        "git_sha": "07c6fda11aff03d2d7fc68224e7fd96866fc6a8f",
                         "installed_by": ["modules"]
                     }
                 }

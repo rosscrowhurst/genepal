@@ -51,6 +51,7 @@ A NextFlow pipeline for pan-genome annotation
 | Parameter                     | Description                                                                       | Type      | Default | Required | Hidden |
 | ----------------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
 | `braker_extra_args`           | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
+| `braker_save_outputs`         | Save BRAKER files                                                                 | `boolean` |         |          |        |
 | `liftoff_coverage`            | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
 | `liftoff_identity`            | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
 | `allow_isoforms`              | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |

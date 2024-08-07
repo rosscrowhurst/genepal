@@ -3,7 +3,7 @@ include { GUNZIP as GUNZIP_TE_LIBRARY           } from '../../modules/nf-core/gu
 include { FASTAVALIDATOR                        } from '../../modules/nf-core/fastavalidator'
 include { REPEATMODELER_BUILDDATABASE           } from '../../modules/nf-core/repeatmodeler/builddatabase'
 include { REPEATMODELER_REPEATMODELER           } from '../../modules/nf-core/repeatmodeler/repeatmodeler'
-include { REPEATMASKER                          } from '../../modules/gallvp/repeatmasker'
+include { REPEATMASKER_REPEATMASKER             } from '../../modules/gallvp/repeatmasker/repeatmasker'
 include { STAR_GENOMEGENERATE                   } from '../../modules/nf-core/star/genomegenerate'
 
 include { FASTA_EDTA_LAI                        } from '../../subworkflows/gallvp/fasta_edta_lai'
@@ -123,15 +123,15 @@ workflow PREPARE_ASSEMBLY {
 
     ch_versions                 = ch_versions.mix(REPEATMODELER_REPEATMODELER.out.versions.first())
 
-    // MODULE: REPEATMASKER
-    REPEATMASKER(
+    // MODULE: REPEATMASKER_REPEATMASKER
+    REPEATMASKER_REPEATMASKER(
         ch_assembly_and_te_lib.map { meta, assembly, teLib -> [ meta, assembly ] },
         ch_assembly_and_te_lib.map { meta, assembly, teLib -> teLib },
     )
 
     ch_masked_assembly          = ch_unmasked_masked_branch.masked
-                                | mix(REPEATMASKER.out.masked)
-    ch_versions                 = ch_versions.mix(REPEATMASKER.out.versions.first())
+                                | mix(REPEATMASKER_REPEATMASKER.out.masked)
+    ch_versions                 = ch_versions.mix(REPEATMASKER_REPEATMASKER.out.versions.first())
 
     // MODULE: STAR_GENOMEGENERATE
     ch_genomegenerate_inputs    = ch_validated_assembly

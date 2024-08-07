@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 14. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
 15. Reduced `BRAKER3` threads to 8 [#55](https://github.com/PlantandFoodResearch/pangene/issues/55)
 16. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/PlantandFoodResearch/pangene/issues/53)
+17. Added `-gff` flag to `REPEATMASKER` to save the gff file [#54](https://github.com/PlantandFoodResearch/pangene/issues/54)
 
 ### `Fixed`
 
