@@ -87,12 +87,12 @@
                 "nf-core": {
                     "agat/convertspgff2gtf": {
                         "branch": "master",
-                        "git_sha": "b1d41826971b91f9649b46a8f3ccb226ee150c85",
+                        "git_sha": "0a0b723d114e502207072603479b635dfbc2bf59",
                         "installed_by": ["modules"]
                     },
                     "agat/convertspgxf2gxf": {
                         "branch": "master",
-                        "git_sha": "b7d09fae1f4fd5880138af68a68c9587528f0de8",
+                        "git_sha": "0a0b723d114e502207072603479b635dfbc2bf59",
                         "installed_by": ["modules"]
                     },
                     "agat/spfilterfeaturefromkilllist": {
@@ -122,12 +122,12 @@
                     },
                     "eggnogmapper": {
                         "branch": "master",
-                        "git_sha": "c0707299f4c5afbadc157ef49d49efaa2484a768",
+                        "git_sha": "b34fb117e397e72a070cde8adf21b758670c90f5",
                         "installed_by": ["modules"]
                     },
                     "fastavalidator": {
                         "branch": "master",
-                        "git_sha": "89ff95427f695086369d7927a3c17cea2a37a382",
+                        "git_sha": "90dad5491658049282ceb287a3d7732c1ce39837",
                         "installed_by": ["modules"]
                     },
                     "fastp": {
@@ -152,7 +152,7 @@
                     },
                     "gt/gff3": {
                         "branch": "master",
-                        "git_sha": "3c77ca9aac783e76c3614a06db3bfe4fef619bde",
+                        "git_sha": "9a8bba5910982ae637dedb8664e3121db77e173f",
                         "installed_by": ["modules"]
                     },
                     "gunzip": {
@@ -163,7 +163,7 @@
                     },
                     "liftoff": {
                         "branch": "master",
-                        "git_sha": "fb8d53f339dc130223367ca7fde3695946f5da64",
+                        "git_sha": "b34fb117e397e72a070cde8adf21b758670c90f5",
                         "installed_by": ["modules"]
                     },
                     "orthofinder": {
