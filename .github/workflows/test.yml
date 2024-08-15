@@ -1,6 +1,6 @@
 # Adopted from https://github.com/nf-core/modules/blob/master/.github/workflows/test.yml
 
-name: Lint and -stub on Linux/Docker
+name: CI tests
 on:
   push:
     branches:
@@ -30,7 +30,7 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-  stub-test:
+  test:
     runs-on: ubuntu-latest
     name: Run stub test with docker
     env:
@@ -48,13 +48,13 @@ jobs:
         run: |
           nextflow run \
             main.nf \
-            -profile local,docker \
+            -profile docker \
             -stub \
             -params-file tests/stub/params.json
 
   confirm-pass:
     runs-on: ubuntu-latest
-    needs: [pre-commit, stub-test]
+    needs: [pre-commit, test]
     if: always()
     steps:
       - name: All tests ok
