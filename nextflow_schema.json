@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "",
-            "required": ["input", "protein_evidence", "eggnogmapper_db_dir", "eggnogmapper_tax_scope", "outdir"],
+            "required": ["input", "protein_evidence", "outdir"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -23,9 +23,9 @@
                 },
                 "protein_evidence": {
                     "type": "string",
-                    "description": "Protein evidence provided as fasta files listed in a text sheet",
+                    "description": "Protein evidence provided as a fasta file or multiple fasta files listed in a plain txt file",
                     "format": "file-path",
-                    "mimetype": "text/txt",
+                    "pattern": "^\\S+\\.(txt|fa|faa|fna|fsa|fas|fasta)(\\.gz)?$",
                     "fa_icon": "far fa-file-alt"
                 },
                 "eggnogmapper_db_dir": {
@@ -36,7 +36,8 @@
                 "eggnogmapper_tax_scope": {
                     "type": "integer",
                     "description": "Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1",
-                    "minimum": 0
+                    "minimum": 1,
+                    "default": 1
                 },
                 "rna_evidence": {
                     "type": "string",

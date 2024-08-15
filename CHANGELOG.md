@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.0 - [07-Aug-2024]
+## 0.4.0+dev - [15-Aug-2024]
 
 ### `Added`
 
@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 15. Reduced `BRAKER3` threads to 8 [#55](https://github.com/PlantandFoodResearch/pangene/issues/55)
 16. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/PlantandFoodResearch/pangene/issues/53)
 17. Added `-gff` flag to `REPEATMASKER` to save the gff file [#54](https://github.com/PlantandFoodResearch/pangene/issues/54)
+18. Now a single `fasta` file can be directly specified for `protein_evidence`
+19. `eggnogmapper_db_dir` is not a required parameter anymore
+20. `eggnogmapper_tax_scope` is now set to 1 (root div) by default
+21. Added a `test` profile based on public data
 
 ### `Fixed`
 
@@ -46,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 6. Removed dependency on <https://github.com/kherronism/nf-modules.git> for `BRAKER3` and `REPEATMASKER` modules which are now installed from <https://github.com/GallVp/nxf-components.git>
 7. Removed dependency on <https://github.com/PlantandFoodResearch/nxf-modules.git>
 8. Now the final annotations are not stored in the `final` folder
-9. Now BRAKER3 outputs are not saved by default [#53](https://github.com/PlantandFoodResearch/pangene/issues/53)
+9. Now BRAKER3 outputs are not saved by default [#53](https://github.com/PlantandFoodResearch/pangene/issues/53) and saved under `etc` folder when enabled
+10. Removed `local` profile. Local executor is the default when no executor is specified. Therefore, the `local` profile was not needed.
 
 ## 0.3.3 - [18-Jun-2024]
 

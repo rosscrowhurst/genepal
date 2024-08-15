@@ -14,8 +14,9 @@ F_BOLD="\033[1m"
 
 nextflow run \
     main.nf \
-    -profile local,docker \
+    -profile docker,test \
     -resume \
     $stub \
-    -params-file pangene-test/params.json \
-    --eggnogmapper_db_dir ../dbs/emapperdb/5.0.2
+    --max_cpus 8 \
+    --max_memory '32.GB'
+    # --eggnogmapper_db_dir ../dbs/emapperdb/5.0.2

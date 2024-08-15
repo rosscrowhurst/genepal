@@ -8,12 +8,15 @@ workflow GFF_STORE {
     ch_target_gff               // [ meta, gff ]
     ch_eggnogmapper_annotations // [ meta, annotations ]
     ch_fasta                    // [ meta, fasta ]
+    val_describe_gff            // val(true|false)
 
     main:
     ch_versions                 = Channel.empty()
 
     // COLLECTFILE: Add eggnogmapper hits to gff
-    ch_described_gff            = ch_target_gff
+    ch_described_gff            = ! val_describe_gff
+                                ? Channel.empty()
+                                : ch_target_gff
                                 | join(ch_eggnogmapper_annotations)
                                 | map { meta, gff, annotations ->
                                     def tx_annotations  = annotations.readLines()
@@ -109,7 +112,11 @@ workflow GFF_STORE {
                                 }
 
     // MODULE: GT_GFF3 as FINAL_GFF_CHECK
-    FINAL_GFF_CHECK ( ch_described_gff )
+    ch_final_check_input        = val_describe_gff
+                                ? ch_described_gff
+                                : ch_target_gff
+
+    FINAL_GFF_CHECK ( ch_final_check_input )
 
     ch_final_gff                = FINAL_GFF_CHECK.out.gt_gff3
     ch_versions                 = ch_versions.mix(FINAL_GFF_CHECK.out.versions.first())
