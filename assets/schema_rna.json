@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/pangene/master/assets/schema_rna.json",
-    "title": "plantandfoodresearch/pangene pipeline - params.rna_evidence schema",
+    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/genepal/master/assets/schema_rna.json",
+    "title": "plantandfoodresearch/genepal pipeline - params.rna_evidence schema",
     "description": "Schema for the file provided with params.rna_evidence",
     "type": "array",
     "items": {

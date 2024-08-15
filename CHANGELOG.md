@@ -1,4 +1,4 @@
-# PlantandFoodResearch/pangene: Changelog
+# PlantandFoodResearch/genepal: Changelog
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -9,21 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 1. Added `orthofinder_annotations` param
 2. Added `FASTA_GFF_ORTHOFINDER` sub-workflow
-3. Added evaluation by BUSCO [#41](https://github.com/PlantandFoodResearch/pangene/issues/41)
-4. Included common tax ids for eggnog mapper [#27](https://github.com/PlantandFoodResearch/pangene/issues/27)
-5. Implemented hierarchical naming scheme: geneI.tJ, geneI.tJ.exonK, geneI.tJ.cdsK [#19](https://github.com/PlantandFoodResearch/pangene/issues/19), [#34](https://github.com/PlantandFoodResearch/pangene/issues/34)
+3. Added evaluation by BUSCO [#41](https://github.com/PlantandFoodResearch/genepal/issues/41)
+4. Included common tax ids for eggnog mapper [#27](https://github.com/PlantandFoodResearch/genepal/issues/27)
+5. Implemented hierarchical naming scheme: geneI.tJ, geneI.tJ.exonK, geneI.tJ.cdsK [#19](https://github.com/PlantandFoodResearch/genepal/issues/19), [#34](https://github.com/PlantandFoodResearch/genepal/issues/34)
 6. Now sorting list of bam and list of fastq before cat to avoid resume cache misses
-7. Allowed BAM files for RNA evidence [#3](https://github.com/PlantandFoodResearch/pangene/issues/3)
-8. Added `GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES` sub-workflow for splice type statistics [#11](https://github.com/PlantandFoodResearch/pangene/issues/11)
-9. Changed `orthofinder_annotations` from FASTA/GFF to protein FASTA [#43](https://github.com/PlantandFoodResearch/pangene/issues/43)
-10. Added param `enforce_full_intron_support` to turn on/off strict model purging by TSEBRA [#21](https://github.com/PlantandFoodResearch/pangene/issues/21)
-11. Added param `filter_liftoff_by_hints` to evaluate liftoff models with TSEBRA to make sure they have the same level of evidence as BRAKER [#28](ttps://github.com/PlantandFoodResearch/pangene/issues/28)
+7. Allowed BAM files for RNA evidence [#3](https://github.com/PlantandFoodResearch/genepal/issues/3)
+8. Added `GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES` sub-workflow for splice type statistics [#11](https://github.com/PlantandFoodResearch/genepal/issues/11)
+9. Changed `orthofinder_annotations` from FASTA/GFF to protein FASTA [#43](https://github.com/PlantandFoodResearch/genepal/issues/43)
+10. Added param `enforce_full_intron_support` to turn on/off strict model purging by TSEBRA [#21](https://github.com/PlantandFoodResearch/genepal/issues/21)
+11. Added param `filter_liftoff_by_hints` to evaluate liftoff models with TSEBRA to make sure they have the same level of evidence as BRAKER [#28](ttps://github.com/PlantandFoodResearch/genepal/issues/28)
 12. Added a script to automatically check module version updates
 13. Updated modules: `AGAT/CONVERTSPGFF2GTF`, `CAT_FASTQ`, `CUSTOM/DUMPSOFTWAREVERSIONS`, `EGGNOGMAPPER`, `FASTP`, `GFFREAD`, `SAMTOOLS/CAT`, `CUSTOM/RESTOREGFFIDS`, `CUSTOM/SHORTENFASTAIDS`, `EDTA/EDTA`, `CAT/CAT`, `FASTQC`, `GUNZIP`, `LIFTOFF`, `STAR/ALIGN`, `STAR/GENOMEGENERATE`, `UMITOOLS/EXTRACT`,
 14. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
-15. Reduced `BRAKER3` threads to 8 [#55](https://github.com/PlantandFoodResearch/pangene/issues/55)
-16. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/PlantandFoodResearch/pangene/issues/53)
-17. Added `-gff` flag to `REPEATMASKER` to save the gff file [#54](https://github.com/PlantandFoodResearch/pangene/issues/54)
+15. Reduced `BRAKER3` threads to 8 [#55](https://github.com/PlantandFoodResearch/genepal/issues/55)
+16. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/PlantandFoodResearch/genepal/issues/53)
+17. Added `-gff` flag to `REPEATMASKER` to save the gff file [#54](https://github.com/PlantandFoodResearch/genepal/issues/54)
 18. Now a single `fasta` file can be directly specified for `protein_evidence`
 19. `eggnogmapper_db_dir` is not a required parameter anymore
 20. `eggnogmapper_tax_scope` is now set to 1 (root div) by default
@@ -31,9 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-1. Fixed BRAKER spellings [#36](https://github.com/PlantandFoodResearch/pangene/issues/36)
-2. Fixed liftoff failure when lifting off from a single reference [#40](https://github.com/PlantandFoodResearch/pangene/issues/40)
-3. Added versions from GFF_STORE sub-workflows [#33](https://github.com/PlantandFoodResearch/pangene/issues/33)
+1. Fixed BRAKER spellings [#36](https://github.com/PlantandFoodResearch/genepal/issues/36)
+2. Fixed liftoff failure when lifting off from a single reference [#40](https://github.com/PlantandFoodResearch/genepal/issues/40)
+3. Added versions from GFF_STORE sub-workflows [#33](https://github.com/PlantandFoodResearch/genepal/issues/33)
 
 ### `Dependencies`
 
@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 6. Removed dependency on <https://github.com/kherronism/nf-modules.git> for `BRAKER3` and `REPEATMASKER` modules which are now installed from <https://github.com/GallVp/nxf-components.git>
 7. Removed dependency on <https://github.com/PlantandFoodResearch/nxf-modules.git>
 8. Now the final annotations are not stored in the `final` folder
-9. Now BRAKER3 outputs are not saved by default [#53](https://github.com/PlantandFoodResearch/pangene/issues/53) and saved under `etc` folder when enabled
+9. Now BRAKER3 outputs are not saved by default [#53](https://github.com/PlantandFoodResearch/genepal/issues/53) and saved under `etc` folder when enabled
 10. Removed `local` profile. Local executor is the default when no executor is specified. Therefore, the `local` profile was not needed.
 
 ## 0.3.3 - [18-Jun-2024]
@@ -112,8 +112,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 2. Changed license to MIT
 3. Updated `.editorconfig`
 4. Moved .literature to test/ branch
-5. Renamed `pangene_local` to `local_pangene`
-6. Renamed `pangene_pfr` to `pfr_pangene`
+5. Renamed `genepal_local` to `local_genepal`
+6. Renamed `genepal_pfr` to `pfr_genepal`
 7. Added versioning checking
 8. Updated github workflow to use pre-commit instead of prettier and editorconfig check
 9. Added central singularity cache dir for pfr config
@@ -145,7 +145,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 35. `external_protein_fastas` and `eggnogmapper_db_dir` are not mandatory parameters
 36. Added contributors
 37. Add a document for the pipeline parameters
-38. Updated `pfr_pangene` and `pfr/profile.config`
+38. Updated `pfr_genepal` and `pfr/profile.config`
 39. Now using local tests/stub files for GitHub CI
 40. Now removing iso-forms left by TSEBRA using `AGAT_SPFILTERFEATUREFROMKILLLIST`
 41. Added `pyproject.toml`

@@ -1,4 +1,4 @@
-# plantandfoodresearch/pangene pipeline parameters
+# plantandfoodresearch/genepal pipeline parameters
 
 A NextFlow pipeline for pan-genome annotation
 
@@ -7,9 +7,9 @@ A NextFlow pipeline for pan-genome annotation
 | Parameter                 | Description                                                                                              | Type      | Default   | Required | Hidden |
 | ------------------------- | -------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
 | `input`                   | Target assemblies listed in a CSV sheet                                                                  | `string`  |           | True     |        |
-| `protein_evidence`        | Protein evidence provided as fasta files listed in a text sheet                                          | `string`  |           | True     |        |
-| `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                          | `string`  |           | True     |        |
-| `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1 | `integer` |           | True     |        |
+| `protein_evidence`        | Protein evidence provided as a fasta file or multiple fasta files listed in a plain txt file             | `string`  |           | True     |        |
+| `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                          | `string`  |           |          |        |
+| `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1 | `integer` | 1         |          |        |
 | `rna_evidence`            | FASTQ/BAM samples listed in a CSV sheet                                                                  | `string`  |           |          |        |
 | `liftoff_annotations`     | Reference annotations listed in a CSV sheet                                                              | `string`  |           |          |        |
 | `orthofinder_annotations` | Additional annotations for orthology listed in a CSV sheet                                               | `string`  |           |          |        |

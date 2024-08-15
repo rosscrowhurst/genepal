@@ -1,28 +1,28 @@
-# PANGENE
+# GENEPAL
 
-[![Lint/stub on Linux/Docker](https://github.com/PlantandFoodResearch/pangene/actions/workflows/test.yml/badge.svg)](https://github.com/PlantandFoodResearch/pangene/actions/workflows/test.yml)
+[![Lint/stub on Linux/Docker](https://github.com/PlantandFoodResearch/genepal/actions/workflows/test.yml/badge.svg)](https://github.com/PlantandFoodResearch/genepal/actions/workflows/test.yml)
 
 A NextFlow pipeline for pan-genome annotation. It can also be used for annotation of a single genome.
 
 ## Flowchart
 
-<p align="center"><img src="docs/img/pangene.png" width="100%"></p>
+<p align="center"><img src="docs/img/genepal.png" width="100%"></p>
 
 ## Alpha Release
 
-This release is not fully documented and under alpha testing by the Bioinformatics Team. There are several [outstanding issues](https://github.com/PlantandFoodResearch/pangene/issues) which will be addressed before a general release.
+This release is not fully documented and under alpha testing by the Bioinformatics Team. There are several [outstanding issues](https://github.com/PlantandFoodResearch/genepal/issues) which will be addressed before a general release.
 
 ## Plant&Food Users
 
 Download the pipeline to your `/workspace/$USER` folder. Change the parameters defined in the [pfr/params.json](./pfr/params.json) file. Submit the pipeline to SLURM for execution. For a description of the parameters, see [parameters.md](./docs/parameters.md).
 
 ```bash
-sbatch ./pfr_pangene
+sbatch ./pfr_genepal
 ```
 
 ## Credits
 
-plantandfoodresearch/pangene workflows were originally scripted by Jason Shiller ([@jasonshiller](https://github.com/jasonshiller)). Usman Rashid ([@gallvp](https://github.com/gallvp)) wrote the NextFLow pipeline.
+plantandfoodresearch/genepal workflows were originally scripted by Jason Shiller ([@jasonshiller](https://github.com/jasonshiller)). Usman Rashid ([@gallvp](https://github.com/gallvp)) wrote the NextFLow pipeline.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 

@@ -6,12 +6,12 @@ include { validateParameters    } from 'plugin/nf-validation'
 
 validateParameters()
 
-include { PANGENE               } from './workflows/pangene.nf'
+include { GENEPAL               } from './workflows/genepal.nf'
 
 workflow {
-    PFR_PANGENE()
+    PFR_GENEPAL()
 }
 
-workflow PFR_PANGENE {
-    PANGENE()
+workflow PFR_GENEPAL {
+    GENEPAL()
 }

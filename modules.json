@@ -1,6 +1,6 @@
 {
-    "name": "PlantandFoodResearch/pangene",
-    "homePage": "https://github.com/PlantandFoodResearch/pangene",
+    "name": "PlantandFoodResearch/genepal",
+    "homePage": "https://github.com/PlantandFoodResearch/genepal",
     "repos": {
         "https://github.com/GallVp/nxf-components.git": {
             "modules": {

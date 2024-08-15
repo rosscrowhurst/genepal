@@ -21,7 +21,7 @@ include { GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES } from '../subworkflows
 
 log.info paramsSummaryLog(workflow)
 
-workflow PANGENE {
+workflow GENEPAL {
 
     // Versions channel
     ch_versions                 = Channel.empty()
