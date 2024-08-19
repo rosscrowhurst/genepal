@@ -14,7 +14,7 @@ import json
 import re
 import os
 
-PIPELINE_REPO = "PlantandFoodResearch/pangene"
+PIPELINE_REPO = "PlantandFoodResearch/genepal"
 
 def get_logger():
     formatter = colorlog.ColoredFormatter(

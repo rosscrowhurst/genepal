@@ -1,6 +1,6 @@
-# plantandfoodresearch/pangene pipeline parameters
+# plantandfoodresearch/genepal pipeline parameters
 
-A NextFlow pipeline for pan-genome annotation
+A NextFlow pipeline for single genome and pan-genome annotation
 
 ## Input/output options
 

@@ -24,7 +24,7 @@ workflow FASTA_ORTHOFINDER {
                                 | collect
                                 | filter { it.size() > 1 }
 
-    ORTHOFINDER ( ch_orthofinder_peps.map { fastas -> [ [ id: 'pangene' ], fastas ] } )
+    ORTHOFINDER ( ch_orthofinder_peps.map { fastas -> [ [ id: 'genepal' ], fastas ] } )
 
     ch_versions                 = ch_versions.mix(ORTHOFINDER.out.versions)
 
