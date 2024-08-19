@@ -1,0 +1,8 @@
+{
+    "input": "/workspace/genepal/test_data/assemblysheet.csv",
+    "protein_evidence": "/workspace/genepal/test_data/external-protein-fastas.txt",
+    "eggnogmapper_db_dir": "/workspace/ComparativeDataSources/emapperdb/5.0.2",
+    "eggnogmapper_tax_scope": 33090,
+    "rna_evidence": "/workspace/genepal/test_data/fastqsheet.csv",
+    "liftoff_annotations": "/workspace/genepal/test_data/liftoffannotations.csv"
+}

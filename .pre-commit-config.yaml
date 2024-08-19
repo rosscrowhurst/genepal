@@ -11,3 +11,13 @@ repos:
     hooks:
       - id: editorconfig-checker
         alias: ec
+  - repo: local
+    hooks:
+      - id: version_checks
+        name: Version checks
+        language: system
+        entry: >
+          .github/version_checks.sh
+        always_run: true
+        fail_fast: true
+        pass_filenames: false

@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the PlantandFoodResearch/genepal pipeline
+// Subworkflow with functionality specific to the plant-food-research-open/genepal pipeline
 //
 
 /*
@@ -39,8 +39,6 @@ workflow PIPELINE_INITIALISATION {
 
     main:
 
-    ch_versions = Channel.empty()
-
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
     //
@@ -74,31 +72,213 @@ workflow PIPELINE_INITIALISATION {
     )
 
     //
-    // Create channel from input file provided through params.input
+    // Create input channels
     //
-    Channel
-        .fromSamplesheet("input")
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
+    ch_input                    = Channel.fromSamplesheet('input')
+
+    ch_target_assembly          = ch_input
+                                | map { it ->
+                                    def tag         = it[0]
+                                    def fasta       = it[1]
+
+                                    [ [ id: tag ], file(fasta, checkIfExists: true) ]
+                                }
+
+    ch_tar_assm_str             = ch_input
+                                | map { it ->
+                                    def tag         = it[0].strip()
+
+                                    tag
+                                }
+                                | collect
+                                | map { it ->
+                                    it.join(",")
+                                }
+
+    ch_is_masked                = ch_input
+                                | map { it ->
+                                    def tag         = it[0]
+                                    def is_masked   = it[2]
+
+                                    [ [ id: tag ], is_masked == "yes" ]
+                                }
+
+    ch_te_library               = ch_input
+                                | map { it ->
+                                    def tag         = it[0]
+                                    def te_fasta    = it[3]
+
+                                    if ( te_fasta ) {
+                                        [ [ id:tag ], file(te_fasta, checkIfExists: true) ]
+                                    }
+                                }
+
+    ch_braker_annotation        = ch_input
+                                | map { it ->
+                                    def tag         = it[0]
+                                    def braker_gff3 = it[4]
+                                    def hints_gff   = it[5]
+
+                                    if ( braker_gff3 ) {
+                                        [
+                                            [ id: tag ],
+                                            file(braker_gff3, checkIfExists: true),
+                                            file(hints_gff, checkIfExists: true)
+                                        ]
+                                    }
+                                }
+
+    ch_braker_ex_asm_str        = ch_braker_annotation
+                                | map { meta, braker_gff3, hints_gff -> meta.id }
+                                | collect
+                                | map { it.join(",") }
+                                | ifEmpty( "" )
+
+    ch_rna_branch               = ! params.rna_evidence
+                                ? Channel.empty()
+                                : Channel.fromSamplesheet('rna_evidence')
+                                | map { meta, f1, f2 ->
+                                    f2
+                                    ? [ meta + [ single_end: false ], [ file(f1, checkIfExists:true), file(f2, checkIfExists:true) ] ]
+                                    : [ meta + [ single_end: true ], [ file(f1, checkIfExists:true) ] ]
+                                }
+                                | map { meta, files ->
+                                    [ meta + [ target_assemblies: meta.target_assemblies.split(';').sort() ], files ]
+                                }
+                                | branch { meta, files ->
+                                    fq:  files.first().extension != 'bam'
+                                    bam: files.first().extension == 'bam'
+                                }
+
+    ch_rna_fq                   = ! params.rna_evidence
+                                ? Channel.empty()
+                                : ch_rna_branch.fq
+                                | map { meta, files -> [ meta.id, meta, files ] }
+                                | groupTuple
+                                | combine(ch_tar_assm_str)
+                                | map { id, metas, files, tar_assm_str ->
+                                    validateFastqMetadata(metas, files, tar_assm_str)
+                                }
+
+    ch_rna_bam                  = ! params.rna_evidence
+                                ? Channel.empty()
+                                : ch_rna_branch.bam
+                                | map { meta, files -> [ meta.id, meta, files ] }
+                                | groupTuple
+                                | combine(ch_tar_assm_str)
+                                | flatMap { id, metas, files, tar_assm_str ->
+                                    validateBamMetadata(metas, files, tar_assm_str)
+                                }
+
+    // Check if each sample for a given assembly has either bam or fastq files
+    ch_rna_bam
+    | flatMap { meta, bams ->
+        meta.target_assemblies.collect { [ [ meta.id, it ], 'bam' ] }
+    }
+    | join(
+        ch_rna_fq
+        | flatMap { meta, fqs ->
+            meta.target_assemblies.collect { [ [ meta.id, it ], 'fq' ] }
         }
-        .groupTuple()
-        .map {
-            validateInputSamplesheet(it)
-        }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
-        }
-        .set { ch_samplesheet }
+    )
+    | map { combination, bam, fq ->
+        error "Sample ${combination[0]} for assembly ${combination[1]} can not have both fastq and bam files"
+    }
+
+    ch_rna_bam_by_assembly      = ch_rna_bam
+                                | map { meta, bams -> [ [ id: meta.target_assemblies.first() ], bams ] }
+                                | groupTuple
+                                | map { meta, bams -> [ meta, bams.flatten() ] }
+
+    ch_ribo_db                  = params.remove_ribo_rna
+                                ? file(params.ribo_database_manifest, checkIfExists: true)
+                                : null
+
+    ch_sortmerna_fastas         = ch_ribo_db
+                                ? Channel.from(ch_ribo_db ? ch_ribo_db.readLines() : null)
+                                | map { row -> file(row, checkIfExists: true) }
+                                | collect
+                                : Channel.empty()
+
+    ch_ext_prot_fastas          = ( params.protein_evidence.endsWith('txt')
+                                    ? Channel.fromPath(params.protein_evidence)
+                                    | splitText
+                                    : Channel.fromPath(params.protein_evidence)
+                                )
+                                | map { file_path ->
+
+                                    def file_handle = ( file_path instanceof String )
+                                        ? file(file_path.strip(), checkIfExists: true)
+                                        : file_path
+
+                                    [ [ id: idFromFileName( file_handle.baseName ) ], file_handle ]
+                                }
+
+
+    ch_liftoff_mm               = ! params.liftoff_annotations
+                                ? Channel.empty()
+                                : Channel.fromSamplesheet('liftoff_annotations')
+                                | multiMap { fasta, gff ->
+                                    def fastaFile = file(fasta, checkIfExists:true)
+
+                                    fasta: [ [ id: idFromFileName( fastaFile.baseName ) ], fastaFile ]
+                                    gff: [ [ id: idFromFileName( fastaFile.baseName ) ], file(gff, checkIfExists:true) ]
+                                }
+
+    ch_liftoff_fasta            = params.liftoff_annotations
+                                ? ch_liftoff_mm.fasta
+                                : Channel.empty()
+
+    ch_liftoff_gff              = params.liftoff_annotations
+                                ? ch_liftoff_mm.gff
+                                : Channel.empty()
+
+    ch_tsebra_config            = Channel.of ( file("${projectDir}/assets/tsebra-template.cfg", checkIfExists: true) )
+                                | map { cfg ->
+                                    def param_intron_support = params.enforce_full_intron_support ? '1.0' : '0.0'
+
+                                    def param_e1 = params.allow_isoforms ? '0.1'    : '0.0'
+                                    def param_e2 = params.allow_isoforms ? '0.5'    : '0.0'
+                                    def param_e3 = params.allow_isoforms ? '0.05'   : '0.0'
+                                    def param_e4 = params.allow_isoforms ? '0.2'    : '0.0'
+
+                                    [
+                                        'tsebra-config.cfg',
+                                        cfg
+                                        .text
+                                        .replace('PARAM_INTRON_SUPPORT', param_intron_support)
+                                        .replace('PARAM_E1', param_e1)
+                                        .replace('PARAM_E2', param_e2)
+                                        .replace('PARAM_E3', param_e3)
+                                        .replace('PARAM_E4', param_e4)
+                                    ]
+                                }
+                                | collectFile
+
+
+    ch_orthofinder_pep          = ! params.orthofinder_annotations
+                                ? Channel.empty()
+                                : Channel.fromSamplesheet('orthofinder_annotations')
+                                | map { tag, fasta ->
+                                    [ [ id: tag ], file(fasta, checkIfExists:true)  ]
+                                }
 
     emit:
-    samplesheet = ch_samplesheet
-    versions    = ch_versions
+    target_assembly             = ch_target_assembly
+    tar_assm_str                = ch_tar_assm_str
+    is_masked                   = ch_is_masked
+    te_library                  = ch_te_library
+    braker_annotation           = ch_braker_annotation
+    braker_ex_asm_str           = ch_braker_ex_asm_str
+    rna_fq                      = ch_rna_fq
+    rna_bam                     = ch_rna_bam
+    rna_bam_by_assembly         = ch_rna_bam_by_assembly
+    sortmerna_fastas            = ch_sortmerna_fastas
+    ext_prot_fastas             = ch_ext_prot_fastas
+    liftoff_fasta               = ch_liftoff_fasta
+    liftoff_gff                 = ch_liftoff_gff
+    tsebra_config               = ch_tsebra_config
+    orthofinder_pep             = ch_orthofinder_pep
 }
 
 /*
@@ -149,80 +329,74 @@ workflow PIPELINE_COMPLETION {
 */
 
 //
-// Validate channels from input samplesheet
+// Additional validation
 //
-def validateInputSamplesheet(input) {
-    def (metas, fastqs) = input[1..2]
+def idFromFileName(fileName) {
 
-    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-    def endedness_ok = metas.collect{ it.single_end }.unique().size == 1
-    if (!endedness_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    def trial = ( fileName
+        ).replaceFirst(
+            /\.f(ast)?q$/, ''
+        ).replaceFirst(
+            /\.f(asta|sa|a|as|aa|na)?$/, ''
+        ).replaceFirst(
+            /\.gff(3)?$/, ''
+        ).replaceFirst(
+            /\.gz$/, ''
+        )
+
+    if ( trial == fileName ) { return fileName }
+
+    return idFromFileName ( trial )
+}
+
+def validateFastqMetadata(metas, fqs, permAssString) {
+    def permAssList = permAssString.split(",")
+
+    // Check if each listed assembly is permissible
+    metas.each { meta ->
+        if ( meta.target_assemblies.any { !permAssList.contains( it ) } ) {
+            error "Sample ${meta.id} targets ${meta.target_assemblies} which are not in $permAssList"
+        }
     }
 
-    return [ metas[0], fastqs ]
+    // Check if multiple runs of a sample have the same target assemblies
+    if ( metas.collect { meta -> meta.target_assemblies }.unique().size() > 1 ) {
+        error "Multiple runs of sample ${metas.first().id} must target same assemblies"
+    }
+
+    // Check if multiple runs of a sample have the same endedness
+    if ( metas.collect { meta -> meta.single_end }.unique().size() > 1 ) {
+        error "Multiple runs of sample ${metas.first().id} must have same endedness"
+    }
+
+    [ metas.first(), fqs ]
 }
 
-//
-// Generate methods description for MultiQC
-//
-def toolCitationText() {
-    // TODO nf-core: Optionally add in-text citation tools to this list.
-    // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "Tool (Foo et al. 2023)" : "",
-    // Uncomment function in methodsDescriptionText to render in MultiQC report
-    def citation_text = [
-            "Tools used in the workflow included:",
-            "FastQC (Andrews 2010),",
-            "MultiQC (Ewels et al. 2016)",
-            "."
-        ].join(' ').trim()
 
-    return citation_text
-}
+def validateBamMetadata(metas, bams, permAssString) {
+    def permAssList = permAssString.split(",")
 
-def toolBibliographyText() {
-    // TODO nf-core: Optionally add bibliographic entries to this list.
-    // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "<li>Author (2023) Pub name, Journal, DOI</li>" : "",
-    // Uncomment function in methodsDescriptionText to render in MultiQC report
-    def reference_text = [
-            "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).</li>",
-            "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics , 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>"
-        ].join(' ').trim()
+    // Check if each listed assembly is permissible
+    metas.each { meta ->
+        if ( meta.target_assemblies.any { !permAssList.contains( it ) } ) {
+            error "Sample ${meta.id} targets ${meta.target_assemblies} which are not in $permAssList"
+        }
+    }
 
-    return reference_text
-}
+    // Check that when the first file is bam then the second file is absent
+    bams.findAll { files ->
+        files.first().extension == 'bam' && files.size() != 1
+    }
+    .each { error "Sample ${metas.first().id} contains both bam and fastq pairs. When a bam file is provided as file_1, a fastq for file_2 is not permitted" }
 
-def methodsDescriptionText(mqc_methods_yaml) {
-    // Convert  to a named map so can be used as with familar NXF ${workflow} variable syntax in the MultiQC YML file
-    def meta = [:]
-    meta.workflow = workflow.toMap()
-    meta["manifest_map"] = workflow.manifest.toMap()
+    // Check that a bam file only targets a single assembly
+    bams.eachWithIndex { files, index ->
+        if ( files.first().extension == 'bam' && metas[index].target_assemblies.size() > 1 ) {
+            error "BAM file for sample ${metas.first().id} can only target one assembly: ${metas[index].target_assemblies}"
+        }
+    }
 
-    // Pipeline DOI
-    if (meta.manifest_map.doi) {
-        // Using a loop to handle multiple DOIs
-        // Removing `https://doi.org/` to handle pipelines using DOIs vs DOI resolvers
-        // Removing ` ` since the manifest.doi is a string and not a proper list
-        def temp_doi_ref = ""
-        String[] manifest_doi = meta.manifest_map.doi.tokenize(",")
-        for (String doi_ref: manifest_doi) temp_doi_ref += "(doi: <a href=\'https://doi.org/${doi_ref.replace("https://doi.org/", "").replace(" ", "")}\'>${doi_ref.replace("https://doi.org/", "").replace(" ", "")}</a>), "
-        meta["doi_text"] = temp_doi_ref.substring(0, temp_doi_ref.length() - 2)
-    } else meta["doi_text"] = ""
-    meta["nodoi_text"] = meta.manifest_map.doi ? "" : "<li>If available, make sure to update the text to include the Zenodo DOI of version of the pipeline used. </li>"
-
-    // Tool references
-    meta["tool_citations"] = ""
-    meta["tool_bibliography"] = ""
-
-    // TODO nf-core: Only uncomment below if logic in toolCitationText/toolBibliographyText has been filled!
-    // meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
-    // meta["tool_bibliography"] = toolBibliographyText()
-
-
-    def methods_text = mqc_methods_yaml.text
-
-    def engine =  new groovy.text.SimpleTemplateEngine()
-    def description_html = engine.createTemplate(methods_text).make(meta)
-
-    return description_html.toString()
+    metas.every { it.target_assemblies == metas.first().target_assemblies }
+    ? [ [ metas.first(), bams.flatten() ] ]
+    : metas.withIndex().collect { meta, index -> [ meta, bams[index].flatten() ] }
 }

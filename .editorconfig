@@ -31,3 +31,30 @@ indent_size = unset
 # ignore python and markdown
 [*.{py,md}]
 indent_style = unset
+
+# These files are edited and tested upstream in gallvp/modules,subworkflows
+[/modules/gallvp/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+
+[/subworkflows/gallvp/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+
+# ignore perl
+[*.{pl,pm}]
+indent_size = unset
+
+# ignore drawio
+[*.drawio]
+indent_size = unset
+
+# ignore LICENSE
+[LICENSE]
+indent_size = unset

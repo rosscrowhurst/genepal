@@ -1,4 +1,4 @@
-# PlantandFoodResearch/genepal: Output
+# plant-food-research-open/genepal: Output
 
 ## Introduction
 
