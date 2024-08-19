@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 8. Now the final annotations are not stored in the `final` folder
 9. Now BRAKER3 outputs are not saved by default [#53](https://github.com/plant-food-research-open/genepal/issues/53) and saved under `etc` folder when enabled
 10. Removed `local` profile. Local executor is the default when no executor is specified. Therefore, the `local` profile was not needed.
+11. Removed `CUSTOM_DUMPSOFTWAREVERSIONS`
 
 ## 0.3.3 - [18-Jun-2024]
 

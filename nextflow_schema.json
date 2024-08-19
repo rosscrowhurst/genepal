@@ -31,7 +31,8 @@
                 "eggnogmapper_db_dir": {
                     "type": "string",
                     "description": "Eggnogmapper database directory",
-                    "format": "directory-path"
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder-open"
                 },
                 "eggnogmapper_tax_scope": {
                     "type": "integer",
@@ -70,8 +71,7 @@
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved",
-                    "fa_icon": "fas fa-folder-open",
-                    "default": "./results"
+                    "fa_icon": "fas fa-folder-open"
                 }
             }
         },
@@ -267,24 +267,21 @@
                     "type": "integer",
                     "description": "Maximum number of CPUs that can be requested for any single job.",
                     "default": 16,
-                    "fa_icon": "fas fa-microchip",
-                    "hidden": true
+                    "fa_icon": "fas fa-microchip"
                 },
                 "max_memory": {
                     "type": "string",
                     "description": "Maximum amount of memory that can be requested for any single job. Example: '8.GB'",
-                    "default": "512.GB",
+                    "default": "72.GB",
                     "fa_icon": "fas fa-memory",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "hidden": true
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$"
                 },
                 "max_time": {
                     "type": "string",
                     "description": "Maximum amount of time that can be requested for any single job. Example: '1.day'",
                     "default": "7.day",
                     "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
-                    "hidden": true
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$"
                 }
             }
         },
@@ -362,6 +359,13 @@
                     "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
                     "hidden": true
                 },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "hidden": true
+                },
                 "email_on_fail": {
                     "type": "string",
                     "description": "Email address for completion summary, only when pipeline fails.",
@@ -379,12 +383,6 @@
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
                     "fa_icon": "fas fa-palette",
-                    "hidden": true
-                },
-                "monochromeLogs": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-palette",
-                    "description": "Do not use coloured log outputs.",
                     "hidden": true
                 },
                 "hook_url": {
@@ -416,6 +414,11 @@
                     "type": "boolean",
                     "fa_icon": "far fa-check-circle",
                     "description": "Validation of parameters in lenient more.",
+                    "hidden": true
+                },
+                "pipelines_testdata_base_path": {
+                    "type": "string",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
                     "hidden": true
                 }
             }

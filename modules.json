@@ -115,11 +115,6 @@
                         "git_sha": "1ceaa8ba4d0fd886dbca0e545815d905b7407de7",
                         "installed_by": ["modules"]
                     },
-                    "custom/dumpsoftwareversions": {
-                        "branch": "master",
-                        "git_sha": "82024cf6325d2ee194e7f056d841ecad2f6856e9",
-                        "installed_by": ["modules"]
-                    },
                     "eggnogmapper": {
                         "branch": "master",
                         "git_sha": "b34fb117e397e72a070cde8adf21b758670c90f5",

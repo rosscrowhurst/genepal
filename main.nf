@@ -31,42 +31,42 @@ include { PIPELINE_COMPLETION       } from './subworkflows/local/utils_nfcore_ge
 workflow PLANTFOODRESEARCHOPEN_GENEPAL {
 
     take:
-    target_assembly
-    tar_assm_str
-    is_masked
-    te_library
-    braker_annotation
-    braker_ex_asm_str
-    rna_fq
-    rna_bam
-    rna_bam_by_assembly
-    sortmerna_fastas
-    ext_prot_fastas
-    liftoff_fasta
-    liftoff_gff
-    tsebra_config
-    orthofinder_pep
+    ch_target_assembly
+    ch_tar_assm_str
+    ch_is_masked
+    ch_te_library
+    ch_braker_annotation
+    ch_braker_ex_asm_str
+    ch_rna_fq
+    ch_rna_bam
+    ch_rna_bam_by_assembly
+    ch_sortmerna_fastas
+    ch_ext_prot_fastas
+    ch_liftoff_fasta
+    ch_liftoff_gff
+    ch_tsebra_config
+    ch_orthofinder_pep
 
     main:
     //
     // WORKFLOW: Run pipeline
     //
     GENEPAL(
-        target_assembly
-        tar_assm_str
-        is_masked
-        te_library
-        braker_annotation
-        braker_ex_asm_str
-        rna_fq
-        rna_bam
-        rna_bam_by_assembly
-        sortmerna_fastas
-        ext_prot_fastas
-        liftoff_fasta
-        liftoff_gff
-        tsebra_config
-        orthofinder_pep
+        ch_target_assembly,
+        ch_tar_assm_str,
+        ch_is_masked,
+        ch_te_library,
+        ch_braker_annotation,
+        ch_braker_ex_asm_str,
+        ch_rna_fq,
+        ch_rna_bam,
+        ch_rna_bam_by_assembly,
+        ch_sortmerna_fastas,
+        ch_ext_prot_fastas,
+        ch_liftoff_fasta,
+        ch_liftoff_gff,
+        ch_tsebra_config,
+        ch_orthofinder_pep
     )
 
 }
@@ -97,20 +97,20 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     PLANTFOODRESEARCHOPEN_GENEPAL(
-        PIPELINE_INITIALISATION.out.target_assembly
-        PIPELINE_INITIALISATION.out.tar_assm_str
-        PIPELINE_INITIALISATION.out.is_masked
-        PIPELINE_INITIALISATION.out.te_library
-        PIPELINE_INITIALISATION.out.braker_annotation
-        PIPELINE_INITIALISATION.out.braker_ex_asm_str
-        PIPELINE_INITIALISATION.out.rna_fq
-        PIPELINE_INITIALISATION.out.rna_bam
-        PIPELINE_INITIALISATION.out.rna_bam_by_assembly
-        PIPELINE_INITIALISATION.out.sortmerna_fastas
-        PIPELINE_INITIALISATION.out.ext_prot_fastas
-        PIPELINE_INITIALISATION.out.liftoff_fasta
-        PIPELINE_INITIALISATION.out.liftoff_gff
-        PIPELINE_INITIALISATION.out.tsebra_config
+        PIPELINE_INITIALISATION.out.target_assembly,
+        PIPELINE_INITIALISATION.out.tar_assm_str,
+        PIPELINE_INITIALISATION.out.is_masked,
+        PIPELINE_INITIALISATION.out.te_library,
+        PIPELINE_INITIALISATION.out.braker_annotation,
+        PIPELINE_INITIALISATION.out.braker_ex_asm_str,
+        PIPELINE_INITIALISATION.out.rna_fq,
+        PIPELINE_INITIALISATION.out.rna_bam,
+        PIPELINE_INITIALISATION.out.rna_bam_by_assembly,
+        PIPELINE_INITIALISATION.out.sortmerna_fastas,
+        PIPELINE_INITIALISATION.out.ext_prot_fastas,
+        PIPELINE_INITIALISATION.out.liftoff_fasta,
+        PIPELINE_INITIALISATION.out.liftoff_gff,
+        PIPELINE_INITIALISATION.out.tsebra_config,
         PIPELINE_INITIALISATION.out.orthofinder_pep
     )
 
