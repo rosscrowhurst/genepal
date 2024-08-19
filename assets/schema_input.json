@@ -1,70 +1,33 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/genepal/master/assets/schema_input.json",
-    "title": "plantandfoodresearch/genepal pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/PlantandFoodResearch/genepal/master/assets/schema_input.json",
+    "title": "PlantandFoodResearch/genepal pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
         "type": "object",
         "properties": {
-            "tag": {
+            "sample": {
                 "type": "string",
-                "pattern": "^\\w+$",
-                "errorMessage": "Assembly tags must be provided and can only contain alphanumeric characters including '_'",
-                "unique": true
+                "pattern": "^\\S+$",
+                "errorMessage": "Sample name must be provided and cannot contain spaces",
+                "meta": ["id"]
             },
-            "fasta": {
+            "fastq_1": {
                 "type": "string",
-                "pattern": "^\\S+\\.f(a|asta|as|sa|na)(\\.gz)?$",
-                "errorMessage": "FASTA file path cannot contain spaces and must have extension '.f(a|asta|as|sa|na)' or '.f(a|asta|as|sa|na).gz'"
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
-            "is_masked": {
+            "fastq_2": {
                 "type": "string",
-                "pattern": "^(yes|no)$",
-                "errorMessage": "Masking information must be provided as 'yes' or 'no'"
-            },
-            "te_lib": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.f(a|asta|as|sa|na)(\\.gz)?$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
-                "errorMessage": "TE library FASTA file path cannot contain spaces and must have extension '.f(a|asta|as|sa|na)' or '.f(a|asta|as|sa|na).gz'"
-            },
-            "braker_gff3": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.gff(3)?(\\.gz)?$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
-                "errorMessage": "BRAKER GFF3 file path cannot contain spaces and must have extension '.gff.gz', '.gff3.gz', '.gff' or '.gff3'",
-                "dependentRequired": ["braker_hints"]
-            },
-            "braker_hints": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.gff(3)?(\\.gz)?$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
-                "errorMessage": "BRAKER hints GFF/GFF3 file path cannot contain spaces and must have extension '.gff.gz', '.gff3.gz', '.gff' or '.gff3'",
-                "dependentRequired": ["braker_gff3"]
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             }
         },
-        "required": ["tag", "fasta", "is_masked"]
+        "required": ["sample", "fastq_1"]
     }
 }

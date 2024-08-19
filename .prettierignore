@@ -1,16 +1,12 @@
-includes/Maven_Pro/
-
-# gitignore
+email_template.html
+adaptivecard.json
+slackreport.json
 .nextflow*
 work/
+data/
 results/
 .DS_Store
-*.code-workspace
-.screenrc
-.*.sw?
-__pycache__
-*.pyo
+testing/
+testing*
 *.pyc
-
-*.stdout
-*.stderr
+bin/
