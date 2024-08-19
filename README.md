@@ -2,7 +2,7 @@
 
 [![Lint/stub on Linux/Docker](https://github.com/PlantandFoodResearch/genepal/actions/workflows/test.yml/badge.svg)](https://github.com/PlantandFoodResearch/genepal/actions/workflows/test.yml)
 
-A NextFlow pipeline for pan-genome annotation. It can also be used for annotation of a single genome.
+A NextFlow pipeline for single genome and pan-genome annotation.
 
 ## Flowchart
 

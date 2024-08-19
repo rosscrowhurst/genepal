@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/plantandfoodresearch/genepal/master/nextflow_schema.json",
     "title": "plantandfoodresearch/genepal pipeline parameters",
-    "description": "A NextFlow pipeline for pan-genome annotation",
+    "description": "A NextFlow pipeline for single genome and pan-genome annotation",
     "type": "object",
     "definitions": {
         "input_output_options": {
