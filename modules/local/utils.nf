@@ -4,7 +4,7 @@ def idFromFileName(fileName) {
         ).replaceFirst(
             /\.f(ast)?q$/, ''
         ).replaceFirst(
-            /\.f(asta|sa|a|as|aa)?$/, ''
+            /\.f(asta|sa|a|as|aa|na)?$/, ''
         ).replaceFirst(
             /\.gff(3)?$/, ''
         ).replaceFirst(

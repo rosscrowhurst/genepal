@@ -103,7 +103,9 @@ workflow PANGENE {
                                     bam: files.first().extension == 'bam'
                                 }
 
-    ch_rna_fq                   = ch_rna_branch.fq
+    ch_rna_fq                   = ! params.rna_evidence
+                                ? Channel.empty()
+                                : ch_rna_branch.fq
                                 | map { meta, files -> [ meta.id, meta, files ] }
                                 | groupTuple
                                 | combine(ch_tar_assm_str)
@@ -111,7 +113,9 @@ workflow PANGENE {
                                     validateFastqMetadata(metas, files, tar_assm_str)
                                 }
 
-    ch_rna_bam                  = ch_rna_branch.bam
+    ch_rna_bam                  = ! params.rna_evidence
+                                ? Channel.empty()
+                                : ch_rna_branch.bam
                                 | map { meta, files -> [ meta.id, meta, files ] }
                                 | groupTuple
                                 | combine(ch_tar_assm_str)
@@ -149,14 +153,20 @@ workflow PANGENE {
                                 | collect
                                 : Channel.empty()
 
-    ch_ext_prot_fastas          = ! params.protein_evidence
-                                ? Channel.empty()
-                                : Channel.fromPath(params.protein_evidence)
-                                | splitText
+    ch_ext_prot_fastas          = ( params.protein_evidence.endsWith('txt')
+                                    ? Channel.fromPath(params.protein_evidence)
+                                    | splitText
+                                    : Channel.fromPath(params.protein_evidence)
+                                )
                                 | map { file_path ->
-                                    def file_handle = file(file_path.strip(), checkIfExists: true)
+
+                                    def file_handle = ( file_path instanceof String )
+                                        ? file(file_path.strip(), checkIfExists: true)
+                                        : file_path
+
                                     [ [ id: idFromFileName( file_handle.baseName ) ], file_handle ]
                                 }
+
 
     ch_liftoff_mm               = ! params.liftoff_annotations
                                 ? Channel.empty()
@@ -319,7 +329,7 @@ workflow PANGENE {
     PURGE_NOHIT_MODELS(
         ch_merged_gff,
         ch_eggnogmapper_hits,
-        params.eggnogmapper_purge_nohits
+        params.eggnogmapper_purge_nohits && params.eggnogmapper_db_dir
     )
 
     ch_purged_gff               = PURGE_NOHIT_MODELS.out.purged_gff
@@ -329,7 +339,8 @@ workflow PANGENE {
     GFF_STORE(
         ch_purged_gff,
         ch_eggnogmapper_annotations,
-        ch_valid_target_assembly
+        ch_valid_target_assembly,
+        params.eggnogmapper_db_dir
     )
 
     ch_final_gff                = GFF_STORE.out.final_gff

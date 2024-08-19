@@ -60,6 +60,11 @@ workflow PURGE_NOHIT_MODELS {
     ch_versions                 = ch_versions.mix(AGAT_SPFILTERFEATUREFROMKILLLIST.out.versions.first())
 
     emit:
-    purged_gff                  = ch_target_purged_gff.mix(val_purge_nohits ? Channel.empty() : ch_target_gff)
+    purged_gff                  = ch_target_purged_gff
+                                | mix(
+                                    val_purge_nohits
+                                    ? Channel.empty()
+                                    : ch_target_gff
+                                )
     versions                    = ch_versions   // [ versions.yml ]
 }

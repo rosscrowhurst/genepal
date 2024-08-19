@@ -1,11 +1,11 @@
 # Adopted from https://github.com/nf-core/modules/blob/master/.github/workflows/test.yml
 
-name: Lint and -stub on Linux/Docker
+name: CI tests
 on:
   push:
-    branches: [main]
+    branches:
+      - dev
   pull_request:
-    branches: [main]
 
 # Cancel if a newer run is started
 concurrency:
@@ -30,7 +30,7 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-  stub-test:
+  test:
     runs-on: ubuntu-latest
     name: Run stub test with docker
     env:
@@ -44,17 +44,20 @@ jobs:
         with:
           version: "23.04.4"
 
+      - name: Disk space cleanup
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+
       - name: Run stub-test
         run: |
           nextflow run \
             main.nf \
-            -profile local,docker \
+            -profile docker \
             -stub \
             -params-file tests/stub/params.json
 
   confirm-pass:
     runs-on: ubuntu-latest
-    needs: [pre-commit, stub-test]
+    needs: [pre-commit, test]
     if: always()
     steps:
       - name: All tests ok
