@@ -131,7 +131,7 @@ workflow GFF_STORE {
     )
 
     ch_final_proteins           = EXTRACT_PROTEINS.out.gffread_fasta
-    ch_versions                 = ch_versions.mix(FINAL_GFF_CHECK.out.versions.first())
+    ch_versions                 = ch_versions.mix(EXTRACT_PROTEINS.out.versions.first())
 
 
     emit:
