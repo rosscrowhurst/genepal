@@ -3,58 +3,59 @@
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
-[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
+[![run with conda ❌](http://img.shields.io/badge/run%20with-conda%20❌-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/plant-food-research-open/genepal)
 
 ## Introduction
 
-**plant-food-research-open/genepal** is a bioinformatics pipeline that ...
+**plant-food-research-open/genepal** is a bioinformatics pipeline for single genome and pan-genome annotation. An overview is shown in the [Pipeline Flowchart](#pipeline-flowchart) and the references for the tools are listed in [CITATIONS.md](./CITATIONS.md).
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+## Pipeline Flowchart
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+<p align="center"><img src="docs/img/genepal.png" width="100%" style="border-radius: 25px;"></p>
 
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+- [FASTA VALIDATOR](https://github.com/linsalrob/fasta_validator): Validate genome fasta
+- [EDTA](https://github.com/oushujun/EDTA) or [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler): Create TE library
+- [REPEATMASKER](https://github.com/rmhubley/RepeatMasker): Soft mask the genome fasta
+- [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc), [FASTP](https://github.com/OpenGene/fastp), [SORTMERNA](https://github.com/sortmerna/sortmerna): QC, trim and filter RNASeq evidence
+- [BRAKER](https://github.com/Gaius-Augustus/BRAKER): Annotate the genome fasta
+- [LIFTOFF](https://github.com/agshumate/Liftoff): Liftoff annotations from reference genome fasta/gff
+- [TSEBRA](https://github.com/Gaius-Augustus/TSEBRA) and [AGAT](https://github.com/NBISweden/AGAT): Merge BRAKER and Liftoff annotations
+- [EGGNOG-MAPPER](https://github.com/eggnogdb/eggnog-mapper): Add functional annotation to gff
+- [ORTHOFINDER](https://github.com/davidemms/OrthoFinder): Perform phylogenetic orthology inference across input genomes
 
 ## Usage
+
+Refer to [usage](./docs/usage.md), [parameters](./docs/parameters.md) and [output](./docs/output.md) documents for details.
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
+First, prepare an assemblysheet with your input genomes that looks as follows:
 
-First, prepare a samplesheet with your input data that looks as follows:
-
-`samplesheet.csv`:
+`assemblysheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+tag,fasta,is_masked
+a_thaliana,/path/to/genome.fa,yes
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
+Each row represents an input genome and the fields are:
 
--->
+- `tag:` A unique tag which represents the genome throughout the pipeline
+- `fasta:` fasta file for the genome
+- `is_masked`: yes or no to denote whether the fasta file is already masked or not
 
-Now, you can run the pipeline using:
-
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
+At minimum, a file with proteins as evidence is also required. Now, you can run the pipeline using:
 
 ```bash
 nextflow run plant-food-research-open/genepal \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR>
+  -profile <docker/singularity/.../institute> \
+  --input assemblysheet.csv \
+  --protein_evidence proteins.faa
+  --outdir <OUTDIR>
 ```
 
 > [!WARNING]
@@ -63,11 +64,44 @@ nextflow run plant-food-research-open/genepal \
 
 ## Credits
 
-plant-food-research-open/genepal was originally written by Usman Rashid, Jason Shiller.
+plant-food-research-open/genepal workflows were originally scripted by Jason Shiller ([@jasonshiller](https://github.com/jasonshiller)). Usman Rashid ([@gallvp](https://github.com/gallvp)) wrote the Nextflow pipeline.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+- Cecilia Deng [@CeciliaDeng](https://github.com/CeciliaDeng)
+- Charles David [@charlesdavid](https://github.com/charlesdavid)
+- Chen Wu [@christinawu2008](https://github.com/christinawu2008)
+- Leonardo Salgado [@leorippel](https://github.com/leorippel)
+- Ross Crowhurst [@rosscrowhurst](https://github.com/rosscrowhurst)
+- Susan Thomson [@cflsjt](https://github.com/cflsjt)
+- Ting-Hsuan Chen [@ting-hsuan-chen](https://github.com/ting-hsuan-chen)
+
+The pipeline uses nf-core modules contributed by following authors:
+
+<a href="https://github.com/gallvp"><img src="https://github.com/gallvp.png" width="50" height="50"></a>
+<a href="https://github.com/drpatelh"><img src="https://github.com/drpatelh.png" width="50" height="50"></a>
+<a href="https://github.com/kevinmenden"><img src="https://github.com/kevinmenden.png" width="50" height="50"></a>
+<a href="https://github.com/grst"><img src="https://github.com/grst.png" width="50" height="50"></a>
+<a href="https://github.com/toniher"><img src="https://github.com/toniher.png" width="50" height="50"></a>
+<a href="https://github.com/joseespinosa"><img src="https://github.com/joseespinosa.png" width="50" height="50"></a>
+<a href="https://github.com/edmundmiller"><img src="https://github.com/edmundmiller.png" width="50" height="50"></a>
+<a href="https://github.com/kherronism"><img src="https://github.com/kherronism.png" width="50" height="50"></a>
+<a href="https://github.com/vagkaratzas"><img src="https://github.com/vagkaratzas.png" width="50" height="50"></a>
+<a href="https://github.com/robsyme"><img src="https://github.com/robsyme.png" width="50" height="50"></a>
+<a href="https://github.com/priyanka-surana"><img src="https://github.com/priyanka-surana.png" width="50" height="50"></a>
+<a href="https://github.com/praveenraj2018"><img src="https://github.com/praveenraj2018.png" width="50" height="50"></a>
+<a href="https://github.com/muffato"><img src="https://github.com/muffato.png" width="50" height="50"></a>
+<a href="https://github.com/matthdsm"><img src="https://github.com/matthdsm.png" width="50" height="50"></a>
+<a href="https://github.com/mashehu"><img src="https://github.com/mashehu.png" width="50" height="50"></a>
+<a href="https://github.com/mahesh-panchal"><img src="https://github.com/mahesh-panchal.png" width="50" height="50"></a>
+<a href="https://github.com/jvhagey"><img src="https://github.com/jvhagey.png" width="50" height="50"></a>
+<a href="https://github.com/jfy133"><img src="https://github.com/jfy133.png" width="50" height="50"></a>
+<a href="https://github.com/jemten"><img src="https://github.com/jemten.png" width="50" height="50"></a>
+<a href="https://github.com/friederikehanssen"><img src="https://github.com/friederikehanssen.png" width="50" height="50"></a>
+<a href="https://github.com/felixkrueger"><img src="https://github.com/felixkrueger.png" width="50" height="50"></a>
+<a href="https://github.com/ewels"><img src="https://github.com/ewels.png" width="50" height="50"></a>
+<a href="https://github.com/erikrikarddaniel"><img src="https://github.com/erikrikarddaniel.png" width="50" height="50"></a>
+<a href="https://github.com/charles-plessy"><img src="https://github.com/charles-plessy.png" width="50" height="50"></a>
 
 ## Contributions and Support
 
@@ -77,8 +111,6 @@ If you would like to contribute to this pipeline, please see the [contributing g
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use plant-food-research-open/genepal for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 

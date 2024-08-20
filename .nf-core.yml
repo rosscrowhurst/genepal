@@ -8,17 +8,21 @@ lint:
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
     - conf/igenomes.config
+    - assets/multiqc_config.yml
   files_unchanged:
     - CODE_OF_CONDUCT.md
     - assets/nf-core-genepal_logo_light.png
     - docs/images/nf-core-genepal_logo_light.png
     - docs/images/nf-core-genepal_logo_dark.png
     - .github/ISSUE_TEMPLATE/bug_report.yml
-  multiqc_config:
-    - report_comment
+    - docs/README.md
+    - LICENSE
   nextflow_config:
     - manifest.name
     - manifest.homePage
+    - config_defaults:
+        - params.ribo_database_manifest
+  multiqc_config: false
 nf_core_version: 2.14.1
 repository_type: pipeline
 template:

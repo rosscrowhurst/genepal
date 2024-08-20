@@ -139,10 +139,12 @@
                 },
                 "ribo_database_manifest": {
                     "type": "string",
-                    "default": "${projectDir}/assets/rrna-db-defaults.txt",
-                    "description": "Ribosomal RNA fastas listed in a text sheet",
                     "format": "file-path",
-                    "mimetype": "text/txt"
+                    "exists": true,
+                    "mimetype": "text/plain",
+                    "default": "${projectDir}/assets/rrna-db-defaults.txt",
+                    "fa_icon": "fas fa-database",
+                    "description": "Ribosomal RNA fastas listed in a text sheet"
                 }
             }
         },
@@ -419,7 +421,8 @@
                 "pipelines_testdata_base_path": {
                     "type": "string",
                     "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
-                    "hidden": true
+                    "hidden": true,
+                    "description": "Base path for pipeline test datasets"
                 }
             }
         }
