@@ -7,12 +7,12 @@
                 "gallvp": {
                     "agat/spaddintrons": {
                         "branch": "main",
-                        "git_sha": "7bf6fbca23edc94490ffa6709f52b2f71c6fb130",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["gxf_fasta_agat_spaddintrons_spextractsequences"]
                     },
                     "agat/spextractsequences": {
                         "branch": "main",
-                        "git_sha": "7bf6fbca23edc94490ffa6709f52b2f71c6fb130",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["gxf_fasta_agat_spaddintrons_spextractsequences"]
                     },
                     "braker3": {
@@ -22,22 +22,22 @@
                     },
                     "busco/busco": {
                         "branch": "main",
-                        "git_sha": "ab92c438688c1f4a3753b65914bfd2e6319cebb2",
+                        "git_sha": "0fcdaa66410acee08d31884cdc3e8e4b1b79e66a",
                         "installed_by": ["fasta_gxf_busco_plot"]
                     },
                     "busco/generateplot": {
                         "branch": "main",
-                        "git_sha": "ab92c438688c1f4a3753b65914bfd2e6319cebb2",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["fasta_gxf_busco_plot"]
                     },
                     "custom/restoregffids": {
                         "branch": "main",
-                        "git_sha": "490f8ab54c632d84f99edd6f208305ac5e283ab3",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["fasta_edta_lai"]
                     },
                     "custom/shortenfastaids": {
                         "branch": "main",
-                        "git_sha": "490f8ab54c632d84f99edd6f208305ac5e283ab3",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["fasta_edta_lai"]
                     },
                     "edta/edta": {
@@ -47,17 +47,17 @@
                     },
                     "gffread": {
                         "branch": "main",
-                        "git_sha": "c04bf39d67027e044a6eaed0b7b0439fd8866fc7",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["fasta_gxf_busco_plot"]
                     },
                     "ltrretriever/lai": {
                         "branch": "main",
-                        "git_sha": "490f8ab54c632d84f99edd6f208305ac5e283ab3",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["fasta_edta_lai"]
                     },
                     "repeatmasker/repeatmasker": {
                         "branch": "main",
-                        "git_sha": "07c6fda11aff03d2d7fc68224e7fd96866fc6a8f",
+                        "git_sha": "004aba06875a2fee13207e2ffaa04deb2190a35d",
                         "installed_by": ["modules"]
                     }
                 }
@@ -132,7 +132,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
+                        "git_sha": "b49b8992e5271ce427f3a7cdb29628fc58400eb5",
                         "installed_by": ["fastq_fastqc_umitools_fastp", "modules"]
                     },
                     "gffcompare": {
@@ -168,12 +168,12 @@
                     },
                     "repeatmodeler/builddatabase": {
                         "branch": "master",
-                        "git_sha": "1cbb5551b917aa423e414dcd69898d01520a309d",
+                        "git_sha": "52507581f62929f98dd6e6c5c5824583fa6ef94d",
                         "installed_by": ["modules"]
                     },
                     "repeatmodeler/repeatmodeler": {
                         "branch": "master",
-                        "git_sha": "84efd2f87d07deb22ee9378f065a9aa5f1434161",
+                        "git_sha": "52507581f62929f98dd6e6c5c5824583fa6ef94d",
                         "installed_by": ["modules"]
                     },
                     "samtools/cat": {
