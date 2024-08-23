@@ -14,12 +14,13 @@
 
 ## Pipeline Flowchart
 
-<p align="center"><img src="docs/img/genepal.png" width="100%" style="border-radius: 25px;"></p>
+<p align="center"><img src="docs/img/genepal.png" width="80%"></p>
 
 - [FASTA VALIDATOR](https://github.com/linsalrob/fasta_validator): Validate genome fasta
 - [EDTA](https://github.com/oushujun/EDTA) or [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler): Create TE library
 - [REPEATMASKER](https://github.com/rmhubley/RepeatMasker): Soft mask the genome fasta
 - [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc), [FASTP](https://github.com/OpenGene/fastp), [SORTMERNA](https://github.com/sortmerna/sortmerna): QC, trim and filter RNASeq evidence
+- [STAR](https://github.com/alexdobin/STAR): RNAseq alignment
 - [BRAKER](https://github.com/Gaius-Augustus/BRAKER): Annotate the genome fasta
 - [LIFTOFF](https://github.com/agshumate/Liftoff): Liftoff annotations from reference genome fasta/gff
 - [TSEBRA](https://github.com/Gaius-Augustus/TSEBRA) and [AGAT](https://github.com/NBISweden/AGAT): Merge BRAKER and Liftoff annotations
@@ -81,10 +82,12 @@ The pipeline uses nf-core modules contributed by following authors:
 <a href="https://github.com/gallvp"><img src="https://github.com/gallvp.png" width="50" height="50"></a>
 <a href="https://github.com/drpatelh"><img src="https://github.com/drpatelh.png" width="50" height="50"></a>
 <a href="https://github.com/kevinmenden"><img src="https://github.com/kevinmenden.png" width="50" height="50"></a>
-<a href="https://github.com/grst"><img src="https://github.com/grst.png" width="50" height="50"></a>
+<a href="https://github.com/adamrtalbot"><img src="https://github.com/adamrtalbot.png" width="50" height="50"></a>
 <a href="https://github.com/toniher"><img src="https://github.com/toniher.png" width="50" height="50"></a>
 <a href="https://github.com/joseespinosa"><img src="https://github.com/joseespinosa.png" width="50" height="50"></a>
+<a href="https://github.com/grst"><img src="https://github.com/grst.png" width="50" height="50"></a>
 <a href="https://github.com/edmundmiller"><img src="https://github.com/edmundmiller.png" width="50" height="50"></a>
+<a href="https://github.com/maxulysse"><img src="https://github.com/maxulysse.png" width="50" height="50"></a>
 <a href="https://github.com/kherronism"><img src="https://github.com/kherronism.png" width="50" height="50"></a>
 <a href="https://github.com/vagkaratzas"><img src="https://github.com/vagkaratzas.png" width="50" height="50"></a>
 <a href="https://github.com/robsyme"><img src="https://github.com/robsyme.png" width="50" height="50"></a>
