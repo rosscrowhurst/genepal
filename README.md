@@ -17,7 +17,7 @@
 <p align="center"><img src="docs/img/genepal.png" width="80%"></p>
 
 - [FASTA VALIDATOR](https://github.com/linsalrob/fasta_validator): Validate genome fasta
-- [EDTA](https://github.com/oushujun/EDTA) or [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler): Create TE library
+- [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler) or [EDTA](https://github.com/oushujun/EDTA): Create TE library
 - [REPEATMASKER](https://github.com/rmhubley/RepeatMasker): Soft mask the genome fasta
 - [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc), [FASTP](https://github.com/OpenGene/fastp), [SORTMERNA](https://github.com/sortmerna/sortmerna): QC, trim and filter RNASeq evidence
 - [STAR](https://github.com/alexdobin/STAR): RNAseq alignment
@@ -55,7 +55,7 @@ At minimum, a file with proteins as evidence is also required. Now, you can run 
 nextflow run plant-food-research-open/genepal \
   -profile <docker/singularity/.../institute> \
   --input assemblysheet.csv \
-  --protein_evidence proteins.faa
+  --protein_evidence proteins.faa \
   --outdir <OUTDIR>
 ```
 
