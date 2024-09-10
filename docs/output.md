@@ -30,7 +30,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 </details>
 
-A repeat library is created with either [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler) or [EDTA](https://github.com/oushujun/EDTA). The choice of the tool is specified by the `repeat_annotator` parameter (default: `repeatmodeler`). Repeat annotation outputs are saved only if `save_annotated_te_lib` parameter is set to `true` (default: `false`).
+A repeat library is created with either [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler) or [EDTA](https://github.com/oushujun/EDTA). The choice of the tool is specified by the `repeat_annotator` parameter (default: `repeatmodeler`). Repeat annotation outputs are saved to the output directory only if `save_annotated_te_lib` parameter is set to `true` (default: `false`).
 
 ### Repeat masking
 
@@ -43,9 +43,36 @@ A repeat library is created with either [REPEATMODELER](https://github.com/Dfam-
 
 </details>
 
-Soft masking of the repeats is performed with [REPEATMASKER](https://github.com/rmhubley/RepeatMasker) using the repeat library prepared in the previous step. Masking outputs are saved only if `repeatmasker_save_outputs` parameter is set to `true` (default: `false`).
+Soft masking of the repeats is performed with [REPEATMASKER](https://github.com/rmhubley/RepeatMasker) using the repeat library prepared in the previous step. Masking outputs are saved to the output directory only if `repeatmasker_save_outputs` parameter is set to `true` (default: `false`).
 
 ### RNAseq trimming, filtering and QC
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `fastqc_raw/`
+  - `*.html`: HTML QC report for a sample before trimming
+  - `*.zip`: Zipped QC files for a sample before trimming
+- `fastqc_trim/`
+  - `*.html`: HTML QC report for a sample after trimming
+  - `*.zip`: Zipped QC files for a sample after trimming
+- `fastp/`
+  - `html/`
+    - `*.fastp.html`: HTML trimming report for a sample
+  - `json/`
+    - `*.fastp.json`: Trimming statistics for a sample
+  - `log/`
+    - `*.fastp.log`: Trimming log for a sample
+  - `*_{1,2}.fail.fastq.gz`: Reads which failed trimming
+  - `*.paired.fail.fastq.gz`: Pairs of reads which failed trimming
+  - `*.merged.fastq.gz`: Reads which passed trimming. For paired reads, reads 1 and 2 are merged into a single file
+- `sortmerna/`
+  - `*.sortmerna.log`: Filtering log for a sample
+  - `*_{1,2}.non_rRNA.fastq.gz`: Filtered reads
+
+</details>
+
+RNASeq reads are trimmed with [FASTP](https://github.com/OpenGene/fastp) and are QC'ed with [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc). Ribosomal reads are filtered out using [SORTMERNA](https://github.com/sortmerna/sortmerna). Trimmed reads are only stored to the output directory if the `save_trimmed` parameter is set to `true` (default: `false`). Reads filtered by [SORTMERNA](https://github.com/sortmerna/sortmerna) are stored to the output directory if the `save_non_ribo_reads` parameter is set to `true` (default: `false`).
 
 ### Pipeline information
 
