@@ -17,6 +17,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Repeat annotation](#repeat-annotation)
 - [Repeat masking](#repeat-masking)
 - [RNAseq trimming, filtering and QC](#rnaseq-trimming-filtering-and-qc)
+- [RNAseq Alignment](#rnaseq-alignment)
 
 ### Repeat annotation
 
@@ -73,6 +74,22 @@ Soft masking of the repeats is performed with [REPEATMASKER](https://github.com/
 </details>
 
 RNASeq reads are trimmed with [FASTP](https://github.com/OpenGene/fastp) and are QC'ed with [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc). Ribosomal reads are filtered out using [SORTMERNA](https://github.com/sortmerna/sortmerna). Trimmed reads are only stored to the output directory if the `save_trimmed` parameter is set to `true` (default: `false`). Reads filtered by [SORTMERNA](https://github.com/sortmerna/sortmerna) are stored to the output directory if the `save_non_ribo_reads` parameter is set to `true` (default: `false`).
+
+### RNAseq Alignment
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `star/`
+  - `alignment/`
+    - `X.on.Y.Aligned.sortedByCoord.out.bam`: Sorted BAM file of read alignments for sample `X` against reference `Y`
+    - `X.on.Y.Log.final.out`: STAR final log file for sample `X` against reference `Y`
+  - `cat_bam/`
+    - `Y.bam`: A single BAM file for reference `Y` created by concatenating alignments from sample-wise `*.on.Y.Aligned.sortedByCoord.out.bam` files
+
+</details>
+
+RNAseq alignment is performed with [STAR](https://github.com/alexdobin/STAR). Alignment files are only stored to the output directory if the `star_save_outputs` parameter is set to `true` (default: `false`). Concatenated bam files are stored to the output directory if the `save_cat_bam` parameter is set to `true` (default: `false`).
 
 ### Pipeline information
 
