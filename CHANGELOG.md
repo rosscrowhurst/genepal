@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.0+dev - [23-Aug-2024]
+## 0.4.0+dev - [11-Sep-2024]
 
 ### `Added`
 
@@ -19,15 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 10. Added param `enforce_full_intron_support` to turn on/off strict model purging by TSEBRA [#21](https://github.com/plant-food-research-open/genepal/issues/21)
 11. Added param `filter_liftoff_by_hints` to evaluate liftoff models with TSEBRA to make sure they have the same level of evidence as BRAKER [#28](ttps://github.com/plant-food-research-open/genepal/issues/28)
 12. Added a script to automatically check module version updates
-13. Updated modules: `AGAT/CONVERTSPGFF2GTF`, `CAT_FASTQ`, `CUSTOM/DUMPSOFTWAREVERSIONS`, `EGGNOGMAPPER`, `FASTP`, `GFFREAD`, `SAMTOOLS/CAT`, `CUSTOM/RESTOREGFFIDS`, `CUSTOM/SHORTENFASTAIDS`, `EDTA/EDTA`, `CAT/CAT`, `FASTQC`, `GUNZIP`, `LIFTOFF`, `STAR/ALIGN`, `STAR/GENOMEGENERATE`, `UMITOOLS/EXTRACT`,
-14. Updated sub-workflows: `FASTQ_FASTQC_UMITOOLS_FASTP` and `FASTA_EDTA_LAI`
-15. Reduced `BRAKER3` threads to 8 [#55](https://github.com/plant-food-research-open/genepal/issues/55)
-16. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/plant-food-research-open/genepal/issues/53)
-17. Added `-gff` flag to `REPEATMASKER` to save the gff file [#54](https://github.com/plant-food-research-open/genepal/issues/54)
-18. Now a single `fasta` file can be directly specified for `protein_evidence`
-19. `eggnogmapper_db_dir` is not a required parameter anymore
-20. `eggnogmapper_tax_scope` is now set to 1 (root div) by default
-21. Added a `test` profile based on public data
+13. Reduced `BRAKER3` threads to 8 [#55](https://github.com/plant-food-research-open/genepal/issues/55)
+14. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/plant-food-research-open/genepal/issues/53)
+15. Added `-gff` flag to `REPEATMASKER` to save the gff file [#54](https://github.com/plant-food-research-open/genepal/issues/54)
+16. Now a single `fasta` file can be directly specified for `protein_evidence`
+17. `eggnogmapper_db_dir` is not a required parameter anymore
+18. `eggnogmapper_tax_scope` is now set to 1 (root div) by default
+19. Added a `test` profile based on public data
+20. Updated modules and sub-workflows
 
 ### `Fixed`
 

@@ -39,8 +39,8 @@ First, prepare an assemblysheet with your input genomes that looks as follows:
 `assemblysheet.csv`:
 
 ```csv
-tag,fasta,is_masked
-a_thaliana,/path/to/genome.fa,yes
+tag         ,fasta              ,is_masked
+a_thaliana  ,/path/to/genome.fa ,yes
 ```
 
 Each row represents an input genome and the fields are:

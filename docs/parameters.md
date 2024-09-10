@@ -109,4 +109,4 @@ Less common options for the pipeline, typically set in a config file.
 | `validationShowHiddenParams`       | Show all params when using `--help`                                     | `boolean` |                                                          |          | True   |
 | `validationFailUnrecognisedParams` | Validation of parameters fails when an unrecognised parameter is found. | `boolean` |                                                          |          | True   |
 | `validationLenientMode`            | Validation of parameters in lenient more.                               | `boolean` |                                                          |          | True   |
-| `pipelines_testdata_base_path`     |                                                                         | `string`  | https://raw.githubusercontent.com/nf-core/test-datasets/ |          | True   |
+| `pipelines_testdata_base_path`     | Base path for pipeline test datasets                                    | `string`  | https://raw.githubusercontent.com/nf-core/test-datasets/ |          | True   |
