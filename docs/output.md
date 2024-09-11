@@ -91,6 +91,29 @@ RNASeq reads are trimmed with [FASTP](https://github.com/OpenGene/fastp) and are
 
 RNAseq alignment is performed with [STAR](https://github.com/alexdobin/STAR). Alignment files are only stored to the output directory if the `star_save_outputs` parameter is set to `true` (default: `false`). Concatenated bam files are stored to the output directory if the `save_cat_bam` parameter is set to `true` (default: `false`).
 
+### Annotation with BRAKER
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `etc/braker/`
+  - `Y/`
+    - `braker.gff3`: Gene models predicted by BRAKER in GFF3 format
+    - `braker.gtf`: Gene models predicted by BRAKER in GTF format
+    - `braker.codingseq`: Coding sequences for the predicted genes
+    - `braker.aa`: Protein sequences for the predicted genes
+    - `braker.log`: BRAKER log file
+    - `hintsfile.gff`: Evidential hints used by BRAKER in GFF format
+    - `what-to-cite.txt`: A list of references which must be cited when reporting outputs created by BRAKER
+
+</details>
+
+[BRAKER](https://github.com/Gaius-Augustus/BRAKER) is used to annotate each genome assembly using the provide protein and RNAseq evidence. Outputs from BRAKER are stored to the output directory if the `braker_save_outputs` parameter is set to `true` (default: `false`).
+
+> [!CAUTION]
+>
+> BRAKER outputs are not the final outputs from the pipeline and that's why they are not stored by default. These are only intermediary files. The pipeline further processes the BRAKER predictions and stores the final validated outputs in the `annotations` directory.
+
 ### Pipeline information
 
 <details markdown="1">
