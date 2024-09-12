@@ -10,7 +10,7 @@
 
 ## Introduction
 
-**plant-food-research-open/genepal** is a bioinformatics pipeline for single genome and pan-genome annotation. An overview is shown in the [Pipeline Flowchart](#pipeline-flowchart) and the references for the tools are listed in [CITATIONS.md](./CITATIONS.md).
+**plant-food-research-open/genepal** is a bioinformatics pipeline for single genome, multiple genomes and pan-genome annotation. An overview is shown in the [Pipeline Flowchart](#pipeline-flowchart) and the references for the tools are listed in [CITATIONS.md](./CITATIONS.md).
 
 ## Pipeline Flowchart
 
@@ -23,9 +23,11 @@
 - [STAR](https://github.com/alexdobin/STAR): RNAseq alignment
 - [BRAKER](https://github.com/Gaius-Augustus/BRAKER): Annotate the genome fasta
 - [LIFTOFF](https://github.com/agshumate/Liftoff): Liftoff annotations from reference genome fasta/gff
-- [TSEBRA](https://github.com/Gaius-Augustus/TSEBRA) and [AGAT](https://github.com/NBISweden/AGAT): Merge BRAKER and Liftoff annotations
+- [TSEBRA](https://github.com/Gaius-Augustus/TSEBRA), [AGAT](https://github.com/NBISweden/AGAT): Merge BRAKER and Liftoff annotations
 - [EGGNOG-MAPPER](https://github.com/eggnogdb/eggnog-mapper): Add functional annotation to gff
 - [ORTHOFINDER](https://github.com/davidemms/OrthoFinder): Perform phylogenetic orthology inference across input genomes
+- [GENOMETOOLS](https://github.com/genometools/genometools), [GFFREAD](https://github.com/gpertea/gffread): Final GFF format validation and extraction of protein sequences
+- [BUSCO](https://gitlab.com/ezlab/busco): Completeness statistics for genome and annotation through proteins
 
 ## Usage
 

@@ -17,7 +17,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Repeat annotation](#repeat-annotation)
 - [Repeat masking](#repeat-masking)
 - [RNAseq trimming, filtering and QC](#rnaseq-trimming-filtering-and-qc)
-- [RNAseq Alignment](#rnaseq-alignment)
+- [RNAseq alignment](#rnaseq-alignment)
+- [Annotation with BRAKER](#annotation-with-braker)
+- [Annotation with Liftoff](#annotation-with-liftoff)
+- [Annotation filtering and merging](#annotation-filtering-and-merging)
+- [Functional annotation](#functional-annotation)
 
 ### Repeat annotation
 
@@ -75,7 +79,7 @@ Soft masking of the repeats is performed with [REPEATMASKER](https://github.com/
 
 RNASeq reads are trimmed with [FASTP](https://github.com/OpenGene/fastp) and are QC'ed with [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc). Ribosomal reads are filtered out using [SORTMERNA](https://github.com/sortmerna/sortmerna). Trimmed reads are only stored to the output directory if the `save_trimmed` parameter is set to `true` (default: `false`). Reads filtered by [SORTMERNA](https://github.com/sortmerna/sortmerna) are stored to the output directory if the `save_non_ribo_reads` parameter is set to `true` (default: `false`).
 
-### RNAseq Alignment
+### RNAseq alignment
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -112,7 +116,32 @@ RNAseq alignment is performed with [STAR](https://github.com/alexdobin/STAR). Al
 
 > [!CAUTION]
 >
-> BRAKER outputs are not the final outputs from the pipeline and that's why they are not stored by default. These are only intermediary files. The pipeline further processes the BRAKER predictions and stores the final validated outputs in the `annotations` directory.
+> BRAKER outputs are not the final outputs from the pipeline and that's why they are not stored by default. These are only intermediary files.
+>
+> The pipeline further processes the BRAKER predictions and stores the final validated outputs in the `annotations` directory. The `braker_save_outputs` option is only provided to allow a manual resume of the pipeline for advanced use cases.
+
+### Annotation with Liftoff
+
+Gene models are lifted from reference assembly(ies) to the target assembly using [LIFTOFF](https://github.com/agshumate/Liftoff). Currently, the outputs from Liftoff are considered intermediary and an option to store them in the output directory is not available.
+
+### Annotation filtering and merging
+
+Annotations obtained from [BRAKER](https://github.com/Gaius-Augustus/BRAKER) and [LIFTOFF](https://github.com/agshumate/Liftoff) are filtered with [TSEBRA](https://github.com/Gaius-Augustus/TSEBRA) and merged with [AGAT](https://github.com/NBISweden/AGAT). Currently, the outputs from these processes are considered intermediary and an option to store them in the output directory is not available.
+
+### Functional annotation
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `annotations/`
+  - `Y/`
+    - `Y.emapper.annotations`: TSV with the annotation results
+    - `Y.emapper.hits`: TSV with the search results
+    - `Y.emapper.seed_orthologs`: TSV with the results from parsing the hits, linking queries with seed orthologs
+
+</details>
+
+Functional annotation of the gene models from BRAKER and Liftoff is performed with [EGGNOG-MAPPER](https://github.com/eggnogdb/eggnog-mapper).
 
 ### Pipeline information
 
