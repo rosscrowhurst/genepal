@@ -17,6 +17,7 @@ lint:
     - .github/ISSUE_TEMPLATE/bug_report.yml
     - docs/README.md
     - LICENSE
+    - .gitignore
   nextflow_config:
     - manifest.name
     - manifest.homePage
