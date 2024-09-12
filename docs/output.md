@@ -22,6 +22,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Annotation with Liftoff](#annotation-with-liftoff)
 - [Annotation filtering and merging](#annotation-filtering-and-merging)
 - [Functional annotation](#functional-annotation)
+- [Orthology inference](#orthology-inference)
+- [Final annotation files](#final-annotation-files)
+- [Annotation QC](#annotation-qc)
 
 ### Repeat annotation
 
@@ -142,6 +145,52 @@ Annotations obtained from [BRAKER](https://github.com/Gaius-Augustus/BRAKER) and
 </details>
 
 Functional annotation of the gene models from BRAKER and Liftoff is performed with [EGGNOG-MAPPER](https://github.com/eggnogdb/eggnog-mapper).
+
+### Orthology inference
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `orthofinder/`
+  - `genepal/*`
+
+</details>
+
+If more than one genome is included in the pipeline, [ORTHOFINDER](https://github.com/davidemms/OrthoFinder) is used to perform an orthology inference.
+
+### Final annotation files
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `annotations/`
+  - `Y/`
+    - `Y.gt.gff3`: Final annotation file for genome `Y` which contains gene models and their functional annotations
+    - `Y.pep.fasta`: Protein sequences for the gene models
+
+</details>
+
+The final annotation files are saved in GFF3 format validated with [GENOMETOOLS](https://github.com/genometools/genometools) and FASTA format obtained with [GFFREAD](https://github.com/gpertea/gffread).
+
+### Annotation QC
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `busco/`
+  - `gff/`
+    - `short_summary.specific.Y.eudicots_odb10.txt`: BUSCO summary for annotations from genome `Y` against the `eudicots_odb10` database
+    - `busco_figure`: BUSCO summary figure including statistics for annotations from all the genomes
+  - `fasta/`
+    - `short_summary.specific.Y.eudicots_odb10.txt`: BUSCO summary for genome `Y` against the `eudicots_odb10` database
+    - `busco_figure`: BUSCO summary figure including statistics for all the genomes
+- `etc/`
+  - `splicing_marked/`
+    - `Y.gff3`: Final annotation file for genome `Y` which contains gene models and their functional annotations. Additionally, the intron features are marked as canonical or non-canonical and the splice motif is also added an attribute.
+
+</details>
+
+The completeness of the annotations is checked with [BUSCO](https://gitlab.com/ezlab/busco). TO provide a comparative baseline, the completeness of the genomes is also checked. Moreover, the canonical/non-canonical splicing of the introns is also assessed by the pipeline.
 
 ### Pipeline information
 

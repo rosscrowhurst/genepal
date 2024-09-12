@@ -43,4 +43,5 @@ jobs:
             main.nf \
             -profile docker \
             -stub \
-            -params-file tests/stub/params.json
+            -params-file tests/stub/params.json \
+            --outdir ./results
