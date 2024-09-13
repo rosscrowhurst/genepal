@@ -1,6 +1,6 @@
 # plant-food-research-open/genepal: Usage<!-- omit in toc -->
 
-> [!TIP]
+> [!NOTE]
 >
 > This document does not describe every pipeline parameter. For an exhaustive list of parameters, see [parameters.md](./parameters.md).
 
@@ -14,6 +14,7 @@
 - [Liftoff annotations](#liftoff-annotations)
 - [EggNOG-mapper DB](#eggnog-mapper-db)
 - [Orthology inference input](#orthology-inference-input)
+- [Iso-forms and full intron support](#iso-forms-and-full-intron-support)
 - [Running the pipeline](#running-the-pipeline)
   - [Updating the pipeline](#updating-the-pipeline)
   - [Reproducibility](#reproducibility)
@@ -108,7 +109,7 @@ In addition to gene prediction with BRAKER, the pipeline also enables gene model
 -s $liftoff_identity
 ```
 
-where `--liftoff_coverage` and `--liftoff_identity` are pipeline parameters and their default value is `0.9`. After the liftoff, the pipeline filters out any model which is marked as `valid_ORF=False` by [LIFTOFF](https://github.com/agshumate/Liftoff). Then, the BRAKER and LIFTOFF annotations are merged together.
+where `--liftoff_coverage` and `--liftoff_identity` are pipeline parameters and their default value is `0.9`. After the liftoff, the pipeline filters out any model which is marked as `valid_ORF=False` by [LIFTOFF](https://github.com/agshumate/Liftoff). Then, the BRAKER and LIFTOFF annotations are merged together. During this merge, LIFTOFF models are given precedence over BRAKER models. A region where the LIFTOFF model overlaps a BRAKER model, the BRAKER model is dropped.
 
 ## EggNOG-mapper DB
 
@@ -153,12 +154,20 @@ If there are more than one target assemblies, an orthology inference is performe
 - `tag:` A unique tag which represents the annotation. The `tag` and `fasta` file name should not be same, such as `tag.fasta`. This can create file name collisions in the pipeline or result in file overwrite. It is also a good-practice to make all the input files read-only.
 - `fasta:` FASTA file containing protein sequences.
 
+## Iso-forms and full intron support
+
+By default the pipeline allows multiple isoforms from BRAKER. This behavior can be changed by setting the `--allow_isoforms` flag to `false`. Moreover, every intron from every model from BRAKER and LIFTOFF must have support from protein or RNAseq evidence. This is enforced with [TSEBRA](https://github.com/Gaius-Augustus/TSEBRA). This requirement can be removed by setting the `--enforce_full_intron_support` flag to `false`. Or, selectively only applying this criterion to BRAKER models by setting the `--filter_liftoff_by_hints` flag to `false`.
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run plant-food-research-open/genepal --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+nextflow run plant-food-research-open/genepal \
+  -profile <docker/singularity/.../institute> \
+  --input assemblysheet.csv \
+  --protein_evidence proteins.faa \
+  --outdir <OUTDIR>
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -176,9 +185,8 @@ If you wish to repeatedly use the same parameters for multiple runs, rather than
 
 Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
 
-:::warning
-Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
-:::
+> [!WARNING]
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
 
 The above pipeline run specified with a params file in yaml format:
 
@@ -189,9 +197,9 @@ nextflow run plant-food-research-open/genepal -profile docker -params-file param
 with `params.yaml` containing:
 
 ```yaml
-input: './samplesheet.csv'
+input: './assemblysheet.csv'
 outdir: './results/'
-genome: 'GRCh37'
+protein_evidence: './proteins.faa'
 <...>
 ```
 
@@ -215,15 +223,13 @@ This version number will be logged in reports when you run the pipeline, so that
 
 To further assist in reproducbility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
 
-:::tip
-If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
-:::
+> [!TIP]
+> If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
 
 ## Core Nextflow arguments
 
-:::note
-These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
-:::
+> [!NOTE]
+> These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
 
 ### `-profile`
 
@@ -231,9 +237,8 @@ Use this parameter to choose a configuration profile. Profiles can give configur
 
 Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
-:::info
-We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
-:::
+> [!INFO]
+> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
 
 The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to see if your system is available in these configs please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
 
