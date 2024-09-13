@@ -12,6 +12,8 @@
   - [Preprocessing](#preprocessing)
   - [Alignment](#alignment)
 - [Liftoff annotations](#liftoff-annotations)
+- [EggNOG-mapper DB](#eggnog-mapper-db)
+- [Orthology inference input](#orthology-inference-input)
 - [Running the pipeline](#running-the-pipeline)
   - [Updating the pipeline](#updating-the-pipeline)
   - [Reproducibility](#reproducibility)
@@ -35,7 +37,7 @@
 You will need to create an assemblysheet with information about the genome assemblies you would like to annotate before running the pipeline. Use the `input` parameter to specify its location. It has to be a comma-separated file with at least three columns, and a header row.
 
 - `tag:` A unique tag which represents the target assembly throughout the pipeline. The `tag` and `fasta` file name should not be same, such as `tag.fasta`. This can create file name collisions in the pipeline or result in file overwrite. It is also a good-practice to make all the input files read-only.
-- `fasta:` FASTA file
+- `fasta:` FASTA file for the genome
 - `is_masked:` Whether the FASTA is masked or not? Use yes/no to indicate the masking. If the assembly is not masked. The pipeline will soft mask it before annotating it.
 - `te_lib [Optional]`: If an assembly is not masked and a TE library is available which cna be used to mask the assembly, the path of the TE library FASTA file can be provided here. If this column is absent and the assembly is not masked, the pipeline will first create a TE library so that it can soft mask the assembly.
 
@@ -66,7 +68,9 @@ If RNAseq evidence is provided, the pipeline executes the [BRAKER workflow D](ht
 
 ### Preprocessing
 
-RNAseq reads provided in FASTQ files are by default preprocessed with FASTP
+RNAseq reads provided in FASTQ files are by default trimmed with [FASTP](https://github.com/OpenGene/fastp). No parameters are provided by default. Although, additional parameters can be provided with `--extra_fastp_args` parameter. After trimming, any sample which does not have `10000` reads left is dropped. This threshold can be specified with the `--min_trimmed_reads` parameter. If trimming was already performed ot it is not desirable, it can be skipped by setting the `--skip_fastp` flag to `true`.
+
+Optionally, [SORTMERNA](https://github.com/sortmerna/sortmerna) can be activated by setting the `--remove_ribo_rna` flag to `true`. A default list of rRNA databases is pre-configured and can be seen in the [assets/rrna-db-defaults.txt](../assets/rrna-db-defaults.txt) file. A path to a custom list of databases can be specified by the `--ribo_database_manifest` parameter.
 
 ### Alignment
 
@@ -104,7 +108,50 @@ In addition to gene prediction with BRAKER, the pipeline also enables gene model
 -s $liftoff_identity
 ```
 
-where `--liftoff_coverage` and `--liftoff_identity` are pipeline parameters and their default value is `0.9`. After the liftoff, the pipeline filters out any model which is marked as `valid_ORF=False` by [LIFTOFF](https://github.com/agshumate/Liftoff).
+where `--liftoff_coverage` and `--liftoff_identity` are pipeline parameters and their default value is `0.9`. After the liftoff, the pipeline filters out any model which is marked as `valid_ORF=False` by [LIFTOFF](https://github.com/agshumate/Liftoff). Then, the BRAKER and LIFTOFF annotations are merged together.
+
+## EggNOG-mapper DB
+
+> ❔ Optional `--eggnogmapper_db_dir`, `--eggnogmapper_tax_scope`
+
+EggNOG-mapper is used to add functional annotations to the gene models. The EggNOG-mapper database must be downloaded manually before running the pipeline. The database is available at <http://eggnog5.embl.de/#/app/downloads>. The path to the database folder must be provided with the `--eggnogmapper_db_dir` parameter. The pipeline assumes following directory structure for the database path.
+
+```bash
+/path/to/db
+├── eggnog.db
+├── eggnog.taxa.db
+├── eggnog.taxa.db.traverse.pkl
+├── eggnog_proteins.dmnd
+├── mmseqs
+│   ├── mmseqs.db
+│   ├── mmseqs.db.dbtype
+│   ├── mmseqs.db.index
+│   ├── mmseqs.db.lookup
+│   ├── mmseqs.db.source
+│   ├── mmseqs.db_h
+│   ├── mmseqs.db_h.dbtype
+│   └── mmseqs.db_h.index
+└── pfam
+    ├── Pfam-A.clans.tsv.gz
+    ├── Pfam-A.hmm
+    ├── Pfam-A.hmm.h3f
+    ├── Pfam-A.hmm.h3i
+    ├── Pfam-A.hmm.h3m
+    ├── Pfam-A.hmm.h3m.ssi
+    ├── Pfam-A.hmm.h3p
+    └── Pfam-A.hmm.idmap
+```
+
+An appropriate taxonomic scope for the mapper can be specified with `--eggnogmapper_tax_scope` parameter, otherwise, the pipeline uses teh default value of `1` for the taxonomic scope. Common taxonomic scopes are Eukaryota: `2759`, Viridiplantae: `33090`, Archaea: `2157`, Bacteria: `2` and root: `1`. For a comprehensive list of available scopes, see <http://eggnog5.embl.de/#/app/downloads>.
+
+## Orthology inference input
+
+> ❔ Optional `--orthofinder_annotations`
+
+If there are more than one target assemblies, an orthology inference is performed with [ORTHOFINDER](https://github.com/davidemms/OrthoFinder). Additional annotations can be directly provided for the orthology inference with the `--orthofinder_annotations` parameter. This should be the path to a CSV file with following two columns,
+
+- `tag:` A unique tag which represents the annotation. The `tag` and `fasta` file name should not be same, such as `tag.fasta`. This can create file name collisions in the pipeline or result in file overwrite. It is also a good-practice to make all the input files read-only.
+- `fasta:` FASTA file containing protein sequences.
 
 ## Running the pipeline
 
