@@ -1,54 +1,110 @@
-# plant-food-research-open/genepal: Usage
+# plant-food-research-open/genepal: Usage<!-- omit in toc -->
 
-> _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+> [!TIP]
+>
+> This document does not describe every pipeline parameter. For an exhaustive list of parameters, see [parameters.md](./parameters.md).
 
-## Introduction
+- [Assemblysheet input](#assemblysheet-input)
+- [Protein evidence](#protein-evidence)
+  - [BRAKER workflow](#braker-workflow)
+- [RNAseq evidence](#rnaseq-evidence)
+  - [BRAKER workflow](#braker-workflow-1)
+  - [Preprocessing](#preprocessing)
+  - [Alignment](#alignment)
+- [Liftoff annotations](#liftoff-annotations)
+- [Running the pipeline](#running-the-pipeline)
+  - [Updating the pipeline](#updating-the-pipeline)
+  - [Reproducibility](#reproducibility)
+- [Core Nextflow arguments](#core-nextflow-arguments)
+  - [`-profile`](#-profile)
+  - [`-resume`](#-resume)
+  - [`-c`](#-c)
+- [Custom configuration](#custom-configuration)
+  - [Resource requests](#resource-requests)
+  - [Custom Containers](#custom-containers)
+  - [Custom Tool Arguments](#custom-tool-arguments)
+  - [nf-core/configs](#nf-coreconfigs)
+- [Azure Resource Requests](#azure-resource-requests)
+- [Running in the background](#running-in-the-background)
+- [Nextflow memory requirements](#nextflow-memory-requirements)
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
+## Assemblysheet input
 
-## Samplesheet input
+> ✅ Mandatory `--input`
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create an assemblysheet with information about the genome assemblies you would like to annotate before running the pipeline. Use the `input` parameter to specify its location. It has to be a comma-separated file with at least three columns, and a header row.
+
+- `tag:` A unique tag which represents the target assembly throughout the pipeline. The `tag` and `fasta` file name should not be same, such as `tag.fasta`. This can create file name collisions in the pipeline or result in file overwrite. It is also a good-practice to make all the input files read-only.
+- `fasta:` FASTA file
+- `is_masked:` Whether the FASTA is masked or not? Use yes/no to indicate the masking. If the assembly is not masked. The pipeline will soft mask it before annotating it.
+- `te_lib [Optional]`: If an assembly is not masked and a TE library is available which cna be used to mask the assembly, the path of the TE library FASTA file can be provided here. If this column is absent and the assembly is not masked, the pipeline will first create a TE library so that it can soft mask the assembly.
+
+## Protein evidence
+
+> ✅ Mandatory `--protein_evidence`
+
+Protein evidence can be provided in two ways. First, a single FASTA file. Second, a list of FASTA files listed in a plain text file. The extension of the text file must be `txt`.
+
+### BRAKER workflow
+
+With these two parameters, the pipeline has sufficient inputs to execute the [BRAKER workflow C](https://github.com/Gaius-Augustus/BRAKER/tree/f58479fe5bb13a9e51c3ca09cb9e137cab3b8471?tab=readme-ov-file#overview-of-modes-for-running-braker) (see Figure 4) in which GeneMark-EP+ is trained on protein spliced alignments, then GeneMark-EP+ generates training data for AUGUSTUS which then performs the final gene prediction.
+
+## RNAseq evidence
+
+> ❔ Optional `--rna_evidence`
+
+RNAseq evidence must be provided through a samplesheet in CSV format which has the following columns,
+
+- `sample:` A sample identifier. The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis.
+- `file_1:` A FASTQ or BAM file
+- `file_2:` A FASTQ file if `file_1` is also a FASTQ file and provides paired samples.
+- `target_assemblies:` A semicolon `;` separated list of assembly tags from the [assemblysheet input](#assemblysheet-input). If `file_1` points to a BAM file, only a single assembly can be listed under `target_assemblies` for that sample. FASTQ data from `file_1` and `file_2` is aligned against each target assembly. BAM data from `file_1` is considered already aligned against the target assembly and is directly fed to BRAKER.
+
+### BRAKER workflow
+
+If RNAseq evidence is provided, the pipeline executes the [BRAKER workflow D](https://github.com/Gaius-Augustus/BRAKER/tree/f58479fe5bb13a9e51c3ca09cb9e137cab3b8471?tab=readme-ov-file#overview-of-modes-for-running-braker) (see Figure 4) in which GeneMark-ETP is trained with both protein and RNASeq evidence and the training data generated by GeneMark-ETP is used to optimise AUGUSTUS for final gene predictions.
+
+### Preprocessing
+
+RNAseq reads provided in FASTQ files are by default preprocessed with FASTP
+
+### Alignment
+
+RNAseq evidence provided as FASTQ files is aligned using [STAR](https://github.com/alexdobin/STAR). The default alignment parameters are,
 
 ```bash
---input '[path to samplesheet file]'
+--outSAMstrandField intronMotif \
+--outSAMtype BAM SortedByCoordinate \
+--readFilesCommand gunzip -c \
+--alignIntronMax $star_max_intron_length
 ```
 
-### Multiple runs of the same sample
+where `--star_max_intron_length` is a pipeline parameter and its default value is `16000`. In our experience, the performance of BRAKER predictions is fairly sensitive to this parameter and the parameter value should be based on some estimation of the length of introns in the genes of the target _species_. Additional STAR parameters can be specified with `--star_align_extra_args`.
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
+> [!WARNING]
+>
+> If pre-aligned RNAseq data is provided as a BAM file and the alignment was not performed with `--outSAMstrandField intronMotif` parameter, the pipeline might trough an error.
 
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
+## Liftoff annotations
+
+> ❔ Optional `--liftoff_annotations`
+
+In addition to gene prediction with BRAKER, the pipeline also enables gene model transfer from one or more reference assemblies to all the target assemblies. The reference assemblies and the associated gene models must be specified through a CSV file with the following two columns,
+
+- `fasta:` Reference assembly genome in a FASTA file
+- `gff3:` Reference assembly gene models in a GFF3 file
+
+[LIFTOFF](https://github.com/agshumate/Liftoff) is used for lifting over the models. The default alignment parameters are,
+
+```bash
+-exclude_partial \
+-copies \
+-polish \
+-a $liftoff_coverage \
+-s $liftoff_identity
 ```
 
-### Full samplesheet
-
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
-
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
-```
-
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+where `--liftoff_coverage` and `--liftoff_identity` are pipeline parameters and their default value is `0.9`. After the liftoff, the pipeline filters out any model which is marked as `valid_ORF=False` by [LIFTOFF](https://github.com/agshumate/Liftoff).
 
 ## Running the pipeline
 
