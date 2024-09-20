@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.0+dev - [13-Sep-2024]
+## 0.4.0+dev - [20-Sep-2024]
 
 ### `Added`
 
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 8. Added `GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES` sub-workflow for splice type statistics [#11](https://github.com/plant-food-research-open/genepal/issues/11)
 9. Changed `orthofinder_annotations` from FASTA/GFF to protein FASTA [#43](https://github.com/plant-food-research-open/genepal/issues/43)
 10. Added param `enforce_full_intron_support` to turn on/off strict model purging by TSEBRA [#21](https://github.com/plant-food-research-open/genepal/issues/21)
-11. Added param `filter_liftoff_by_hints` to evaluate liftoff models with TSEBRA to make sure they have the same level of evidence as BRAKER [#28](ttps://github.com/plant-food-research-open/genepal/issues/28)
+11. Added param `filter_liftoff_by_hints` to evaluate liftoff models with TSEBRA to make sure they have the same level of evidence as BRAKER [#28](https://github.com/plant-food-research-open/genepal/issues/28)
 12. Added a script to automatically check module version updates
 13. Reduced `BRAKER3` threads to 8 [#55](https://github.com/plant-food-research-open/genepal/issues/55)
 14. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/plant-food-research-open/genepal/issues/53)
@@ -26,7 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 17. `eggnogmapper_db_dir` is not a required parameter anymore
 18. `eggnogmapper_tax_scope` is now set to 1 (root div) by default
 19. Added a `test` profile based on public data
-20. Updated modules and sub-workflows
+20. Added parameter `add_attrs_to_proteins_fasta` to enable/disable addition of decoded gff attributes to proteins fasta [#58](https://github.com/plant-food-research-open/genepal/issues/58)
+21. Updated modules and sub-workflows
 
 ### `Fixed`
 

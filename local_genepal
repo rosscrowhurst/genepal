@@ -20,4 +20,5 @@ nextflow run \
     --max_cpus 8 \
     --max_memory '32.GB' \
     --eggnogmapper_tax_scope 33090 \
-    --eggnogmapper_db_dir ../dbs/emapperdb/5.0.2
+    --eggnogmapper_db_dir ../dbs/emapperdb/5.0.2 \
+    --outdir results
