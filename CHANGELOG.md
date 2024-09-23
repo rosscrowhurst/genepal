@@ -21,13 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 12. Added a script to automatically check module version updates
 13. Reduced `BRAKER3` threads to 8 [#55](https://github.com/plant-food-research-open/genepal/issues/55)
 14. Now the final annotations are stored in the `annotations` folder [#53](https://github.com/plant-food-research-open/genepal/issues/53)
-15. Added `-gff` flag to `REPEATMASKER` to save the gff file [#54](https://github.com/plant-food-research-open/genepal/issues/54)
-16. Now a single `fasta` file can be directly specified for `protein_evidence`
-17. `eggnogmapper_db_dir` is not a required parameter anymore
-18. `eggnogmapper_tax_scope` is now set to 1 (root div) by default
-19. Added a `test` profile based on public data
-20. Added parameter `add_attrs_to_proteins_fasta` to enable/disable addition of decoded gff attributes to proteins fasta [#58](https://github.com/plant-food-research-open/genepal/issues/58)
-21. Updated modules and sub-workflows
+15. Now a single `fasta` file can be directly specified for `protein_evidence`
+16. `eggnogmapper_db_dir` is not a required parameter anymore
+17. `eggnogmapper_tax_scope` is now set to 1 (root div) by default
+18. Added a `test` profile based on public data
+19. Added parameter `add_attrs_to_proteins_fasta` to enable/disable addition of decoded gff attributes to proteins fasta [#58](https://github.com/plant-food-research-open/genepal/issues/58)
+20. Updated modules and sub-workflows
 
 ### `Fixed`
 
