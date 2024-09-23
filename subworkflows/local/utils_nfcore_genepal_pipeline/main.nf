@@ -85,7 +85,16 @@ workflow PIPELINE_INITIALISATION {
                                     def tag         = it[0]
                                     def fasta       = it[1]
 
-                                    [ [ id: tag ], file(fasta, checkIfExists: true) ]
+                                    def fasta_file  = file(fasta, checkIfExists: true)
+                                    def is_zipped   = fasta.endsWith('.gz')
+                                    def sz_thresh   = is_zipped ? 300_000 : 1_000_000
+                                    def fasta_size  = fasta_file.size()
+
+                                    if ( fasta_size < sz_thresh ) { // < 1 MB
+                                        error "The assembly represented by tag '$tag' is only $fasta_size bytes. The minimum allowed size is 1 MB!"
+                                    }
+
+                                    [ [ id: tag ], fasta_file ]
                                 }
 
     ch_tar_assm_str             = ch_input

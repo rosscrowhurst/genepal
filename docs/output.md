@@ -45,7 +45,6 @@ A repeat library is created with either [REPEATMODELER](https://github.com/Dfam-
 
 - `repeatmasker/`
   - `*.masked`: Masked assembly
-  - `*.gff`: Repeatmasker output in GFF3 format
 
 </details>
 
