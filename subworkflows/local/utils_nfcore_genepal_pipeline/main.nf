@@ -86,6 +86,11 @@ workflow PIPELINE_INITIALISATION {
                                     def fasta       = it[1]
 
                                     def fasta_file  = file(fasta, checkIfExists: true)
+
+                                    if ( workflow.stubRun ) {
+                                        return [ [ id: tag ], fasta_file ]
+                                    }
+
                                     def is_zipped   = fasta.endsWith('.gz')
                                     def sz_thresh   = is_zipped ? 300_000 : 1_000_000
                                     def fasta_size  = fasta_file.size()
