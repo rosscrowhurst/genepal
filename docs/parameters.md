@@ -60,6 +60,7 @@ A Nextflow pipeline for single genome, multiple genomes and pan-genome annotatio
 | `eggnogmapper_evalue`         | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
 | `eggnogmapper_pident`         | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
 | `eggnogmapper_purge_nohits`   | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
+| `add_attrs_to_proteins_fasta` | Add gff attributes to proteins fasta                                              | `boolean` |         |          |        |
 
 ## Evaluation options
 

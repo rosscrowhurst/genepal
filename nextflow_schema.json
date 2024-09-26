@@ -262,7 +262,8 @@
                 },
                 "add_attrs_to_proteins_fasta": {
                     "type": "boolean",
-                    "fa_icon": "fas fa-question-circle"
+                    "fa_icon": "fas fa-question-circle",
+                    "description": "Add gff attributes to proteins fasta"
                 }
             },
             "fa_icon": "fab fa-adn"
