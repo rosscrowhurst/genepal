@@ -7,57 +7,57 @@
                 "gallvp": {
                     "agat/spaddintrons": {
                         "branch": "main",
-                        "git_sha": "a203a6035aed3f9b345ee380f5d497ca98504d98",
+                        "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["gxf_fasta_agat_spaddintrons_spextractsequences"]
                     },
                     "agat/spextractsequences": {
                         "branch": "main",
-                        "git_sha": "a203a6035aed3f9b345ee380f5d497ca98504d98",
+                        "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["gxf_fasta_agat_spaddintrons_spextractsequences"]
                     },
                     "braker3": {
                         "branch": "main",
-                        "git_sha": "cc6ea1f3e96e8264d2cc99afed31bcf3b0bb03ca",
+                        "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["modules"]
                     },
                     "busco/busco": {
                         "branch": "main",
-                        "git_sha": "cc6ea1f3e96e8264d2cc99afed31bcf3b0bb03ca",
+                        "git_sha": "92d59e5f578a2929b75f7588985b9bf451f4c370",
                         "installed_by": ["fasta_gxf_busco_plot"]
                     },
                     "busco/generateplot": {
                         "branch": "main",
-                        "git_sha": "cc6ea1f3e96e8264d2cc99afed31bcf3b0bb03ca",
+                        "git_sha": "ae9714c21ede9199a3118e3c20b65484aa73e232",
                         "installed_by": ["fasta_gxf_busco_plot"]
                     },
                     "custom/restoregffids": {
                         "branch": "main",
-                        "git_sha": "a203a6035aed3f9b345ee380f5d497ca98504d98",
+                        "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["fasta_edta_lai"]
                     },
                     "custom/shortenfastaids": {
                         "branch": "main",
-                        "git_sha": "a203a6035aed3f9b345ee380f5d497ca98504d98",
+                        "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["fasta_edta_lai"]
                     },
                     "edta/edta": {
                         "branch": "main",
-                        "git_sha": "7bf6fbca23edc94490ffa6709f52b2f71c6fb130",
+                        "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["fasta_edta_lai"]
                     },
                     "gffread": {
                         "branch": "main",
-                        "git_sha": "cc6ea1f3e96e8264d2cc99afed31bcf3b0bb03ca",
+                        "git_sha": "ae9714c21ede9199a3118e3c20b65484aa73e232",
                         "installed_by": ["fasta_gxf_busco_plot"]
                     },
                     "ltrretriever/lai": {
                         "branch": "main",
-                        "git_sha": "cc6ea1f3e96e8264d2cc99afed31bcf3b0bb03ca",
+                        "git_sha": "ae9714c21ede9199a3118e3c20b65484aa73e232",
                         "installed_by": ["fasta_edta_lai"]
                     },
                     "repeatmasker/repeatmasker": {
                         "branch": "main",
-                        "git_sha": "a203a6035aed3f9b345ee380f5d497ca98504d98",
+                        "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["modules"]
                     }
                 }
@@ -87,47 +87,47 @@
                 "nf-core": {
                     "agat/convertspgff2gtf": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "agat/convertspgxf2gxf": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "agat/spfilterfeaturefromkilllist": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "agat/spmergeannotations": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "cat/cat": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "cat/fastq": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "eggnogmapper": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "fastavalidator": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "fastp": {
                         "branch": "master",
-                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["fastq_fastqc_umitools_fastp"]
                     },
                     "fastqc": {
