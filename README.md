@@ -14,7 +14,7 @@
 
 ## Pipeline Flowchart
 
-<p align="center"><img src="docs/img/genepal.png" width="80%"></p>
+<p align="center"><img src="docs/img/genepal.png"></p>
 
 - [FASTA VALIDATOR](https://github.com/linsalrob/fasta_validator): Validate genome fasta
 - [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler) or [EDTA](https://github.com/oushujun/EDTA): Create TE library
