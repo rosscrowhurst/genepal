@@ -18,7 +18,7 @@ concurrency:
 jobs:
   test:
     name: Run pipeline with test data
-    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'plant-food-research-open/genepal') }}"
+    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'Plant-Food-Research-Open/genepal') }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
