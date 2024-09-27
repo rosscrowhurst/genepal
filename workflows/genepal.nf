@@ -19,6 +19,7 @@ include { FASTA_ORTHOFINDER                     } from '../subworkflows/local/fa
 include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/gallvp/fasta_gxf_busco_plot/main'
 include { CAT_CAT as SAVE_MARKED_GFF3           } from '../modules/nf-core/cat/cat/main'
 include { softwareVersionsToYAML                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { GFFCOMPARE as BENCHMARK               } from '../modules/nf-core/gffcompare/main'
 
 include { GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES } from '../subworkflows/gallvp/gxf_fasta_agat_spaddintrons_spextractsequences/main'
 
@@ -37,6 +38,7 @@ workflow GENEPAL {
     ch_te_library
     ch_braker_annotation
     ch_braker_ex_asm_str
+    ch_benchmark_gff
     ch_rna_fq
     ch_rna_bam
     ch_rna_bam_by_assembly
@@ -222,6 +224,19 @@ workflow GENEPAL {
 
     // MODULE: CAT_CAT as SAVE_MARKED_GFF3
     SAVE_MARKED_GFF3 ( ch_splicing_marked_gff3 )
+
+    // MODULE: GFFCOMPARE as BENCHMARK
+    ch_benchmark_inputs         = ch_final_gff
+                                | join ( ch_valid_target_assembly )
+                                | join ( ch_benchmark_gff )
+
+    BENCHMARK (
+        ch_benchmark_inputs.map { meta, gff, fasta, ref_gff -> [ meta, gff ] },
+        ch_benchmark_inputs.map { meta, gff, fasta, ref_gff -> [ meta, fasta, [] ] },
+        ch_benchmark_inputs.map { meta, gff, fasta, ref_gff -> [ meta, ref_gff ] }
+    )
+
+    ch_versions                 = ch_versions.mix(BENCHMARK.out.versions.first())
 
     // Collate and save software versions
     ch_versions                 = ch_versions

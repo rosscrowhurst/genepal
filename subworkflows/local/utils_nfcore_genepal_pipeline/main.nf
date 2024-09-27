@@ -152,6 +152,19 @@ workflow PIPELINE_INITIALISATION {
                                 | map { it.join(",") }
                                 | ifEmpty( "" )
 
+    ch_benchmark_gff            = ch_input
+                                | map { it ->
+                                    def tag         = it[0]
+                                    def gff         = it[6]
+
+                                    if ( gff ) {
+                                        [
+                                            [ id: tag ],
+                                            file(gff, checkIfExists: true)
+                                        ]
+                                    }
+                                }
+
     ch_rna_branch               = ! params.rna_evidence
                                 ? Channel.empty()
                                 : Channel.fromSamplesheet('rna_evidence')
@@ -288,6 +301,7 @@ workflow PIPELINE_INITIALISATION {
     te_library                  = ch_te_library
     braker_annotation           = ch_braker_annotation
     braker_ex_asm_str           = ch_braker_ex_asm_str
+    benchmark_gff               = ch_benchmark_gff
     rna_fq                      = ch_rna_fq
     rna_bam                     = ch_rna_bam
     rna_bam_by_assembly         = ch_rna_bam_by_assembly

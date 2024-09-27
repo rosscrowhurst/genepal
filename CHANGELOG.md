@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 19. Added parameter `add_attrs_to_proteins_fasta` to enable/disable addition of decoded gff attributes to proteins fasta [#58](https://github.com/plant-food-research-open/genepal/issues/58)
 20. Added a check for input assemblies. If an assembly is smaller than 1 MB (or 300KB in zipped format), the pipeline errors out before starting the downstream processes [#47](https://github.com/plant-food-research-open/genepal/issues/47)
 21. Updated modules and sub-workflows
+22. Added `benchmark` column to the input sheet and used `GFFCOMPARE` to perform benchmarking [#63](https://github.com/plant-food-research-open/genepal/issues/63)
 
 ### `Fixed`
 

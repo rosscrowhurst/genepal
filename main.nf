@@ -37,6 +37,7 @@ workflow PLANTFOODRESEARCHOPEN_GENEPAL {
     ch_te_library
     ch_braker_annotation
     ch_braker_ex_asm_str
+    ch_benchmark_gff
     ch_rna_fq
     ch_rna_bam
     ch_rna_bam_by_assembly
@@ -58,6 +59,7 @@ workflow PLANTFOODRESEARCHOPEN_GENEPAL {
         ch_te_library,
         ch_braker_annotation,
         ch_braker_ex_asm_str,
+        ch_benchmark_gff,
         ch_rna_fq,
         ch_rna_bam,
         ch_rna_bam_by_assembly,
@@ -103,6 +105,7 @@ workflow {
         PIPELINE_INITIALISATION.out.te_library,
         PIPELINE_INITIALISATION.out.braker_annotation,
         PIPELINE_INITIALISATION.out.braker_ex_asm_str,
+        PIPELINE_INITIALISATION.out.benchmark_gff,
         PIPELINE_INITIALISATION.out.rna_fq,
         PIPELINE_INITIALISATION.out.rna_bam,
         PIPELINE_INITIALISATION.out.rna_bam_by_assembly,
