@@ -35,6 +35,11 @@
                         "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",
                         "installed_by": ["fasta_edta_lai"]
                     },
+                    "custom/rmouttogff3": {
+                        "branch": "main",
+                        "git_sha": "cf6e6dee79b29313ed6cda962908056a15f8c531",
+                        "installed_by": ["modules"]
+                    },
                     "custom/shortenfastaids": {
                         "branch": "main",
                         "git_sha": "a8939d36280e7d9037c7cf164eeede19e46546a4",

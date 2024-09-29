@@ -59,6 +59,7 @@ workflow GENEPAL {
         ch_target_assembly,
         ch_te_library,
         params.repeat_annotator,
+        params.repeatmasker_save_outputs,
         ch_braker_ex_asm_str,
         ch_is_masked
     )

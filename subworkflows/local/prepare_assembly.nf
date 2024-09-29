@@ -4,6 +4,7 @@ include { FASTAVALIDATOR                        } from '../../modules/nf-core/fa
 include { REPEATMODELER_BUILDDATABASE           } from '../../modules/nf-core/repeatmodeler/builddatabase'
 include { REPEATMODELER_REPEATMODELER           } from '../../modules/nf-core/repeatmodeler/repeatmodeler'
 include { REPEATMASKER_REPEATMASKER             } from '../../modules/gallvp/repeatmasker/repeatmasker'
+include { CUSTOM_RMOUTTOGFF3                    } from '../../modules/gallvp/custom/rmouttogff3'
 include { STAR_GENOMEGENERATE                   } from '../../modules/nf-core/star/genomegenerate'
 
 include { FASTA_EDTA_LAI                        } from '../../subworkflows/gallvp/fasta_edta_lai'
@@ -13,6 +14,7 @@ workflow PREPARE_ASSEMBLY {
     target_assembly             // channel: [ meta, fasta ]
     te_library                  // channel: [ meta, fasta ]
     repeat_annotator            // val(String), 'repeatmodeler' or 'edta'
+    repeatmasker_save_outputs   // val(true/false)
     exclude_assemblies          // channel: val(assembly_x,assembly_y)
     ch_is_masked                // channel: [ meta, val(true|false) ]
 
@@ -131,7 +133,17 @@ workflow PREPARE_ASSEMBLY {
 
     ch_masked_assembly          = ch_unmasked_masked_branch.masked
                                 | mix(REPEATMASKER_REPEATMASKER.out.masked)
+
+    ch_repeatmasker_out         = REPEATMASKER_REPEATMASKER.out.out
     ch_versions                 = ch_versions.mix(REPEATMASKER_REPEATMASKER.out.versions.first())
+
+    // MODULE: CUSTOM_RMOUTTOGFF3
+    ch_RMOUTTOGFF3_input        = repeatmasker_save_outputs
+                                ? ch_repeatmasker_out
+                                : Channel.empty()
+    CUSTOM_RMOUTTOGFF3 ( ch_RMOUTTOGFF3_input )
+
+    ch_versions                 = ch_versions.mix(CUSTOM_RMOUTTOGFF3.out.versions.first())
 
     // MODULE: STAR_GENOMEGENERATE
     ch_genomegenerate_inputs    = ch_validated_assembly
