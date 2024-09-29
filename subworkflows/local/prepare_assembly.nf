@@ -1,5 +1,6 @@
 include { GUNZIP as GUNZIP_TARGET_ASSEMBLY      } from '../../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_TE_LIBRARY           } from '../../modules/nf-core/gunzip'
+include { SEQKIT_RMDUP                          } from '../../modules/nf-core/seqkit/rmdup/main.nf'
 include { FASTAVALIDATOR                        } from '../../modules/nf-core/fastavalidator'
 include { REPEATMODELER_BUILDDATABASE           } from '../../modules/nf-core/repeatmodeler/builddatabase'
 include { REPEATMODELER_REPEATMODELER           } from '../../modules/nf-core/repeatmodeler/repeatmodeler'
@@ -36,18 +37,35 @@ workflow PREPARE_ASSEMBLY {
                                 )
     ch_versions                 = ch_versions.mix(GUNZIP_TARGET_ASSEMBLY.out.versions.first())
 
+    // MODULE: SEQKIT_RMDUP
+    SEQKIT_RMDUP ( ch_gunzip_assembly )
+
+    ch_nondup_fw_assembly       = SEQKIT_RMDUP.out.log
+                                | join(SEQKIT_RMDUP.out.fastx)
+                                | map { meta, error_log, fasta ->
+                                    if ( error_log.text.contains('0 duplicated records removed') ) {
+                                        return [ meta, fasta ]
+                                    }
+
+                                    log.warn "FASTA validation failed for ${meta.id} due to presence of duplicate sequences.\n" +
+                                        "${meta.id} is excluded from further analysis."
+
+                                    return null
+                                } // Fixed width assembly fasta without duplicates
+
+    ch_versions                 = ch_versions.mix(SEQKIT_RMDUP.out.versions.first())
 
     // MODULE: FASTAVALIDATOR
-    FASTAVALIDATOR ( ch_gunzip_assembly )
+    FASTAVALIDATOR ( ch_nondup_fw_assembly )
 
-    ch_validated_assembly       = ch_gunzip_assembly
+    ch_validated_assembly       = ch_nondup_fw_assembly
                                 | join(FASTAVALIDATOR.out.success_log)
                                 | map { meta, fasta, log -> [ meta, fasta ] }
     ch_versions                 = ch_versions.mix(FASTAVALIDATOR.out.versions.first())
 
     FASTAVALIDATOR.out.error_log
     | map { meta, log ->
-        System.err.println("WARNING: FASTAVALIDATOR failed for ${meta.id} with error: ${log}. ${meta.id} is excluded from further analysis.")
+        log.warn "FASTAVALIDATOR failed for ${meta.id} with error: ${log}. ${meta.id} is excluded from further analysis."
     }
 
     // MODULE: GUNZIP_TE_LIBRARY

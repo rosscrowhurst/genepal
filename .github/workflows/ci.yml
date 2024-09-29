@@ -52,4 +52,7 @@ jobs:
             -params-file \
             ./tests/${{ matrix.TEST_PARAMS }}/params.json \
             ${{ matrix.OPTION_STUB }} \
-            --outdir ./results
+            --outdir ./results \
+            --max_cpus 2 \
+            --max_memory '6.GB' \
+            --max_time '2.h'
