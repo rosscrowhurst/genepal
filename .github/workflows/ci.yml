@@ -24,6 +24,13 @@ jobs:
       matrix:
         NXF_VER:
           - "23.04.0"
+        TEST_PARAMS:
+          - minimal
+          - short
+          - nonmasked
+          - stub
+        OPTION_STUB:
+          - "-stub"
 
     steps:
       - name: Check out pipeline code
@@ -40,8 +47,9 @@ jobs:
       - name: Run pipeline with test data
         run: |
           nextflow run \
-            main.nf \
+            ${GITHUB_WORKSPACE} \
             -profile docker \
-            -stub \
-            -params-file tests/stub/params.json \
+            -params-file \
+            ./tests/${{ matrix.TEST_PARAMS }}/params.json \
+            ${{ matrix.OPTION_STUB }} \
             --outdir ./results
