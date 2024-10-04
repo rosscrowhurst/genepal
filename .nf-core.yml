@@ -23,6 +23,8 @@ lint:
     - manifest.homePage
     - config_defaults:
         - params.ribo_database_manifest
+  multiqc_config:
+    - report_comment
 nf_core_version: 2.14.1
 repository_type: pipeline
 template:
