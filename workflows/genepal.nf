@@ -4,6 +4,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+include { paramsSummaryMap                      } from 'plugin/nf-validation'
+
 include { PREPARE_ASSEMBLY                      } from '../subworkflows/local/prepare_assembly'
 include { PREPROCESS_RNASEQ                     } from '../subworkflows/local/preprocess_rnaseq'
 include { ALIGN_RNASEQ                          } from '../subworkflows/local/align_rnaseq'
@@ -17,11 +19,16 @@ include { PURGE_NOHIT_MODELS                    } from '../subworkflows/local/pu
 include { GFF_STORE                             } from '../subworkflows/local/gff_store'
 include { FASTA_ORTHOFINDER                     } from '../subworkflows/local/fasta_orthofinder'
 include { FASTA_GXF_BUSCO_PLOT                  } from '../subworkflows/gallvp/fasta_gxf_busco_plot/main'
-include { CAT_CAT as SAVE_MARKED_GFF3           } from '../modules/nf-core/cat/cat/main'
-include { softwareVersionsToYAML                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { GFFCOMPARE as BENCHMARK               } from '../modules/nf-core/gffcompare/main'
 
 include { GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES } from '../subworkflows/gallvp/gxf_fasta_agat_spaddintrons_spextractsequences/main'
+
+include { CAT_CAT as SAVE_MARKED_GFF3           } from '../modules/nf-core/cat/cat/main'
+include { GFFCOMPARE as BENCHMARK               } from '../modules/nf-core/gffcompare/main'
+include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
+
+include { methodsDescriptionText                } from '../subworkflows/local/utils_nfcore_genepal_pipeline'
+include { softwareVersionsToYAML                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { paramsSummaryMultiqc                  } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,8 +58,9 @@ workflow GENEPAL {
 
 
     main:
-    // Versions channel
+    // Channels
     ch_versions                 = Channel.empty()
+    ch_multiqc_files            = Channel.empty()
 
     // SUBWORKFLOW: PREPARE_ASSEMBLY
     PREPARE_ASSEMBLY(
@@ -242,18 +250,39 @@ workflow GENEPAL {
     // Collate and save software versions
     ch_versions                 = ch_versions
                                 | unique
-                                | map { yml ->
-                                    if ( yml ) { yml }
-                                }
+                                | filter { yml -> yml }
 
     ch_versions_yml             = softwareVersionsToYAML(ch_versions)
                                 | collectFile(
                                     storeDir: "${params.outdir}/pipeline_info",
-                                    name: 'software_versions.yml',
+                                    name: 'genepal_software_mqc_versions.yml',
                                     sort: true,
                                     newLine: true,
                                     cache: false
                                 )
+
+    // MODULE: MultiQC
+    ch_multiqc_config           = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+
+    ch_workflow_summary         = Channel.value( paramsSummaryMultiqc ( paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json") ) )
+                                | collectFile(name: 'workflow_summary_mqc.yaml')
+
+    ch_methods_description      = Channel.value( methodsDescriptionText ( file("$projectDir/assets/methods_description_template.yml", checkIfExists: true) ) )
+                                | collectFile(name: 'methods_description_mqc.yaml', sort: true)
+
+    ch_multiqc_extra_files      = Channel.empty()
+                                | mix(ch_workflow_summary)
+                                | mix(ch_versions_yml)
+                                | mix(ch_methods_description)
+
+    MULTIQC (
+        ch_multiqc_files.map { meta, file -> file }.mix(ch_multiqc_extra_files).collect(),
+        ch_multiqc_config.toList(),
+        [],
+        [],
+        [],
+        []
+    )
 }
 
 /*

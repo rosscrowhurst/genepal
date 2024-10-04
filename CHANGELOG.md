@@ -41,7 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 22. Added `benchmark` column to the input sheet and used `GFFCOMPARE` to perform benchmarking [#63](https://github.com/plant-food-research-open/genepal/issues/63)
 23. Added `SEQKIT_RMDUP` to detect duplicate sequence and wrap the fasta to 80 characters
 24. Updated parameter section labels for annotation and post-annotation filtering [#64](https://github.com/plant-food-research-open/genepal/issues/64)
-25. Updated modules and sub-workflows
+25. Added MultiQC [#65](https://github.com/plant-food-research-open/genepal/issues/65)
+26. Updated modules and sub-workflows
 
 ### `Fixed`
 
@@ -67,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 9. Now BRAKER3 outputs are not saved by default [#53](https://github.com/plant-food-research-open/genepal/issues/53) and saved under `etc` folder when enabled
 10. Removed `local` profile. Local executor is the default when no executor is specified. Therefore, the `local` profile was not needed.
 11. Removed `CUSTOM_DUMPSOFTWAREVERSIONS`
+12. `pipeline_info/software_versions.yml` has been replaced with `pipeline_info/genepal_software_mqc_versions.yml`
 
 ## 0.3.3 - [18-Jun-2024]
 
