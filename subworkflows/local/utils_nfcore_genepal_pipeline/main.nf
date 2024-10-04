@@ -437,16 +437,26 @@ def validateBamMetadata(metas, bams, permAssString) {
 //
 def toolCitationText() {
     def citation_text = [
-            ""
-        ].join(' ').trim()
+            'Tools used in the workflow included:',
+            'AGAT (Dainat et al. 2024)',
+            'BRAKER (Gabriel et al. 2023)',
+            'BUSCO (Manni et al. 2021)',
+            'EggNOG-mapper (Carlos et al. 2021)',
+            'GffRead (Pertea et al. 2020)',
+        ].join(', ').trim() + ' and MultiQC (Ewels et al. 2016).'
 
     return citation_text
 }
 
 def toolBibliographyText() {
     def reference_text = [
-            ""
-        ].join(' ').trim()
+            'Jacques Dainat, Darío Hereñú, Dr. K. D. Murray, Ed Davis, Ivan Ugrin, Kathryn Crouch, LucileSol, Nuno Agostinho, pascal-git, Zachary Zollman, & tayyrov. (2024). NBISweden/AGAT: AGAT-v1.4.1 (v1.4.1). Zenodo. <a href="https://doi.org/10.5281/zenodo.13799920">10.5281/zenodo.13799920</a>',
+            'Gabriel, L., Bruna, T., Hoff, K. J., Ebel, M., Lomsadze, A., Borodovsky, M., Stanke, M. (2023). BRAKER3: Fully Automated Genome Annotation Using RNA-Seq and Protein Evidence with GeneMark-ETP, AUGUSTUS and TSEBRA. bioRxiV, doi: <a href="https://doi.org/10.1101/2023.06.10.544449">10.1101/2023.06.10.544449</a>.',
+            'Manni M, Berkeley MR, Seppey M, Simão FA, Zdobnov EM. 2021. BUSCO Update: Novel and Streamlined Workflows along with Broader and Deeper Phylogenetic Coverage for Scoring of Eukaryotic, Prokaryotic, and Viral Genomes, Molecular Biology and Evolution, Volume 38, Issue 10, October 2021, Pages 4647–4654, <a href="https://doi.org/10.1093/molbev/msab199">10.1093/molbev/msab199</a>',
+            'eggNOG-mapper v2: functional annotation, orthology assignments, and domain prediction at the metagenomic scale. Carlos P. Cantalapiedra, Ana Hernandez-Plaza, Ivica Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. Molecular Biology and Evolution, msab293, <a href="https://doi.org/10.1093/molbev/msab293">10.1093/molbev/msab293</a>',
+            'Pertea G, Pertea M. GFF Utilities: GffRead and GffCompare. F1000Res. 2020 Apr 28;9:ISCB Comm J-304. doi: <a href="http://doi.org/10.12688/f1000research.23297.2">10.12688/f1000research.23297.2</a>. PMID: 32489650; PMCID: PMC7222033.',
+            'Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics , 32(19), 3047–3048. doi: <a href="https://doi.org/10.1093/bioinformatics/btw354">10.1093/bioinformatics/btw354</a>',
+        ].collect { it -> it != "" ? "<li>$it</li>" : '' }.join(' ').trim()
 
     return reference_text
 }

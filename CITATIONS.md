@@ -26,7 +26,7 @@
 
   > Manni M, Berkeley MR, Seppey M, Simão FA, Zdobnov EM. 2021. BUSCO Update: Novel and Streamlined Workflows along with Broader and Deeper Phylogenetic Coverage for Scoring of Eukaryotic, Prokaryotic, and Viral Genomes, Molecular Biology and Evolution, Volume 38, Issue 10, October 2021, Pages 4647–4654, <https://doi.org/10.1093/molbev/msab199>
 
-- GFFREAD, [MIT](https://github.com/gpertea/gffread/blob/master/LICENSE)
+- GffRead, [MIT](https://github.com/gpertea/gffread/blob/master/LICENSE)
 
   > Pertea G, Pertea M. GFF Utilities: GffRead and GffCompare. F1000Res. 2020 Apr 28;9:ISCB Comm J-304. doi: <http://doi.org/10.12688/f1000research.23297.2>. PMID: 32489650; PMCID: PMC7222033.
 
@@ -44,7 +44,7 @@
 
 - AGAT, [GPL v3](https://github.com/NBISweden/AGAT/blob/master/LICENSE)
 
-  > Dainat J. AGAT: Another Gff Analysis Toolkit to handle annotations in any GTF/GFF format. (Version v0.8.0). Zenodo. https://www.doi.org/10.5281/zenodo.3552717
+  > Jacques Dainat, Darío Hereñú, Dr. K. D. Murray, Ed Davis, Ivan Ugrin, Kathryn Crouch, LucileSol, Nuno Agostinho, pascal-git, Zachary Zollman, & tayyrov. (2024). NBISweden/AGAT: AGAT-v1.4.1 (v1.4.1). Zenodo. https://doi.org/10.5281/zenodo.13799920
 
 - BRAKER, [Artistic license-1.0](https://github.com/Gaius-Augustus/BRAKER/blob/master/LICENSE.TXT)
 
@@ -52,7 +52,7 @@
 
   > Stanke. M., Schöffmann, O., Morgenstern, B. and Waack, S. (2006). Gene prediction in eukaryotes with a generalized hidden Markov model that uses hints from external sources. BMC Bioinformatics 7, 62.
 
-  > Gabriel, L., Bruna, T., Hoff, K. J., Ebel, M., Lomsadze, A., Borodovsky, M., Stanke, M. (2023). BRAKER3: Fully Automated Genome Annotation Using RNA-Seq and Protein Evidence with GeneMark-ETP, AUGUSTUS and TSEBRA. bioRxiV, doi: 10.1101/2023.06.10.54444910.1101/2023.01.01.474747.
+  > Gabriel, L., Bruna, T., Hoff, K. J., Ebel, M., Lomsadze, A., Borodovsky, M., Stanke, M. (2023). BRAKER3: Fully Automated Genome Annotation Using RNA-Seq and Protein Evidence with GeneMark-ETP, AUGUSTUS and TSEBRA. bioRxiV, doi: 10.1101/2023.06.10.544449.
 
   > Bruna, T., Lomsadze, A., Borodovsky, M. (2023). GeneMark-ETP: Automatic Gene Finding in Eukaryotic Genomes in Consistence with Extrinsic Data. bioRxiv, doi: 10.1101/2023.01.13.524024.
 
@@ -66,7 +66,7 @@
 
   > <https://github.com/rmhubley/RepeatMasker>
 
-- eggnog-mapper, [GPL v3](https://github.com/eggnogdb/eggnog-mapper/blob/master/LICENSE.txt)
+- EggNOG-mapper, [GPL v3](https://github.com/eggnogdb/eggnog-mapper/blob/master/LICENSE.txt)
 
   > eggNOG-mapper v2: functional annotation, orthology assignments, and domain prediction at the metagenomic scale. Carlos P. Cantalapiedra, Ana Hernandez-Plaza, Ivica Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. Molecular Biology and Evolution, msab293, <https://doi.org/10.1093/molbev/msab293>
 
