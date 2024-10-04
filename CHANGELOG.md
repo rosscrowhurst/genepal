@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.0+dev - [30-Sep-2024]
+## 0.4.0+dev - [04-Oct-2024]
 
 ### `Added`
 
@@ -30,7 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 21. Now `REPEATMASKER` GFF output is saved via `CUSTOM_RMOUTTOGFF3` [#54](https://github.com/plant-food-research-open/genepal/issues/54)
 22. Added `benchmark` column to the input sheet and used `GFFCOMPARE` to perform benchmarking [#63](https://github.com/plant-food-research-open/genepal/issues/63)
 23. Added `SEQKIT_RMDUP` to detect duplicate sequence and wrap the fasta to 80 characters
-24. Updated modules and sub-workflows
+24. Updated parameter section labels for annotation and post-annotation filtering [#64](https://github.com/plant-food-research-open/genepal/issues/64)
+25. Updated modules and sub-workflows
 
 ### `Fixed`
 

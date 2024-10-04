@@ -37,7 +37,7 @@ A Nextflow pipeline for single genome, multiple genomes and pan-genome annotatio
 | `save_non_ribo_reads`    | Save FASTQ files after Ribosomal RNA removal or not?               | `boolean` |                                           |          |        |
 | `ribo_database_manifest` | Ribosomal RNA fastas listed in a text sheet                        | `string`  | ${projectDir}/assets/rrna-db-defaults.txt |          |        |
 
-## RNAseq alignment options
+## RNASeq alignment options
 
 | Parameter                | Description                                       | Type      | Default | Required | Hidden |
 | ------------------------ | ------------------------------------------------- | --------- | ------- | -------- | ------ |
@@ -48,19 +48,29 @@ A Nextflow pipeline for single genome, multiple genomes and pan-genome annotatio
 
 ## Annotation options
 
-| Parameter                     | Description                                                                       | Type      | Default | Required | Hidden |
-| ----------------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `braker_extra_args`           | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
-| `braker_save_outputs`         | Save BRAKER files                                                                 | `boolean` |         |          |        |
-| `liftoff_coverage`            | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
-| `liftoff_identity`            | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
-| `allow_isoforms`              | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |
-| `enforce_full_intron_support` | Require every model to have external evidence for all its introns                 | `boolean` | True    |          |        |
-| `filter_liftoff_by_hints`     | Use BRAKER hints to filter Liftoff models                                         | `boolean` | True    |          |        |
-| `eggnogmapper_evalue`         | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
-| `eggnogmapper_pident`         | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
-| `eggnogmapper_purge_nohits`   | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
-| `add_attrs_to_proteins_fasta` | Add gff attributes to proteins fasta                                              | `boolean` |         |          |        |
+| Parameter             | Description                                                                       | Type      | Default | Required | Hidden |
+| --------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
+| `braker_extra_args`   | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
+| `liftoff_coverage`    | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
+| `liftoff_identity`    | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
+| `eggnogmapper_evalue` | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
+| `eggnogmapper_pident` | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
+
+## Post-annotation filtering options
+
+| Parameter                     | Description                                                       | Type      | Default | Required | Hidden |
+| ----------------------------- | ----------------------------------------------------------------- | --------- | ------- | -------- | ------ |
+| `allow_isoforms`              | Allow multiple isoforms for gene models                           | `boolean` | True    |          |        |
+| `enforce_full_intron_support` | Require every model to have external evidence for all its introns | `boolean` | True    |          |        |
+| `filter_liftoff_by_hints`     | Use BRAKER hints to filter Liftoff models                         | `boolean` | True    |          |        |
+| `eggnogmapper_purge_nohits`   | Purge transcripts which do not have a hit against eggnog          | `boolean` |         |          |        |
+
+## Annotation output options
+
+| Parameter                     | Description                          | Type      | Default | Required | Hidden |
+| ----------------------------- | ------------------------------------ | --------- | ------- | -------- | ------ |
+| `braker_save_outputs`         | Save BRAKER files                    | `boolean` |         |          |        |
+| `add_attrs_to_proteins_fasta` | Add gff attributes to proteins fasta | `boolean` |         |          |        |
 
 ## Evaluation options
 

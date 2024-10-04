@@ -20,7 +20,7 @@
 - [REPEATMODELER](https://github.com/Dfam-consortium/RepeatModeler) or [EDTA](https://github.com/oushujun/EDTA): Create TE library
 - [REPEATMASKER](https://github.com/rmhubley/RepeatMasker): Soft mask the genome fasta
 - [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc), [FASTP](https://github.com/OpenGene/fastp), [SORTMERNA](https://github.com/sortmerna/sortmerna): QC, trim and filter RNASeq evidence
-- [STAR](https://github.com/alexdobin/STAR): RNAseq alignment
+- [STAR](https://github.com/alexdobin/STAR): RNASeq alignment
 - [BRAKER](https://github.com/Gaius-Augustus/BRAKER): Annotate the genome fasta
 - [LIFTOFF](https://github.com/agshumate/Liftoff): Liftoff annotations from reference genome fasta/gff
 - [TSEBRA](https://github.com/Gaius-Augustus/TSEBRA), [AGAT](https://github.com/NBISweden/AGAT): Merge BRAKER and Liftoff annotations

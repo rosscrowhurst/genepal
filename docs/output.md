@@ -14,8 +14,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - [Repeat annotation](#repeat-annotation)
 - [Repeat masking](#repeat-masking)
-- [RNAseq trimming, filtering and QC](#rnaseq-trimming-filtering-and-qc)
-- [RNAseq alignment](#rnaseq-alignment)
+- [RNASeq trimming, filtering and QC](#rnaseq-trimming-filtering-and-qc)
+- [RNASeq alignment](#rnaseq-alignment)
 - [Annotation with BRAKER](#annotation-with-braker)
 - [Annotation with Liftoff](#annotation-with-liftoff)
 - [Annotation filtering and merging](#annotation-filtering-and-merging)
@@ -50,7 +50,7 @@ A repeat library is created with either [REPEATMODELER](https://github.com/Dfam-
 
 Soft masking of the repeats is performed with [REPEATMASKER](https://github.com/rmhubley/RepeatMasker) using the repeat library prepared in the previous step. Masking outputs are saved to the output directory only if `repeatmasker_save_outputs` parameter is set to `true` (default: `false`).
 
-### RNAseq trimming, filtering and QC
+### RNASeq trimming, filtering and QC
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -79,7 +79,7 @@ Soft masking of the repeats is performed with [REPEATMASKER](https://github.com/
 
 RNASeq reads are trimmed with [FASTP](https://github.com/OpenGene/fastp) and are QC'ed with [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc). Ribosomal reads are filtered out using [SORTMERNA](https://github.com/sortmerna/sortmerna). Trimmed reads are only stored to the output directory if the `save_trimmed` parameter is set to `true` (default: `false`). Reads filtered by [SORTMERNA](https://github.com/sortmerna/sortmerna) are stored to the output directory if the `save_non_ribo_reads` parameter is set to `true` (default: `false`).
 
-### RNAseq alignment
+### RNASeq alignment
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -93,7 +93,7 @@ RNASeq reads are trimmed with [FASTP](https://github.com/OpenGene/fastp) and are
 
 </details>
 
-RNAseq alignment is performed with [STAR](https://github.com/alexdobin/STAR). Alignment files are only stored to the output directory if the `star_save_outputs` parameter is set to `true` (default: `false`). Concatenated bam files are stored to the output directory if the `save_cat_bam` parameter is set to `true` (default: `false`).
+RNASeq alignment is performed with [STAR](https://github.com/alexdobin/STAR). Alignment files are only stored to the output directory if the `star_save_outputs` parameter is set to `true` (default: `false`). Concatenated bam files are stored to the output directory if the `save_cat_bam` parameter is set to `true` (default: `false`).
 
 ### Annotation with BRAKER
 
@@ -112,7 +112,7 @@ RNAseq alignment is performed with [STAR](https://github.com/alexdobin/STAR). Al
 
 </details>
 
-[BRAKER](https://github.com/Gaius-Augustus/BRAKER) is used to annotate each genome assembly using the provide protein and RNAseq evidence. Outputs from BRAKER are stored to the output directory if the `braker_save_outputs` parameter is set to `true` (default: `false`).
+[BRAKER](https://github.com/Gaius-Augustus/BRAKER) is used to annotate each genome assembly using the provide protein and RNASeq evidence. Outputs from BRAKER are stored to the output directory if the `braker_save_outputs` parameter is set to `true` (default: `false`).
 
 > [!CAUTION]
 >

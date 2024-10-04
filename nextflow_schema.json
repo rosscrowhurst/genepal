@@ -160,10 +160,10 @@
                     "description": "Ribosomal RNA fastas listed in a text sheet"
                 }
             },
-            "fa_icon": "fas fa-filter"
+            "fa_icon": "fas fa-cut"
         },
         "rnaseq_alignment_options": {
-            "title": "RNAseq alignment options",
+            "title": "RNASeq alignment options",
             "type": "object",
             "description": "",
             "default": "",
@@ -204,11 +204,6 @@
                     "description": "Extra arguments for BRAKER",
                     "fa_icon": "fas fa-terminal"
                 },
-                "braker_save_outputs": {
-                    "type": "boolean",
-                    "description": "Save BRAKER files",
-                    "fa_icon": "fas fa-question-circle"
-                },
                 "liftoff_coverage": {
                     "type": "number",
                     "default": 0.9,
@@ -223,6 +218,30 @@
                     "description": "Liftoff identity parameter",
                     "fa_icon": "fas fa-hashtag"
                 },
+                "eggnogmapper_evalue": {
+                    "type": "number",
+                    "default": 1e-5,
+                    "description": "Only report alignments below or equal the e-value threshold",
+                    "fa_icon": "fas fa-hashtag"
+                },
+                "eggnogmapper_pident": {
+                    "type": "integer",
+                    "default": 35,
+                    "description": "Only report alignments above or equal to the given percentage of identity (0-100)",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "fa_icon": "fas fa-hashtag"
+                }
+            },
+            "fa_icon": "fab fa-adn"
+        },
+        "post_annotation_filtering_options": {
+            "title": "Post-annotation filtering options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-filter",
+            "properties": {
                 "allow_isoforms": {
                     "type": "boolean",
                     "default": true,
@@ -241,23 +260,23 @@
                     "fa_icon": "fas fa-question-circle",
                     "description": "Use BRAKER hints to filter Liftoff models"
                 },
-                "eggnogmapper_evalue": {
-                    "type": "number",
-                    "default": 1e-5,
-                    "description": "Only report alignments below or equal the e-value threshold",
-                    "fa_icon": "fas fa-hashtag"
-                },
-                "eggnogmapper_pident": {
-                    "type": "integer",
-                    "default": 35,
-                    "description": "Only report alignments above or equal to the given percentage of identity (0-100)",
-                    "minimum": 0,
-                    "maximum": 100,
-                    "fa_icon": "fas fa-hashtag"
-                },
                 "eggnogmapper_purge_nohits": {
                     "type": "boolean",
                     "description": "Purge transcripts which do not have a hit against eggnog",
+                    "fa_icon": "fas fa-question-circle"
+                }
+            }
+        },
+        "annotation_output_options": {
+            "title": "Annotation output options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-download",
+            "properties": {
+                "braker_save_outputs": {
+                    "type": "boolean",
+                    "description": "Save BRAKER files",
                     "fa_icon": "fas fa-question-circle"
                 },
                 "add_attrs_to_proteins_fasta": {
@@ -265,8 +284,7 @@
                     "fa_icon": "fas fa-question-circle",
                     "description": "Add gff attributes to proteins fasta"
                 }
-            },
-            "fa_icon": "fab fa-adn"
+            }
         },
         "evaluation_options": {
             "title": "Evaluation options",
@@ -473,6 +491,12 @@
         },
         {
             "$ref": "#/definitions/annotation_options"
+        },
+        {
+            "$ref": "#/definitions/post_annotation_filtering_options"
+        },
+        {
+            "$ref": "#/definitions/annotation_output_options"
         },
         {
             "$ref": "#/definitions/evaluation_options"
