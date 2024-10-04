@@ -114,6 +114,7 @@ Less common options for the pipeline, typically set in a config file.
 | `email`                            | Email address for completion summary.                                   | `string`  |                                                          |          | True   |
 | `email_on_fail`                    | Email address for completion summary, only when pipeline fails.         | `string`  |                                                          |          | True   |
 | `plaintext_email`                  | Send plain-text email instead of HTML.                                  | `boolean` |                                                          |          | True   |
+| `max_multiqc_email_size`           | File size limit when attaching MultiQC reports to summary emails.       | `string`  | 25.MB                                                    |          | True   |
 | `monochrome_logs`                  | Do not use coloured log outputs.                                        | `boolean` |                                                          |          | True   |
 | `hook_url`                         | Incoming hook URL for messaging service                                 | `string`  |                                                          |          | True   |
 | `validate_params`                  | Boolean whether to validate parameters against the schema at runtime    | `boolean` | True                                                     |          | True   |
