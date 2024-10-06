@@ -1,8 +1,10 @@
 {
-    "input": "/workspace/pangene/test_data/assemblysheet.csv",
-    "external_protein_fastas": "/workspace/pangene/test_data/external-protein-fastas.txt",
+    "input": "/workspace/genepal/testdata/0.4.0/assemblysheet.csv",
+    "protein_evidence": "/workspace/genepal/testdata/0.4.0/external-protein-fastas.txt",
     "eggnogmapper_db_dir": "/workspace/ComparativeDataSources/emapperdb/5.0.2",
     "eggnogmapper_tax_scope": 33090,
-    "fastq": "/workspace/pangene/test_data/fastqsheet.csv",
-    "liftoff_annotations": "/workspace/pangene/test_data/liftoffannotations.csv"
+    "rna_evidence": "/workspace/genepal/testdata/0.4.0/rnasheet.csv",
+    "liftoff_annotations": "/workspace/genepal/testdata/0.4.0/liftoffannotations.csv",
+    "busco_lineage_datasets": "embryophyta_odb10",
+    "outdir": "results"
 }

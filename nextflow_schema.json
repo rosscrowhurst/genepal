@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/pangene/master/nextflow_schema.json",
-    "title": "plantandfoodresearch/pangene pipeline parameters",
-    "description": "A NextFlow pipeline for pan-genome annotation",
+    "$id": "https://raw.githubusercontent.com/plant-food-research-open/genepal/master/nextflow_schema.json",
+    "title": "plant-food-research-open/genepal pipeline parameters",
+    "description": "A Nextflow pipeline for single genome, multiple genomes and pan-genome annotation",
     "type": "object",
     "definitions": {
         "input_output_options": {
@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "",
-            "required": ["input", "outdir", "external_protein_fastas", "eggnogmapper_db_dir", "eggnogmapper_tax_scope"],
+            "required": ["input", "protein_evidence", "outdir"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -19,36 +19,36 @@
                     "schema": "assets/schema_input.json",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Target assemblies listed in a CSV sheet",
-                    "fa_icon": "fas fa-file-csv",
-                    "help_text": "FASTA and other associated files for target assemblies provided as a CSV sheet"
+                    "fa_icon": "fas fa-file-csv"
                 },
-                "external_protein_fastas": {
+                "protein_evidence": {
                     "type": "string",
-                    "description": "External protein fastas listed in a text sheet",
-                    "help_text": "A text file listing FASTA files to provide protein evidence for annotation",
+                    "description": "Protein evidence provided as a fasta file or multiple fasta files listed in a plain txt file",
                     "format": "file-path",
-                    "mimetype": "text/txt",
+                    "pattern": "^\\S+\\.(txt|fa|faa|fna|fsa|fas|fasta)(\\.gz)?$",
                     "fa_icon": "far fa-file-alt"
                 },
                 "eggnogmapper_db_dir": {
                     "type": "string",
                     "description": "Eggnogmapper database directory",
-                    "format": "directory-path"
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder-open"
                 },
                 "eggnogmapper_tax_scope": {
                     "type": "integer",
-                    "description": "Eggnogmapper taxonomy scopre",
-                    "minimum": 0
+                    "description": "Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1",
+                    "minimum": 1,
+                    "default": 1,
+                    "fa_icon": "fas fa-hashtag"
                 },
-                "fastq": {
+                "rna_evidence": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
-                    "schema": "assets/schema_fastq.json",
+                    "schema": "assets/schema_rna.json",
                     "pattern": "^\\S+\\.csv$",
-                    "help_text": "FASTQ files for RNASeq samples corresponding to each target assembly provided in a CSV sheet",
                     "fa_icon": "fas fa-file-csv",
-                    "description": "FASTQ samples listed in a CSV sheet"
+                    "description": "FASTQ/BAM samples listed in a CSV sheet"
                 },
                 "liftoff_annotations": {
                     "type": "string",
@@ -57,16 +57,22 @@
                     "schema": "assets/schema_liftoff.json",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Reference annotations listed in a CSV sheet",
-                    "help_text": "FASTA and GFF3 files for reference annotations for liftoff listed in a CSV sheet",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "orthofinder_annotations": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "schema": "/assets/schema_orthofinder.json",
+                    "pattern": "^\\S+\\.csv$",
+                    "description": "Additional annotations for orthology listed in a CSV sheet",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved",
-                    "fa_icon": "fas fa-folder-open",
-                    "default": "./results",
-                    "help_text": " Use absolute paths to storage on Cloud infrastructure"
+                    "fa_icon": "fas fa-folder-open"
                 }
             }
         },
@@ -80,21 +86,26 @@
                     "type": "string",
                     "default": "repeatmodeler",
                     "enum": ["edta", "repeatmodeler"],
-                    "description": "'edta' or 'repeatmodeler'"
+                    "description": "'edta' or 'repeatmodeler'",
+                    "fa_icon": "fas fa-tasks"
                 },
                 "save_annotated_te_lib": {
                     "type": "boolean",
-                    "description": "Save annotated TE library or not?"
+                    "description": "Save annotated TE library or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "edta_is_sensitive": {
                     "type": "boolean",
-                    "description": "Use '--sensitive 1' flag with EDTA or not?"
+                    "description": "Use '--sensitive 1' flag with EDTA or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "repeatmasker_save_outputs": {
                     "type": "boolean",
-                    "description": "Save the repeat-masked genome or not?"
+                    "description": "Save the repeat-masked genome or not?",
+                    "fa_icon": "fas fa-question-circle"
                 }
-            }
+            },
+            "fa_icon": "fab fa-adn"
         },
         "rnaseq_pre_processing_options": {
             "title": "RNASeq pre-processing options",
@@ -104,45 +115,55 @@
             "properties": {
                 "skip_fastqc": {
                     "type": "boolean",
-                    "description": "Skip FASTQC or not?"
+                    "description": "Skip FASTQC or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "skip_fastp": {
                     "type": "boolean",
-                    "description": "Skip trimming by FASTQP or not?"
+                    "description": "Skip trimming by FASTQP or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "min_trimmed_reads": {
                     "type": "integer",
                     "default": 10000,
                     "description": "Exclude a sample if its reads after trimming are below this number",
-                    "minimum": 0
+                    "minimum": 0,
+                    "fa_icon": "fas fa-hashtag"
                 },
                 "extra_fastp_args": {
                     "type": "string",
-                    "description": "Extra FASTP arguments"
+                    "description": "Extra FASTP arguments",
+                    "fa_icon": "fas fa-terminal"
                 },
                 "save_trimmed": {
                     "type": "boolean",
-                    "description": "Save FASTQ files after trimming or not?"
+                    "description": "Save FASTQ files after trimming or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "remove_ribo_rna": {
                     "type": "boolean",
-                    "description": "Remove Ribosomal RNA or not?"
+                    "description": "Remove Ribosomal RNA or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "save_non_ribo_reads": {
                     "type": "boolean",
-                    "description": "Save FASTQ files after Ribosomal RNA removal or not?"
+                    "description": "Save FASTQ files after Ribosomal RNA removal or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "ribo_database_manifest": {
                     "type": "string",
-                    "default": "${projectDir}/assets/rrna-db-defaults.txt",
-                    "description": "Ribosomal RNA fastas listed in a text sheet",
                     "format": "file-path",
-                    "mimetype": "text/txt"
+                    "exists": true,
+                    "mimetype": "text/plain",
+                    "default": "${projectDir}/assets/rrna-db-defaults.txt",
+                    "fa_icon": "fas fa-database",
+                    "description": "Ribosomal RNA fastas listed in a text sheet"
                 }
-            }
+            },
+            "fa_icon": "fas fa-cut"
         },
         "rnaseq_alignment_options": {
-            "title": "RNAseq alignment options",
+            "title": "RNASeq alignment options",
             "type": "object",
             "description": "",
             "default": "",
@@ -151,21 +172,26 @@
                     "type": "integer",
                     "default": 16000,
                     "minimum": 0,
-                    "description": "Maximum intron length for STAR alignment"
+                    "description": "Maximum intron length for STAR alignment",
+                    "fa_icon": "fas fa-hashtag"
                 },
                 "star_align_extra_args": {
                     "type": "string",
-                    "description": "EXTRA arguments for STAR"
+                    "description": "EXTRA arguments for STAR",
+                    "fa_icon": "fas fa-terminal"
                 },
                 "star_save_outputs": {
                     "type": "boolean",
-                    "description": "Save BAM files from STAR or not?"
+                    "description": "Save BAM files from STAR or not?",
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "save_cat_bam": {
                     "type": "boolean",
-                    "description": "SAVE a concatenated BAM file per assembly or not?"
+                    "description": "SAVE a concatenated BAM file per assembly or not?",
+                    "fa_icon": "fas fa-question-circle"
                 }
-            }
+            },
+            "fa_icon": "fas fa-align-center"
         },
         "annotation_options": {
             "title": "Annotation options",
@@ -175,40 +201,109 @@
             "properties": {
                 "braker_extra_args": {
                     "type": "string",
-                    "description": "Extra arguments for BRAKER"
-                },
-                "braker_allow_isoforms": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Allow multiple isoforms for gene models"
+                    "description": "Extra arguments for BRAKER",
+                    "fa_icon": "fas fa-terminal"
                 },
                 "liftoff_coverage": {
                     "type": "number",
                     "default": 0.9,
                     "minimum": 0,
                     "maximum": 1,
-                    "description": "Liftoff coverage parameter"
+                    "description": "Liftoff coverage parameter",
+                    "fa_icon": "fas fa-hashtag"
                 },
                 "liftoff_identity": {
                     "type": "number",
                     "default": 0.9,
-                    "description": "Liftoff identity parameter"
+                    "description": "Liftoff identity parameter",
+                    "fa_icon": "fas fa-hashtag"
                 },
                 "eggnogmapper_evalue": {
                     "type": "number",
                     "default": 1e-5,
-                    "description": "Only report alignments below or equal the e-value threshold"
+                    "description": "Only report alignments below or equal the e-value threshold",
+                    "fa_icon": "fas fa-hashtag"
                 },
                 "eggnogmapper_pident": {
                     "type": "integer",
                     "default": 35,
                     "description": "Only report alignments above or equal to the given percentage of identity (0-100)",
                     "minimum": 0,
-                    "maximum": 100
+                    "maximum": 100,
+                    "fa_icon": "fas fa-hashtag"
+                }
+            },
+            "fa_icon": "fab fa-adn"
+        },
+        "post_annotation_filtering_options": {
+            "title": "Post-annotation filtering options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-filter",
+            "properties": {
+                "allow_isoforms": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Allow multiple isoforms for gene models",
+                    "fa_icon": "fas fa-question-circle"
+                },
+                "enforce_full_intron_support": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-question-circle",
+                    "description": "Require every model to have external evidence for all its introns"
+                },
+                "filter_liftoff_by_hints": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-question-circle",
+                    "description": "Use BRAKER hints to filter Liftoff models"
                 },
                 "eggnogmapper_purge_nohits": {
                     "type": "boolean",
-                    "description": "Purge transcripts which do not have a hit against eggnog"
+                    "description": "Purge transcripts which do not have a hit against eggnog",
+                    "fa_icon": "fas fa-question-circle"
+                }
+            }
+        },
+        "annotation_output_options": {
+            "title": "Annotation output options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-download",
+            "properties": {
+                "braker_save_outputs": {
+                    "type": "boolean",
+                    "description": "Save BRAKER files",
+                    "fa_icon": "fas fa-question-circle"
+                },
+                "add_attrs_to_proteins_fasta": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-question-circle",
+                    "description": "Add gff attributes to proteins fasta"
+                }
+            }
+        },
+        "evaluation_options": {
+            "title": "Evaluation options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-balance-scale-right",
+            "properties": {
+                "busco_skip": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip evaluation by BUSCO"
+                },
+                "busco_lineage_datasets": {
+                    "type": "string",
+                    "pattern": "^(\\w+_odb10\\s)*\\w+_odb10$",
+                    "fa_icon": "fas fa-tree",
+                    "description": "BUSCO lineages as a space-separated list: 'fungi_odb10 microsporidia_odb10'",
+                    "default": "eukaryota_odb10"
                 }
             }
         },
@@ -222,47 +317,161 @@
                 "max_cpus": {
                     "type": "integer",
                     "description": "Maximum number of CPUs that can be requested for any single job.",
-                    "default": 12,
-                    "fa_icon": "fas fa-microchip",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                    "default": 16,
+                    "fa_icon": "fas fa-microchip"
                 },
                 "max_memory": {
                     "type": "string",
-                    "description": "Maximum amount of memory that can be requested for any single job.",
-                    "default": "200.GB",
+                    "description": "Maximum amount of memory that can be requested for any single job. Example: '8.GB'",
+                    "default": "72.GB",
                     "fa_icon": "fas fa-memory",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$"
                 },
                 "max_time": {
                     "type": "string",
-                    "description": "Maximum amount of time that can be requested for any single job.",
+                    "description": "Maximum amount of time that can be requested for any single job. Example: '1.day'",
                     "default": "7.day",
                     "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$"
                 }
             }
         },
-        "infrastructure_options": {
-            "title": "Infrastructure options",
+        "institutional_config_options": {
+            "title": "Institutional config options",
+            "type": "object",
+            "fa_icon": "fas fa-university",
+            "description": "Parameters used to describe centralised config profiles. These should not be edited.",
+            "help_text": "The centralised nf-core configuration profiles use a handful of pipeline parameters to describe themselves. This information is then printed to the Nextflow log when you run a pipeline. You should not need to change these values when you run a pipeline.",
+            "properties": {
+                "custom_config_version": {
+                    "type": "string",
+                    "description": "Git commit id for Institutional configs.",
+                    "default": "master",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "custom_config_base": {
+                    "type": "string",
+                    "description": "Base directory for Institutional configs.",
+                    "default": "https://raw.githubusercontent.com/nf-core/configs/master",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_name": {
+                    "type": "string",
+                    "description": "Institutional config name.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_description": {
+                    "type": "string",
+                    "description": "Institutional config description.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_contact": {
+                    "type": "string",
+                    "description": "Institutional config contact information.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_url": {
+                    "type": "string",
+                    "description": "Institutional config URL link.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                }
+            }
+        },
+        "generic_options": {
+            "title": "Generic options",
             "type": "object",
             "fa_icon": "fas fa-file-import",
-            "description": "",
-            "help_text": "",
+            "description": "Less common options for the pipeline, typically set in a config file.",
+            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
             "properties": {
-                "validationSkipDuplicateCheck": {
+                "help": {
                     "type": "boolean",
-                    "default": true,
+                    "description": "Display help text.",
+                    "fa_icon": "fas fa-question-circle",
                     "hidden": true
                 },
-                "validationS3PathCheck": {
+                "version": {
                     "type": "boolean",
-                    "default": true,
+                    "description": "Display version and exit.",
+                    "fa_icon": "fas fa-question-circle",
                     "hidden": true
+                },
+                "publish_dir_mode": {
+                    "type": "string",
+                    "default": "copy",
+                    "description": "Method used to save pipeline results to output directory.",
+                    "fa_icon": "fas fa-copy",
+                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+                    "hidden": true
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "hidden": true
+                },
+                "email_on_fail": {
+                    "type": "string",
+                    "description": "Email address for completion summary, only when pipeline fails.",
+                    "fa_icon": "fas fa-exclamation-triangle",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "hidden": true
+                },
+                "plaintext_email": {
+                    "type": "boolean",
+                    "description": "Send plain-text email instead of HTML.",
+                    "fa_icon": "fas fa-remove-format",
+                    "hidden": true
+                },
+                "monochrome_logs": {
+                    "type": "boolean",
+                    "description": "Do not use coloured log outputs.",
+                    "fa_icon": "fas fa-palette",
+                    "hidden": true
+                },
+                "hook_url": {
+                    "type": "string",
+                    "description": "Incoming hook URL for messaging service",
+                    "fa_icon": "fas fa-people-group",
+                    "hidden": true
+                },
+                "validate_params": {
+                    "type": "boolean",
+                    "description": "Boolean whether to validate parameters against the schema at runtime",
+                    "default": true,
+                    "fa_icon": "fas fa-check-square",
+                    "hidden": true
+                },
+                "validationShowHiddenParams": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-eye-slash",
+                    "description": "Show all params when using `--help`",
+                    "hidden": true
+                },
+                "validationFailUnrecognisedParams": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
+                    "hidden": true
+                },
+                "validationLenientMode": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters in lenient more.",
+                    "hidden": true
+                },
+                "pipelines_testdata_base_path": {
+                    "type": "string",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
+                    "hidden": true,
+                    "description": "Base path for pipeline test datasets"
                 }
             }
         }
@@ -284,10 +493,22 @@
             "$ref": "#/definitions/annotation_options"
         },
         {
+            "$ref": "#/definitions/post_annotation_filtering_options"
+        },
+        {
+            "$ref": "#/definitions/annotation_output_options"
+        },
+        {
+            "$ref": "#/definitions/evaluation_options"
+        },
+        {
             "$ref": "#/definitions/max_job_request_options"
         },
         {
-            "$ref": "#/definitions/infrastructure_options"
+            "$ref": "#/definitions/institutional_config_options"
+        },
+        {
+            "$ref": "#/definitions/generic_options"
         }
     ]
 }

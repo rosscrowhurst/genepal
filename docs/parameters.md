@@ -1,18 +1,19 @@
-# plantandfoodresearch/pangene pipeline parameters
+# plant-food-research-open/genepal pipeline parameters
 
-A NextFlow pipeline for pan-genome annotation
+A Nextflow pipeline for single genome, multiple genomes and pan-genome annotation
 
 ## Input/output options
 
-| Parameter                 | Description                                                                                                                                                                               | Type      | Default   | Required | Hidden |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
-| `input`                   | Target assemblies listed in a CSV sheet <details><summary>Help</summary><small>FASTA and other associated files for target assemblies provided as a CSV sheet</small></details>           | `string`  |           | True     |        |
-| `external_protein_fastas` | External protein fastas listed in a text sheet <details><summary>Help</summary><small>A text file listing FASTA files to provide protein evidence for annotation</small></details>        | `string`  |           | True     |        |
-| `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                                                                                                           | `string`  |           | True     |        |
-| `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre                                                                                                                                                              | `integer` |           | True     |        |
-| `fastq`                   | FASTQ samples listed in a CSV sheet <details><summary>Help</summary><small>FASTQ files for RNASeq samples corresponding to each target assembly provided in a CSV sheet</small></details> | `string`  |           |          |        |
-| `liftoff_annotations`     | Reference annotations listed in a CSV sheet <details><summary>Help</summary><small>FASTA and GFF3 files for reference annotations for liftoff listed in a CSV sheet</small></details>     | `string`  |           |          |        |
-| `outdir`                  | The output directory where the results will be saved <details><summary>Help</summary><small> Use absolute paths to storage on Cloud infrastructure</small></details>                      | `string`  | ./results | True     |        |
+| Parameter                 | Description                                                                                              | Type      | Default | Required | Hidden |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
+| `input`                   | Target assemblies listed in a CSV sheet                                                                  | `string`  |         | True     |        |
+| `protein_evidence`        | Protein evidence provided as a fasta file or multiple fasta files listed in a plain txt file             | `string`  |         | True     |        |
+| `eggnogmapper_db_dir`     | Eggnogmapper database directory                                                                          | `string`  |         |          |        |
+| `eggnogmapper_tax_scope`  | Eggnogmapper taxonomy scopre. Eukaryota: 2759, Viridiplantae: 33090, Archaea: 2157, Bacteria: 2, root: 1 | `integer` | 1       |          |        |
+| `rna_evidence`            | FASTQ/BAM samples listed in a CSV sheet                                                                  | `string`  |         |          |        |
+| `liftoff_annotations`     | Reference annotations listed in a CSV sheet                                                              | `string`  |         |          |        |
+| `orthofinder_annotations` | Additional annotations for orthology listed in a CSV sheet                                               | `string`  |         |          |        |
+| `outdir`                  | The output directory where the results will be saved                                                     | `string`  |         | True     |        |
 
 ## Repeat annotation options
 
@@ -36,7 +37,7 @@ A NextFlow pipeline for pan-genome annotation
 | `save_non_ribo_reads`    | Save FASTQ files after Ribosomal RNA removal or not?               | `boolean` |                                           |          |        |
 | `ribo_database_manifest` | Ribosomal RNA fastas listed in a text sheet                        | `string`  | ${projectDir}/assets/rrna-db-defaults.txt |          |        |
 
-## RNAseq alignment options
+## RNASeq alignment options
 
 | Parameter                | Description                                       | Type      | Default | Required | Hidden |
 | ------------------------ | ------------------------------------------------- | --------- | ------- | -------- | ------ |
@@ -47,22 +48,76 @@ A NextFlow pipeline for pan-genome annotation
 
 ## Annotation options
 
-| Parameter                   | Description                                                                       | Type      | Default | Required | Hidden |
-| --------------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `braker_extra_args`         | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
-| `braker_allow_isoforms`     | Allow multiple isoforms for gene models                                           | `boolean` | True    |          |        |
-| `liftoff_coverage`          | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
-| `liftoff_identity`          | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
-| `eggnogmapper_evalue`       | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
-| `eggnogmapper_pident`       | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
-| `eggnogmapper_purge_nohits` | Purge transcripts which do not have a hit against eggnog                          | `boolean` |         |          |        |
+| Parameter             | Description                                                                       | Type      | Default | Required | Hidden |
+| --------------------- | --------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
+| `braker_extra_args`   | Extra arguments for BRAKER                                                        | `string`  |         |          |        |
+| `liftoff_coverage`    | Liftoff coverage parameter                                                        | `number`  | 0.9     |          |        |
+| `liftoff_identity`    | Liftoff identity parameter                                                        | `number`  | 0.9     |          |        |
+| `eggnogmapper_evalue` | Only report alignments below or equal the e-value threshold                       | `number`  | 1e-05   |          |        |
+| `eggnogmapper_pident` | Only report alignments above or equal to the given percentage of identity (0-100) | `integer` | 35      |          |        |
+
+## Post-annotation filtering options
+
+| Parameter                     | Description                                                       | Type      | Default | Required | Hidden |
+| ----------------------------- | ----------------------------------------------------------------- | --------- | ------- | -------- | ------ |
+| `allow_isoforms`              | Allow multiple isoforms for gene models                           | `boolean` | True    |          |        |
+| `enforce_full_intron_support` | Require every model to have external evidence for all its introns | `boolean` | True    |          |        |
+| `filter_liftoff_by_hints`     | Use BRAKER hints to filter Liftoff models                         | `boolean` | True    |          |        |
+| `eggnogmapper_purge_nohits`   | Purge transcripts which do not have a hit against eggnog          | `boolean` |         |          |        |
+
+## Annotation output options
+
+| Parameter                     | Description                          | Type      | Default | Required | Hidden |
+| ----------------------------- | ------------------------------------ | --------- | ------- | -------- | ------ |
+| `braker_save_outputs`         | Save BRAKER files                    | `boolean` |         |          |        |
+| `add_attrs_to_proteins_fasta` | Add gff attributes to proteins fasta | `boolean` |         |          |        |
+
+## Evaluation options
+
+| Parameter                | Description                                                                 | Type      | Default         | Required | Hidden |
+| ------------------------ | --------------------------------------------------------------------------- | --------- | --------------- | -------- | ------ |
+| `busco_skip`             | Skip evaluation by BUSCO                                                    | `boolean` |                 |          |        |
+| `busco_lineage_datasets` | BUSCO lineages as a space-separated list: 'fungi_odb10 microsporidia_odb10' | `string`  | eukaryota_odb10 |          |        |
 
 ## Max job request options
 
 Set the top limit for requested resources for any single job.
 
-| Parameter    | Description                                                                                                                                                                                                                                                                 | Type      | Default | Required | Hidden |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `max_cpus`   | Maximum number of CPUs that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`</small></details>                                      | `integer` | 12      |          | True   |
-| `max_memory` | Maximum amount of memory that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`</small></details> | `string`  | 200.GB  |          | True   |
-| `max_time`   | Maximum amount of time that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`</small></details>        | `string`  | 7.day   |          | True   |
+| Parameter    | Description                                                                        | Type      | Default | Required | Hidden |
+| ------------ | ---------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
+| `max_cpus`   | Maximum number of CPUs that can be requested for any single job.                   | `integer` | 16      |          |        |
+| `max_memory` | Maximum amount of memory that can be requested for any single job. Example: '8.GB' | `string`  | 72.GB   |          |        |
+| `max_time`   | Maximum amount of time that can be requested for any single job. Example: '1.day'  | `string`  | 7.day   |          |        |
+
+## Institutional config options
+
+Parameters used to describe centralised config profiles. These should not be edited.
+
+| Parameter                    | Description                               | Type     | Default                                                  | Required | Hidden |
+| ---------------------------- | ----------------------------------------- | -------- | -------------------------------------------------------- | -------- | ------ |
+| `custom_config_version`      | Git commit id for Institutional configs.  | `string` | master                                                   |          | True   |
+| `custom_config_base`         | Base directory for Institutional configs. | `string` | https://raw.githubusercontent.com/nf-core/configs/master |          | True   |
+| `config_profile_name`        | Institutional config name.                | `string` |                                                          |          | True   |
+| `config_profile_description` | Institutional config description.         | `string` |                                                          |          | True   |
+| `config_profile_contact`     | Institutional config contact information. | `string` |                                                          |          | True   |
+| `config_profile_url`         | Institutional config URL link.            | `string` |                                                          |          | True   |
+
+## Generic options
+
+Less common options for the pipeline, typically set in a config file.
+
+| Parameter                          | Description                                                             | Type      | Default                                                  | Required | Hidden |
+| ---------------------------------- | ----------------------------------------------------------------------- | --------- | -------------------------------------------------------- | -------- | ------ |
+| `help`                             | Display help text.                                                      | `boolean` |                                                          |          | True   |
+| `version`                          | Display version and exit.                                               | `boolean` |                                                          |          | True   |
+| `publish_dir_mode`                 | Method used to save pipeline results to output directory.               | `string`  | copy                                                     |          | True   |
+| `email`                            | Email address for completion summary.                                   | `string`  |                                                          |          | True   |
+| `email_on_fail`                    | Email address for completion summary, only when pipeline fails.         | `string`  |                                                          |          | True   |
+| `plaintext_email`                  | Send plain-text email instead of HTML.                                  | `boolean` |                                                          |          | True   |
+| `monochrome_logs`                  | Do not use coloured log outputs.                                        | `boolean` |                                                          |          | True   |
+| `hook_url`                         | Incoming hook URL for messaging service                                 | `string`  |                                                          |          | True   |
+| `validate_params`                  | Boolean whether to validate parameters against the schema at runtime    | `boolean` | True                                                     |          | True   |
+| `validationShowHiddenParams`       | Show all params when using `--help`                                     | `boolean` |                                                          |          | True   |
+| `validationFailUnrecognisedParams` | Validation of parameters fails when an unrecognised parameter is found. | `boolean` |                                                          |          | True   |
+| `validationLenientMode`            | Validation of parameters in lenient more.                               | `boolean` |                                                          |          | True   |
+| `pipelines_testdata_base_path`     | Base path for pipeline test datasets                                    | `string`  | https://raw.githubusercontent.com/nf-core/test-datasets/ |          | True   |

@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/plantandfoodresearch/pangene/master/assets/schema_input.json",
-    "title": "plantandfoodresearch/pangene pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/plant-food-research-open/genepal/master/assets/schema_input.json",
+    "title": "plant-food-research-open/genepal pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
@@ -63,6 +63,19 @@
                 ],
                 "errorMessage": "BRAKER hints GFF/GFF3 file path cannot contain spaces and must have extension '.gff.gz', '.gff3.gz', '.gff' or '.gff3'",
                 "dependentRequired": ["braker_gff3"]
+            },
+            "benchmark": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+\\.gff(3)?$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
+                "errorMessage": "GFF/GFF3 file for benchmarking cannot contain spaces and must have extension '.gff' or '.gff3'"
             }
         },
         "required": ["tag", "fasta", "is_masked"]

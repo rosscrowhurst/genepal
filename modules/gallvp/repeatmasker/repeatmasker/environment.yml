@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - "bioconda::repeatmasker=4.1.5"

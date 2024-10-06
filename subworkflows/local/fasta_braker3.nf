@@ -1,4 +1,4 @@
-include { BRAKER3                               } from '../../modules/kherronism/braker3'
+include { BRAKER3                               } from '../../modules/gallvp/braker3'
 include { FILE_GUNZIP as BRAKER_GFF3_GUNZIP     } from '../../subworkflows/local/file_gunzip'
 include { FILE_GUNZIP as BRAKER_HINTS_GUNZIP    } from '../../subworkflows/local/file_gunzip'
 

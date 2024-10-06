@@ -1,10 +1,11 @@
 {
     "input": "tests/stub/assemblysheet.csv",
-    "external_protein_fastas": "tests/stub/external-protein-fastas.txt",
+    "protein_evidence": "tests/stub/external-protein-fastas.txt",
     "eggnogmapper_db_dir": "tests/stub/emapperdb/5.0.2",
     "eggnogmapper_tax_scope": 33090,
-    "fastq": "tests/stub/fastqsheet.csv",
+    "rna_evidence": "tests/stub/rnasheet.csv",
     "liftoff_annotations": "tests/stub/liftoffannotations.csv",
+    "orthofinder_annotations": "tests/stub/orthofinderannotations.csv",
     "max_cpus": 2,
     "max_memory": "3.GB"
 }

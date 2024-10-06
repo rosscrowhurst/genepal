@@ -1,18 +1,21 @@
 include { GUNZIP as GUNZIP_TARGET_ASSEMBLY      } from '../../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_TE_LIBRARY           } from '../../modules/nf-core/gunzip'
+include { SEQKIT_RMDUP                          } from '../../modules/nf-core/seqkit/rmdup/main.nf'
 include { FASTAVALIDATOR                        } from '../../modules/nf-core/fastavalidator'
-include { REPEATMODELER_BUILDDATABASE           } from '../../modules/pfr/repeatmodeler/builddatabase'
-include { REPEATMODELER_REPEATMODELER           } from '../../modules/pfr/repeatmodeler/repeatmodeler'
-include { REPEATMASKER                          } from '../../modules/kherronism/repeatmasker'
+include { REPEATMODELER_BUILDDATABASE           } from '../../modules/nf-core/repeatmodeler/builddatabase'
+include { REPEATMODELER_REPEATMODELER           } from '../../modules/nf-core/repeatmodeler/repeatmodeler'
+include { REPEATMASKER_REPEATMASKER             } from '../../modules/gallvp/repeatmasker/repeatmasker'
+include { CUSTOM_RMOUTTOGFF3                    } from '../../modules/gallvp/custom/rmouttogff3'
 include { STAR_GENOMEGENERATE                   } from '../../modules/nf-core/star/genomegenerate'
 
-include { FASTA_EDTA_LAI                        } from '../../subworkflows/pfr/fasta_edta_lai'
+include { FASTA_EDTA_LAI                        } from '../../subworkflows/gallvp/fasta_edta_lai'
 
 workflow PREPARE_ASSEMBLY {
     take:
     target_assembly             // channel: [ meta, fasta ]
     te_library                  // channel: [ meta, fasta ]
     repeat_annotator            // val(String), 'repeatmodeler' or 'edta'
+    repeatmasker_save_outputs   // val(true/false)
     exclude_assemblies          // channel: val(assembly_x,assembly_y)
     ch_is_masked                // channel: [ meta, val(true|false) ]
 
@@ -34,18 +37,35 @@ workflow PREPARE_ASSEMBLY {
                                 )
     ch_versions                 = ch_versions.mix(GUNZIP_TARGET_ASSEMBLY.out.versions.first())
 
+    // MODULE: SEQKIT_RMDUP
+    SEQKIT_RMDUP ( ch_gunzip_assembly )
+
+    ch_nondup_fw_assembly       = SEQKIT_RMDUP.out.log
+                                | join(SEQKIT_RMDUP.out.fastx)
+                                | map { meta, error_log, fasta ->
+                                    if ( error_log.text.contains('0 duplicated records removed') ) {
+                                        return [ meta, fasta ]
+                                    }
+
+                                    log.warn "FASTA validation failed for ${meta.id} due to presence of duplicate sequences.\n" +
+                                        "${meta.id} is excluded from further analysis."
+
+                                    return null
+                                } // Fixed width assembly fasta without duplicates
+
+    ch_versions                 = ch_versions.mix(SEQKIT_RMDUP.out.versions.first())
 
     // MODULE: FASTAVALIDATOR
-    FASTAVALIDATOR ( ch_gunzip_assembly )
+    FASTAVALIDATOR ( ch_nondup_fw_assembly )
 
-    ch_validated_assembly       = ch_gunzip_assembly
+    ch_validated_assembly       = ch_nondup_fw_assembly
                                 | join(FASTAVALIDATOR.out.success_log)
                                 | map { meta, fasta, log -> [ meta, fasta ] }
     ch_versions                 = ch_versions.mix(FASTAVALIDATOR.out.versions.first())
 
     FASTAVALIDATOR.out.error_log
     | map { meta, log ->
-        System.err.println("WARNING: FASTAVALIDATOR failed for ${meta.id} with error: ${log}. ${meta.id} is excluded from further analysis.")
+        log.warn "FASTAVALIDATOR failed for ${meta.id} with error: ${log}. ${meta.id} is excluded from further analysis."
     }
 
     // MODULE: GUNZIP_TE_LIBRARY
@@ -123,15 +143,25 @@ workflow PREPARE_ASSEMBLY {
 
     ch_versions                 = ch_versions.mix(REPEATMODELER_REPEATMODELER.out.versions.first())
 
-    // MODULE: REPEATMASKER
-    REPEATMASKER(
+    // MODULE: REPEATMASKER_REPEATMASKER
+    REPEATMASKER_REPEATMASKER(
         ch_assembly_and_te_lib.map { meta, assembly, teLib -> [ meta, assembly ] },
         ch_assembly_and_te_lib.map { meta, assembly, teLib -> teLib },
     )
 
     ch_masked_assembly          = ch_unmasked_masked_branch.masked
-                                | mix(REPEATMASKER.out.fasta_masked)
-    ch_versions                 = ch_versions.mix(REPEATMASKER.out.versions.first())
+                                | mix(REPEATMASKER_REPEATMASKER.out.masked)
+
+    ch_repeatmasker_out         = REPEATMASKER_REPEATMASKER.out.out
+    ch_versions                 = ch_versions.mix(REPEATMASKER_REPEATMASKER.out.versions.first())
+
+    // MODULE: CUSTOM_RMOUTTOGFF3
+    ch_RMOUTTOGFF3_input        = repeatmasker_save_outputs
+                                ? ch_repeatmasker_out
+                                : Channel.empty()
+    CUSTOM_RMOUTTOGFF3 ( ch_RMOUTTOGFF3_input )
+
+    ch_versions                 = ch_versions.mix(CUSTOM_RMOUTTOGFF3.out.versions.first())
 
     // MODULE: STAR_GENOMEGENERATE
     ch_genomegenerate_inputs    = ch_validated_assembly

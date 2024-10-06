@@ -77,7 +77,7 @@ workflow PREPROCESS_RNASEQ {
     | join(ch_trim_reads, remainder:true)
     | map { meta, reads, trimmed ->
         if (!trimmed) {
-            System.err.println("WARNING: Dropping ${reads.collect { it.getName() }} as read count after trimming is less than $min_trimmed_reads")
+            log.warn "Dropping ${reads.collect { it.getName() }} as read count after trimming is less than $min_trimmed_reads"
         }
     }
 

@@ -1,15 +1,12 @@
 .nextflow*
 work/
+data/
+null/
 results/
 .DS_Store
-*.code-workspace
-.screenrc
-.*.sw?
-__pycache__
-*.pyo
+testing/
+testing*
 *.pyc
 
 *.stdout
 *.stderr
-
-pangene-test/

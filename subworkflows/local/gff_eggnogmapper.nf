@@ -24,7 +24,9 @@ workflow GFF_EGGNOGMAPPER {
     ch_versions                 = ch_versions.mix(GFF2FASTA_FOR_EGGNOGMAPPER.out.versions.first())
 
 
-    ch_eggnogmapper_inputs      = ch_gffread_fasta
+    ch_eggnogmapper_inputs      = ! db_folder
+                                ? Channel.empty()
+                                : ch_gffread_fasta
                                 | combine(Channel.fromPath(db_folder))
 
     EGGNOGMAPPER(
