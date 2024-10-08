@@ -220,6 +220,9 @@ workflow GENEPAL {
         [] // val_busco_config
     )
 
+    ch_multiqc_files            = ch_multiqc_files
+                                | mix(FASTA_GXF_BUSCO_PLOT.out.assembly_short_summaries_txt)
+                                | mix(FASTA_GXF_BUSCO_PLOT.out.annotation_short_summaries_txt)
     ch_versions                 = ch_versions.mix(FASTA_GXF_BUSCO_PLOT.out.versions)
 
     // SUBWORKFLOW: GXF_FASTA_AGAT_SPADDINTRONS_SPEXTRACTSEQUENCES
@@ -276,7 +279,10 @@ workflow GENEPAL {
                                 | mix(ch_methods_description)
 
     MULTIQC (
-        ch_multiqc_files.map { meta, file -> file }.mix(ch_multiqc_extra_files).collect(),
+        ch_multiqc_files
+        | map { meta, file -> file }
+        | mix(ch_multiqc_extra_files)
+        | collect,
         ch_multiqc_config.toList(),
         [],
         [],

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+1. Added MultiQC [#65](https://github.com/plant-food-research-open/genepal/issues/65)
+
 ### `Fixed`
 
 ### `Dependencies`
@@ -41,8 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 22. Added `benchmark` column to the input sheet and used `GFFCOMPARE` to perform benchmarking [#63](https://github.com/plant-food-research-open/genepal/issues/63)
 23. Added `SEQKIT_RMDUP` to detect duplicate sequence and wrap the fasta to 80 characters
 24. Updated parameter section labels for annotation and post-annotation filtering [#64](https://github.com/plant-food-research-open/genepal/issues/64)
-25. Added MultiQC [#65](https://github.com/plant-food-research-open/genepal/issues/65)
-26. Updated modules and sub-workflows
+25. Updated modules and sub-workflows
 
 ### `Fixed`
 
