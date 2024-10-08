@@ -117,7 +117,10 @@ workflow PREPROCESS_RNASEQ {
 
 
     emit:
-    trim_reads                      = ch_emitted_reads  // channel: [ [ id, single_end ], [ fq ] ]
-    reads_target                    = ch_reads_target   // channel: [ [ id, single_end ], assembly_id ]
-    versions                        = ch_versions       // channel: [ versions.yml ]
+    trim_reads                      = ch_emitted_reads                                  // channel: [ [ id, single_end ], [ fq ] ]
+    reads_target                    = ch_reads_target                                   // channel: [ [ id, single_end ], assembly_id ]
+    fastqc_raw_zip                  = FASTQ_FASTQC_UMITOOLS_FASTP.out.fastqc_raw_zip    // channel: [ [ id, single_end ], zip ]
+    trim_json                       = FASTQ_FASTQC_UMITOOLS_FASTP.out.trim_json         // channel: [ [ id, single_end ], json ]
+    fastqc_trim_zip                 = FASTQ_FASTQC_UMITOOLS_FASTP.out.fastqc_trim_zip   // channel: [ [ id, single_end ], zip ]
+    versions                        = ch_versions                                       // channel: [ versions.yml ]
 }

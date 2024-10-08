@@ -92,6 +92,12 @@ workflow GENEPAL {
 
     ch_trim_reads               = PREPROCESS_RNASEQ.out.trim_reads
     ch_reads_target             = PREPROCESS_RNASEQ.out.reads_target
+
+    ch_multiqc_files            = ch_multiqc_files
+                                | mix(PREPROCESS_RNASEQ.out.fastqc_raw_zip)
+                                | mix(PREPROCESS_RNASEQ.out.trim_json)
+                                | mix(PREPROCESS_RNASEQ.out.fastqc_trim_zip)
+
     ch_versions                 = ch_versions.mix(PREPROCESS_RNASEQ.out.versions)
 
     // SUBWORKFLOW: ALIGN_RNASEQ
@@ -103,6 +109,10 @@ workflow GENEPAL {
     )
 
     ch_rnaseq_bam               = ALIGN_RNASEQ.out.bam
+
+    ch_multiqc_files            = ch_multiqc_files
+                                | mix(ALIGN_RNASEQ.out.star_log_final)
+
     ch_versions                 = ch_versions.mix(ALIGN_RNASEQ.out.versions)
 
     // MODULE: PREPARE_EXT_PROTS
