@@ -15,15 +15,14 @@ disable_version_detection: true
 module_order:
   - fastqc:
       name: "FastQC (raw)"
-      info: "This section of the report shows FastQC results before adapter trimming."
-      path_filters:
-        - "*_raw*fastqc.zip"
-  - fastp
+      path_filters_exclude:
+        - "*_trim*"
+  - fastp:
   - fastqc:
-      name: "FastQC (trimmed)"
-      info: "This section of the report shows FastQC results after adapter trimming."
+      name: "FastQC (trim)"
       path_filters:
-        - "*_trim*fastqc.zip"
+        - "*_trim*"
+  - star:
   - busco:
       name: "BUSCO"
       info: "Genome completeness statistics"
@@ -34,6 +33,7 @@ module_order:
       info: "Annotation completeness statistics"
       path_filters_exclude:
         - "*seqkit.rmdup.fasta.txt"
+  - gffcompare:
 
 extra_fn_clean_exts:
   - ".seqkit"

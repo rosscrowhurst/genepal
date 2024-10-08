@@ -258,6 +258,8 @@ workflow GENEPAL {
         ch_benchmark_inputs.map { meta, gff, fasta, ref_gff -> [ meta, ref_gff ] }
     )
 
+    ch_multiqc_files            = ch_multiqc_files
+                                | mix(BENCHMARK.out.stats)
     ch_versions                 = ch_versions.mix(BENCHMARK.out.versions.first())
 
     // Collate and save software versions
