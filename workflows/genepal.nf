@@ -282,7 +282,10 @@ workflow GENEPAL {
     ch_workflow_summary         = Channel.value( paramsSummaryMultiqc ( paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json") ) )
                                 | collectFile(name: 'workflow_summary_mqc.yaml')
 
-    ch_methods_description      = Channel.value( methodsDescriptionText ( file("$projectDir/assets/methods_description_template.yml", checkIfExists: true) ) )
+    ch_methods_description      = ch_versions_yml
+                                | map { versions_yml ->
+                                    methodsDescriptionText ( file("$projectDir/assets/methods_description_template.yml", checkIfExists: true), versions_yml )
+                                }
                                 | collectFile(name: 'methods_description_mqc.yaml', sort: true)
 
     ch_multiqc_extra_files      = Channel.empty()
