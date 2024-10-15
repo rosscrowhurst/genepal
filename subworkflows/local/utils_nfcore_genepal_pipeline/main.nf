@@ -63,7 +63,7 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create input channels
     //
-    ch_input                    = Channel.fromSamplesheet('input')
+    ch_input                    = Channel.fromList (samplesheetToList(input, "assets/schema_input.json"))
 
     ch_target_assembly          = ch_input
                                 | map { it ->
@@ -152,7 +152,7 @@ workflow PIPELINE_INITIALISATION {
 
     ch_rna_branch               = ! params.rna_evidence
                                 ? Channel.empty()
-                                : Channel.fromSamplesheet('rna_evidence')
+                                : Channel.fromList (samplesheetToList(rna_evidence, "assets/schema_rna.json"))
                                 | map { meta, f1, f2 ->
                                     f2
                                     ? [ meta + [ single_end: false ], [ file(f1, checkIfExists:true), file(f2, checkIfExists:true) ] ]
@@ -233,7 +233,7 @@ workflow PIPELINE_INITIALISATION {
 
     ch_liftoff_mm               = ! params.liftoff_annotations
                                 ? Channel.empty()
-                                : Channel.fromSamplesheet('liftoff_annotations')
+                                : Channel.fromList (samplesheetToList(liftoff_annotations, "assets/schema_liftoff.json"))
                                 | multiMap { fasta, gff ->
                                     def fastaFile = file(fasta, checkIfExists:true)
 
@@ -274,7 +274,7 @@ workflow PIPELINE_INITIALISATION {
 
     ch_orthofinder_pep          = ! params.orthofinder_annotations
                                 ? Channel.empty()
-                                : Channel.fromSamplesheet('orthofinder_annotations')
+                                : Channel.fromList (samplesheetToList(orthofinder_annotations, "assets/schema_orthofinder.json"))
                                 | map { tag, fasta ->
                                     [ [ id: tag ], file(fasta, checkIfExists:true)  ]
                                 }
@@ -313,6 +313,7 @@ workflow PIPELINE_COMPLETION {
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
     hook_url        //  string: hook URL for notifications
+    multiqc_report  //  string: Path to MultiQC report
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")

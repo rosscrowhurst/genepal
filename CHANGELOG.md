@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.5.0+dev - [15-Oct-2024]
+## 0.5.0+dev - [16-Oct-2024]
 
 ### `Added`
 
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Deprecated`
 
 1. Resource parameters have been removed: `max_memory`, `max_cpus`, `max_time`
-2. Removed a number of unnecessary parameters: `monochromeLogs`, `config_profile_contact`, `config_profile_url`, `validationFailUnrecognisedParams`, `validationLenientMode`, `validationSchemaIgnoreParams`, `validationShowHiddenParams` `validate_params`
+2. Removed a number of unnecessary parameters: `monochromeLogs`, `config_profile_contact`, `config_profile_url`, `validationFailUnrecognisedParams`, `validationLenientMode`, `validationSchemaIgnoreParams`, `validationShowHiddenParams`, `validate_params`
 
 ## 0.4.0 - [04-Oct-2024]
 
