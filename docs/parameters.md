@@ -118,7 +118,6 @@ Less common options for the pipeline, typically set in a config file.
 | `monochrome_logs`                  | Do not use coloured log outputs.                                        | `boolean` |                                                          |          | True   |
 | `monochromeLogs`                   | Do not use coloured log outputs.                                        | `boolean` |                                                          |          | True   |
 | `hook_url`                         | Incoming hook URL for messaging service                                 | `string`  |                                                          |          | True   |
-| `validate_params`                  | Boolean whether to validate parameters against the schema at runtime    | `boolean` | True                                                     |          | True   |
 | `validationShowHiddenParams`       | Show all params when using `--help`                                     | `boolean` |                                                          |          | True   |
 | `validationFailUnrecognisedParams` | Validation of parameters fails when an unrecognised parameter is found. | `boolean` |                                                          |          | True   |
 | `validationLenientMode`            | Validation of parameters in lenient more.                               | `boolean` |                                                          |          | True   |
