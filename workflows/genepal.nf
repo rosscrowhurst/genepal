@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryMap                      } from 'plugin/nf-validation'
+include { paramsSummaryMap                      } from 'plugin/nf-schema'
 
 include { PREPARE_ASSEMBLY                      } from '../subworkflows/local/prepare_assembly'
 include { PREPROCESS_RNASEQ                     } from '../subworkflows/local/preprocess_rnaseq'
