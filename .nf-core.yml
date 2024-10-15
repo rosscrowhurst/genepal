@@ -1,5 +1,6 @@
 bump_version: null
 lint:
+  actions_ci: false
   files_exist:
     - CODE_OF_CONDUCT.md
     - .github/ISSUE_TEMPLATE/config.yml
