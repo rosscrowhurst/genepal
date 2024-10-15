@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Deprecated`
 
+1. Resource parameters have been removed: `max_memory`, `max_cpus`, `max_time`
+2. Removed a number of unnecessary parameters: `monochromeLogs`, `config_profile_contact`, `config_profile_url`, `validationFailUnrecognisedParams`, `validationLenientMode`, `validationSchemaIgnoreParams`, `validationShowHiddenParams` `validate_params`
+
 ## 0.4.0 - [04-Oct-2024]
 
 ### `Added`

@@ -19,7 +19,7 @@ nextflow run plant-food-research-open/genepal -r main -profile singularity,test 
 The test sets included in this directory can be executed by first downloading the pipeline from GitHub and then executing the following command:
 
 ```bash
-./main.nf -profile docker -params-file tests/minimal/params.json --max_cpus 8 --max_memory '32.GB' --outdir results
+./main.nf -profile docker -params-file tests/minimal/params.json --outdir results
 ```
 
 ## Continuous Integration (CI)

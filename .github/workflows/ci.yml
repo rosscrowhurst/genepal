@@ -1,12 +1,7 @@
 name: nf-core CI
 # This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
 on:
-  push:
-    branches:
-      - dev
   pull_request:
-  release:
-    types: [published]
 
 env:
   NXF_ANSI_LOG: false
@@ -18,7 +13,6 @@ concurrency:
 jobs:
   test:
     name: Run pipeline with test data
-    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'Plant-Food-Research-Open/genepal') }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,11 +42,8 @@ jobs:
         run: |
           nextflow run \
             ${GITHUB_WORKSPACE} \
-            -profile docker \
+            -profile test,docker \
             -params-file \
             ./tests/${{ matrix.TEST_PARAMS }}/params.json \
             ${{ matrix.OPTION_STUB }} \
-            --outdir ./results \
-            --max_cpus 2 \
-            --max_memory '6.GB' \
-            --max_time '2.h'
+            --outdir ./results
