@@ -26,11 +26,14 @@ include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipelin
 workflow PIPELINE_INITIALISATION {
 
     take:
-    version           // boolean: Display version and exit
-    monochrome_logs   // boolean: Do not use coloured log outputs
-    nextflow_cli_args //   array: List of positional nextflow CLI args
-    outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
+    version                 // boolean: Display version and exit
+    monochrome_logs         // boolean: Do not use coloured log outputs
+    nextflow_cli_args       //   array: List of positional nextflow CLI args
+    outdir                  //  string: The output directory where the results will be saved
+    input                   //  string: Path to input assemblysheet
+    rna_evidence            //  string: Path to rna samplesheet
+    liftoff_annotations     //  string: Path to liftoff annotations sheet
+    orthofinder_annotations //  string: Path to orthofinder annotations sheet
 
     main:
 

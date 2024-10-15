@@ -88,7 +88,10 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input
+        params.input,
+        params.rna_evidence,
+        params.liftoff_annotations,
+        params.orthofinder_annotations
     )
 
     //
