@@ -6,6 +6,12 @@ lint:
     - assets/nf-core-genepal_logo_light.png
     - docs/images/nf-core-genepal_logo_light.png
     - docs/images/nf-core-genepal_logo_dark.png
+  files_unchanged:
+    - .gitignore
+    - LICENSE
+    - .github/workflows/branch.yml
+    - .github/workflows/linting.yml
+    - docs/README.md
   nextflow_config:
     - manifest.name
     - manifest.homePage
