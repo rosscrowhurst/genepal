@@ -14,11 +14,9 @@ F_BOLD="\033[1m"
 
 nextflow run \
     main.nf \
-    -profile docker,test \
+    -profile docker,test_full \
     -resume \
     $stub \
-    --max_cpus 8 \
-    --max_memory '32.GB' \
     --eggnogmapper_tax_scope 33090 \
     --eggnogmapper_db_dir ../dbs/emapperdb/5.0.2 \
     --outdir results

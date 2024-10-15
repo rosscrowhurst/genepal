@@ -7,8 +7,6 @@
 ----------------------------------------------------------------------------------------
 */
 
-nextflow.enable.dsl = 2
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
@@ -70,7 +68,8 @@ workflow PLANTFOODRESEARCHOPEN_GENEPAL {
         ch_tsebra_config,
         ch_orthofinder_pep
     )
-
+    emit:
+    multiqc_report = GENEPAL.out.multiqc_report // channel: /path/to/multiqc_report.html
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,18 +80,18 @@ workflow PLANTFOODRESEARCHOPEN_GENEPAL {
 workflow {
 
     main:
-
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
     PIPELINE_INITIALISATION (
         params.version,
-        params.help,
-        params.validate_params,
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input
+        params.input,
+        params.rna_evidence,
+        params.liftoff_annotations,
+        params.orthofinder_annotations
     )
 
     //
@@ -116,7 +115,6 @@ workflow {
         PIPELINE_INITIALISATION.out.tsebra_config,
         PIPELINE_INITIALISATION.out.orthofinder_pep
     )
-
     //
     // SUBWORKFLOW: Run completion tasks
     //
@@ -126,7 +124,8 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url
+        params.hook_url,
+        PLANTFOODRESEARCHOPEN_GENEPAL.out.multiqc_report
     )
 }
 

@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryMap                      } from 'plugin/nf-validation'
+include { paramsSummaryMap                      } from 'plugin/nf-schema'
 
 include { PREPARE_ASSEMBLY                      } from '../subworkflows/local/prepare_assembly'
 include { PREPROCESS_RNASEQ                     } from '../subworkflows/local/preprocess_rnaseq'
@@ -304,6 +304,10 @@ workflow GENEPAL {
         [],
         []
     )
+
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*
