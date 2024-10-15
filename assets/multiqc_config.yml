@@ -6,10 +6,12 @@ report_comment: >
 report_section_order:
   "plant-food-research-open-genepal-methods-description":
     order: -1000
-  "plant-food-research-open-genepal-summary":
+  software_versions:
     order: -1001
+  "plant-food-research-open-genepal-summary":
+    order: -1002
 
-export_plots: false
+export_plots: true
 disable_version_detection: true
 
 module_order:

@@ -12,9 +12,9 @@ lint:
     - .github/workflows/branch.yml
     - .github/workflows/linting.yml
     - docs/README.md
-  nextflow_config:
-    - manifest.name
-    - manifest.homePage
+  nextflow_config: False
+  multiqc_config:
+    - report_comment
 nf_core_version: 3.0.2
 org_path: null
 repository_type: pipeline
