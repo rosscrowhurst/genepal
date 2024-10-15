@@ -21,7 +21,7 @@ org_path: null
 repository_type: pipeline
 template:
   author: Usman Rashid, Jason Shiller
-  description: A Nextflow pipeline for single genome, phased genomes and pan-genome annotation.
+  description: A Nextflow pipeline for consensus, phased and pan-genome annotation.
   force: false
   is_nfcore: false
   name: genepal

@@ -1,6 +1,6 @@
 # plant-food-research-open/genepal pipeline parameters
 
-A Nextflow pipeline for single genome, phased genomes and pan-genome annotation.
+A Nextflow pipeline for consensus, phased and pan-genome annotation.
 
 ## Input/output options
 

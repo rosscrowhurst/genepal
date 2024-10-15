@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/plant-food-research-open/genepal/master/nextflow_schema.json",
     "title": "plant-food-research-open/genepal pipeline parameters",
-    "description": "A Nextflow pipeline for single genome, phased genomes and pan-genome annotation.",
+    "description": "A Nextflow pipeline for consensus, phased and pan-genome annotation.",
     "type": "object",
     "$defs": {
         "input_output_options": {
