@@ -3,11 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.5.0+dev - [08-Oct-2024]
+## 0.5.0+dev - [15-Oct-2024]
 
 ### `Added`
 
 1. Added MultiQC [#65](https://github.com/plant-food-research-open/genepal/issues/65)
+2. Updated nf-core template to 3.0.2 [#66](https://github.com/PlantandFoodResearch/genepal/issues/66)
 
 ### `Fixed`
 
@@ -16,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 3. Updated citations to include DOIs
 
 ### `Dependencies`
+
+1. Nextflow!>=24.04.2
+2. nf-schema@2.1.1
 
 ### `Deprecated`
 

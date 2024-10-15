@@ -1,10 +1,10 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/plant-food-research-open/genepal/master/nextflow_schema.json",
     "title": "plant-food-research-open/genepal pipeline parameters",
-    "description": "A Nextflow pipeline for single genome, multiple genomes and pan-genome annotation",
+    "description": "A Nextflow pipeline for single genome, multiple genomes and pan-genome annotation.",
     "type": "object",
-    "definitions": {
+    "$defs": {
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -390,12 +390,6 @@
             "description": "Less common options for the pipeline, typically set in a config file.",
             "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
             "properties": {
-                "help": {
-                    "type": "boolean",
-                    "description": "Display help text.",
-                    "fa_icon": "fas fa-question-circle",
-                    "hidden": true
-                },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
@@ -463,24 +457,6 @@
                     "fa_icon": "fas fa-check-square",
                     "hidden": true
                 },
-                "validationShowHiddenParams": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-eye-slash",
-                    "description": "Show all params when using `--help`",
-                    "hidden": true
-                },
-                "validationFailUnrecognisedParams": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-check-circle",
-                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
-                    "hidden": true
-                },
-                "validationLenientMode": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-check-circle",
-                    "description": "Validation of parameters in lenient more.",
-                    "hidden": true
-                },
                 "pipelines_testdata_base_path": {
                     "type": "string",
                     "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
@@ -492,37 +468,37 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/input_output_options"
+            "$ref": "#/$defs/input_output_options"
         },
         {
-            "$ref": "#/definitions/repeat_annotation_options"
+            "$ref": "#/$defs/repeat_annotation_options"
         },
         {
-            "$ref": "#/definitions/rnaseq_pre_processing_options"
+            "$ref": "#/$defs/rnaseq_pre_processing_options"
         },
         {
-            "$ref": "#/definitions/rnaseq_alignment_options"
+            "$ref": "#/$defs/rnaseq_alignment_options"
         },
         {
-            "$ref": "#/definitions/annotation_options"
+            "$ref": "#/$defs/annotation_options"
         },
         {
-            "$ref": "#/definitions/post_annotation_filtering_options"
+            "$ref": "#/$defs/post_annotation_filtering_options"
         },
         {
-            "$ref": "#/definitions/annotation_output_options"
+            "$ref": "#/$defs/annotation_output_options"
         },
         {
-            "$ref": "#/definitions/evaluation_options"
+            "$ref": "#/$defs/evaluation_options"
         },
         {
-            "$ref": "#/definitions/max_job_request_options"
+            "$ref": "#/$defs/max_job_request_options"
         },
         {
-            "$ref": "#/definitions/institutional_config_options"
+            "$ref": "#/$defs/institutional_config_options"
         },
         {
-            "$ref": "#/definitions/generic_options"
+            "$ref": "#/$defs/generic_options"
         }
     ]
 }
