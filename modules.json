@@ -261,7 +261,7 @@
                 "nf-core": {
                     "fastq_fastqc_umitools_fastp": {
                         "branch": "master",
-                        "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
+                        "git_sha": "4026bab16a91b1b0b18d80ff465819ca725f33fd",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nextflow_pipeline": {
