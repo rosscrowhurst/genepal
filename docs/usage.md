@@ -163,6 +163,7 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run plant-food-research-open/genepal \
+  -revision <version> \
   -profile <docker/singularity/.../institute> \
   --input assemblysheet.csv \
   --protein_evidence proteins.faa \
@@ -190,7 +191,7 @@ Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
-nextflow run plant-food-research-open/genepal -profile docker -params-file params.yaml
+nextflow run plant-food-research-open/genepal -revision main -profile docker -params-file params.yaml
 ```
 
 with:
