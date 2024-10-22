@@ -81,7 +81,7 @@ workflow PREPROCESS_RNASEQ {
         }
     }
 
-    ch_versions                     = ch_versions.mix(FASTQ_FASTQC_UMITOOLS_FASTP.out.versions.first())
+    ch_versions                     = ch_versions.mix(FASTQ_FASTQC_UMITOOLS_FASTP.out.versions)
 
 
     // MODULE: SORTMERNA as SORTMERNA_INDEX

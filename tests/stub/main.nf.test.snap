@@ -58,6 +58,12 @@
                     "FASTP": {
                         "fastp": "0.23.4"
                     },
+                    "FASTQC_RAW": {
+                        "fastqc": "0.12.1"
+                    },
+                    "FASTQC_TRIM": {
+                        "fastqc": "0.12.1"
+                    },
                     "FINAL_GFF_CHECK": {
                         "genometools": "1.6.5"
                     },
@@ -178,6 +184,6 @@
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-10-22T11:32:02.951075"
+        "timestamp": "2024-10-22T13:39:38.456892"
     }
 }

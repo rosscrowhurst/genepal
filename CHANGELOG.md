@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 1. Now using `${meta.id}_trim` as prefix for `FASTQC` files
 2. Added `monochromeLogs` parameter to suppress warnings
 3. Updated citations to include DOIs
+4. Fixed a bug where FASTQ versions were not correctly captured.
 
 ### `Dependencies`
 
