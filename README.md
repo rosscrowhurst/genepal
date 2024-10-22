@@ -57,6 +57,7 @@ At minimum, a file with proteins as evidence is also required. Now, you can run 
 
 ```bash
 nextflow run plant-food-research-open/genepal \
+  -revision <version> \
   -profile <docker/singularity/.../institute> \
   --input assemblysheet.csv \
   --protein_evidence proteins.faa \
