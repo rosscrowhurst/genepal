@@ -130,7 +130,7 @@
                     "minimum": 0,
                     "fa_icon": "fas fa-hashtag"
                 },
-                "extra_fastp_args": {
+                "fastp_extra_args": {
                     "type": "string",
                     "description": "Extra FASTP arguments",
                     "fa_icon": "fas fa-terminal"
