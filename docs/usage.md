@@ -68,7 +68,7 @@ If RNASeq evidence is provided, the pipeline executes the [BRAKER workflow D](ht
 
 ### Preprocessing
 
-RNASeq reads provided in FASTQ files are by default trimmed with [FASTP](https://github.com/OpenGene/fastp). No parameters are provided by default. Although, additional parameters can be provided with `--fastp_extra_args` parameter. After trimming, any sample which does not have `10000` reads left is dropped. This threshold can be specified with the `--min_trimmed_reads` parameter. If trimming was already performed ot it is not desirable, it can be skipped by setting the `--skip_fastp` flag to `true`.
+RNASeq reads provided in FASTQ files are by default trimmed with [FASTP](https://github.com/OpenGene/fastp). No parameters are provided by default. Although, additional parameters can be provided with `--fastp_extra_args` parameter. After trimming, any sample which does not have `10000` reads left is dropped. This threshold can be specified with the `--min_trimmed_reads` parameter. If trimming was already performed ot it is not desirable, it can be skipped by setting the `--fastp_skip` flag to `true`.
 
 Optionally, [SORTMERNA](https://github.com/sortmerna/sortmerna) can be activated by setting the `--remove_ribo_rna` flag to `true`. A default list of rRNA databases is pre-configured and can be seen in the [assets/rrna-db-defaults.txt](../assets/rrna-db-defaults.txt) file. A path to a custom list of databases can be specified by the `--ribo_database_manifest` parameter.
 
