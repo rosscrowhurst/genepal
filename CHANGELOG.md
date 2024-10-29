@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 1. Resource parameters have been removed: `max_memory`, `max_cpus`, `max_time`
 2. Removed a number of unnecessary parameters: `monochromeLogs`, `config_profile_contact`, `config_profile_url`, `validationFailUnrecognisedParams`, `validationLenientMode`, `validationSchemaIgnoreParams`, `validationShowHiddenParams`, `validate_params`
+3. Removed `extra_fastp_args` and replaced it with `fastp_extra_args`
 
 ## v0.4.0 - [04-Oct-2024]
 

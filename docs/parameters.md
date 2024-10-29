@@ -31,7 +31,7 @@ A Nextflow pipeline for consensus, phased and pan-genome annotation.
 | `skip_fastqc`            | Skip FASTQC or not?                                                | `boolean` |                                           |          |        |
 | `skip_fastp`             | Skip trimming by FASTQP or not?                                    | `boolean` |                                           |          |        |
 | `min_trimmed_reads`      | Exclude a sample if its reads after trimming are below this number | `integer` | 10000                                     |          |        |
-| `extra_fastp_args`       | Extra FASTP arguments                                              | `string`  |                                           |          |        |
+| `fastp_extra_args`       | Extra FASTP arguments                                              | `string`  |                                           |          |        |
 | `save_trimmed`           | Save FASTQ files after trimming or not?                            | `boolean` |                                           |          |        |
 | `remove_ribo_rna`        | Remove Ribosomal RNA or not?                                       | `boolean` |                                           |          |        |
 | `save_non_ribo_reads`    | Save FASTQ files after Ribosomal RNA removal or not?               | `boolean` |                                           |          |        |
