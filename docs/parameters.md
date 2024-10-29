@@ -28,8 +28,8 @@ A Nextflow pipeline for consensus, phased and pan-genome annotation.
 
 | Parameter                | Description                                                        | Type      | Default                                   | Required | Hidden |
 | ------------------------ | ------------------------------------------------------------------ | --------- | ----------------------------------------- | -------- | ------ |
-| `skip_fastqc`            | Skip FASTQC or not?                                                | `boolean` |                                           |          |        |
-| `skip_fastp`             | Skip trimming by FASTQP or not?                                    | `boolean` |                                           |          |        |
+| `fastqc_skip`            | Skip FASTQC or not?                                                | `boolean` |                                           |          |        |
+| `fastp_skip`             | Skip trimming by FASTQP or not?                                    | `boolean` |                                           |          |        |
 | `min_trimmed_reads`      | Exclude a sample if its reads after trimming are below this number | `integer` | 10000                                     |          |        |
 | `fastp_extra_args`       | Extra FASTP arguments                                              | `string`  |                                           |          |        |
 | `save_trimmed`           | Save FASTQ files after trimming or not?                            | `boolean` |                                           |          |        |

@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 1. Resource parameters have been removed: `max_memory`, `max_cpus`, `max_time`
 2. Removed a number of unnecessary parameters: `monochromeLogs`, `config_profile_contact`, `config_profile_url`, `validationFailUnrecognisedParams`, `validationLenientMode`, `validationSchemaIgnoreParams`, `validationShowHiddenParams`, `validate_params`
 3. Removed `extra_fastp_args` and replaced it with `fastp_extra_args`
+4. Removed and replaced `skip_fastp` and `skip_fastqc` with `fastp_skip` and `fastqc_skip` [#82](https://github.com/Plant-Food-Research-Open/genepal/issues/82)
 
 ## v0.4.0 - [04-Oct-2024]
 

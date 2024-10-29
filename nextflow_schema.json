@@ -113,12 +113,12 @@
             "description": "",
             "default": "",
             "properties": {
-                "skip_fastqc": {
+                "fastqc_skip": {
                     "type": "boolean",
                     "description": "Skip FASTQC or not?",
                     "fa_icon": "fas fa-question-circle"
                 },
-                "skip_fastp": {
+                "fastp_skip": {
                     "type": "boolean",
                     "description": "Skip trimming by FASTQP or not?",
                     "fa_icon": "fas fa-question-circle"
