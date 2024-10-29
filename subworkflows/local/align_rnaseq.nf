@@ -44,7 +44,7 @@ workflow ALIGN_RNASEQ {
         seq_center
     )
 
-    ch_star_bam                 = STAR_ALIGN.out.bam_sorted
+    ch_star_bam                 = STAR_ALIGN.out.bam_sorted_aligned
     ch_versions                 = ch_versions.mix(STAR_ALIGN.out.versions.first())
 
     // MODULE: SAMTOOLS_CAT
