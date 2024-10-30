@@ -56,7 +56,7 @@ With these two parameters, the pipeline has sufficient inputs to execute the [BR
 
 > ❔ Optional `--rna_evidence`
 
-RNASeq evidence must be provided through a samplesheet in CSV format which has the following columns,
+RNASeq evidence must be provided through a samplesheet in CSV format which has the following columns, and a header row.
 
 - `sample:` A sample identifier. The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis.
 - `file_1:` A FASTQ or BAM file
@@ -94,7 +94,7 @@ where `--star_max_intron_length` is a pipeline parameter and its default value i
 
 > ❔ Optional `--liftoff_annotations`
 
-In addition to gene prediction with BRAKER, the pipeline also enables gene model transfer from one or more reference assemblies to all the target assemblies. The reference assemblies and the associated gene models must be specified through a CSV file with the following two columns,
+In addition to gene prediction with BRAKER, the pipeline also enables gene model transfer from one or more reference assemblies to all the target assemblies. The reference assemblies and the associated gene models must be specified through a CSV file with the following two columns, and a header row.
 
 - `fasta:` Reference assembly genome in a FASTA file
 - `gff3:` Reference assembly gene models in a GFF3 file
@@ -149,7 +149,7 @@ An appropriate taxonomic scope for the mapper can be specified with `--eggnogmap
 
 > ❔ Optional `--orthofinder_annotations`
 
-If there are more than one target assemblies, an orthology inference is performed with [ORTHOFINDER](https://github.com/davidemms/OrthoFinder). Additional annotations can be directly provided for the orthology inference with the `--orthofinder_annotations` parameter. This should be the path to a CSV file with following two columns,
+If there are more than one target assemblies, an orthology inference is performed with [ORTHOFINDER](https://github.com/davidemms/OrthoFinder). Additional annotations can be directly provided for the orthology inference with the `--orthofinder_annotations` parameter. This should be the path to a CSV file with following two columns, and a header row.
 
 - `tag:` A unique tag which represents the annotation. The `tag` and `fasta` file name should not be same, such as `tag.fasta`. This can create file name collisions in the pipeline or result in file overwrite. It is also a good-practice to make all the input files read-only.
 - `fasta:` FASTA file containing protein sequences.
