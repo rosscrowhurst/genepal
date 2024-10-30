@@ -8,8 +8,8 @@ workflow PREPROCESS_RNASEQ {
     ch_reads                        // channel: [ [ id, single_end, target_assemblies ], [ [ fq ] ] ]
     permissible_assemblies          // val: assembly_a,assembly_b
     exclude_assemblies              // channel: val(assembly_x,assembly_y)
-    skip_fastqc                     // val: true|false
-    skip_fastp                      // val: true|false
+    fastqc_skip                     // val: true|false
+    fastp_skip                      // val: true|false
     save_trimmed                    // val: true|false
     min_trimmed_reads               // val: Integer
     remove_ribo_rna                 // val: true|false
@@ -60,11 +60,11 @@ workflow PREPROCESS_RNASEQ {
 
     FASTQ_FASTQC_UMITOOLS_FASTP (
         ch_cat_fastq,
-        skip_fastqc,
+        fastqc_skip,
         with_umi,
         skip_umi_extract,
         umi_discard_read,
-        skip_fastp,
+        fastp_skip,
         [],
         save_trimmed,
         save_trimmed,
