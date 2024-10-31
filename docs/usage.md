@@ -41,6 +41,22 @@ You will need to create an assemblysheet with information about the genome assem
 - `is_masked:` Whether the FASTA is masked or not? Use yes/no to indicate the masking. If the assembly is not masked. The pipeline will soft mask it before annotating it.
 - `te_lib [Optional]`: If an assembly is not masked and a TE library is available which cna be used to mask the assembly, the path of the TE library FASTA file can be provided here. If this column is absent and the assembly is not masked, the pipeline will first create a TE library so that it can soft mask the assembly.
 
+The following is an example of an ```assemblysheet.csv``` that needs to be created. 
+
+```
+tag,fasta,is_masked
+a_thaliana,https://raw.githubusercontent.com/Gaius-Augustus/BRAKER/f58479fe5bb13a9e51c3ca09cb9e137cab3b8471/example/genome.fa,yes
+```
+
+If you have already run genepal and/or already have results for TE libraries, braker gff3 and braker hints then you can supply the paths to these in the ```assemblysheet.csv``` file as in the follow example for a genome assembly with 2 haplotypes:
+
+```
+tag,fasta,is_masked,te_lib,braker_gff3,braker_hints
+genome_hap1,/assembly_genome_hap1/v3/genome_hap1.chromosomes.only.fsa,no,/my_workspace/genepal/archive/RepeatModeler/genome_hap1.fa,/my_workspace/genepal/archive/genome_hap1.braker.gff3,/my_workspace/genepal/archive/genome_hap1.hintsfile.gff
+genome_hap2,/assembly_genome_hap2/v3/genome_hap2.chromosomes.only.fsa,no,/my_workspace/genepal/archive/RepeatModeler/genome_hap2.fa,/my_workspace/genepal/archive/genome_hap2.braker.gff3,/my_workspace/genepal/archive/genome_hap2.hintsfile.gff
+```
+
+
 ## Protein evidence
 
 > ✅ Mandatory `--protein_evidence`
